@@ -3,12 +3,18 @@
 using namespace vex;
 
 brain Brain;
-controller Controller;
+controller* con = new controller(controllerType::primary);
 
 Chassis* chassis;
 
-void vexcodeInit(void) {
-    int motorL[2] = {1, 9};
-    int motorR[2] = {2, 10};
-    chassis = new Chassis((12.5 + 12.75) / 2, 3.375, motorL, motorR);
+motor leftFront = motor(PORT1, ratio18_1, false);
+motor leftBack = motor(PORT10, ratio18_1, false);
+motor rightFront = motor(PORT2, ratio18_1, true);
+motor rightBack = motor(PORT10, ratio18_1, true);
+
+motor_group leftGroup = motor_group(leftFront, leftBack);
+motor_group rightGroup = motor_group(rightFront, rightBack);
+
+void init(void) {
+    chassis = new Chassis((12.5 + 12.75) / 2, 3.375, &leftGroup, &rightGroup);
 }

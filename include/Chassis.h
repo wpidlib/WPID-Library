@@ -8,15 +8,29 @@ class Chassis {
         float wheel_base;
         float wheel_radius;
         float wheel_circumference;
-        int num_motors;
-        motor** left;
-        motor** right;
+        motor_group* left;
+        motor_group* right;
         PID pid;
     public:
-        Chassis(float wheel_base, float wheel_radius, int motorL[], int motorR[]);
+        Chassis(float wheel_base, float wheel_radius, motor_group* left, motor_group* right);
         Chassis() = default;
-        void Chassis::forward(float distance, float max_velocity);
-        void Chassis::turn(float target_angle, float max_velocity);
+        /**
+         * @brief Spin the entire chassis by specified velocities for each
+         * side of the chassis
+         * 
+         * @param left_velocity 
+         * @param right_velocity 
+         */
+        void Chassis::spin(int left_velocity, int right_velocity);
+
+        /**
+         * @brief Spin the entire chassis by specified velocities for both sides
+         * 
+         * @param velocity 
+         */
+        void Chassis::spin(int velocity);
+        
+        void Chassis::forward(float distance, int max_velocity);
+        void Chassis::turn(float target_angle, int max_velocity);
         float Chassis::getEncoderCount();
-        void Chassis::setSideVelocity(float velocity, char side);
 };      

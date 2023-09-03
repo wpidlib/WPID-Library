@@ -2,9 +2,9 @@
 using namespace vex;
 
 brain Brain;
-controller Controller;
+controller* con;
 
 Chassis* chassis;
 
 
-void vexcodeInit(void);
+void init(void);
