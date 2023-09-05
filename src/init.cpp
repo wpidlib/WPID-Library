@@ -16,5 +16,10 @@ motor_group leftGroup = motor_group(leftFront, leftBack);
 motor_group rightGroup = motor_group(rightFront, rightBack);
 
 void init(void) {
+    Brain.Screen.clearScreen();
     chassis = new Chassis((12.5 + 12.75) / 2, 3.375, &leftGroup, &rightGroup);
+}
+
+void delay(int msec){
+    wait(msec, timeUnits::msec);
 }

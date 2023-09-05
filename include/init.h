@@ -6,5 +6,5 @@ controller* con;
 
 Chassis* chassis;
 
-
 void init(void);
+void delay(int msec);

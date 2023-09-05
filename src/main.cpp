@@ -1,27 +1,10 @@
 #include "main.h"
 
-void pre_auton(){
-    init();
-}
-
-void usercontrol(){
-    while (1) {
-        Brain.Screen.clearScreen();
-        chassis->spin(con->Axis3.value());
-    }
-    
-}
+competition Comp;
 
 int main() {
-    pre_auton();
+    Comp.autonomous(auton);
+    Comp.drivercontrol(usercontrol);
+    init();
+    while(1){usercontrol();}
 }
-
-
-
-
-
-
-
-
-
-
