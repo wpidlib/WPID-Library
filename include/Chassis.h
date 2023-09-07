@@ -32,5 +32,6 @@ class Chassis {
         
         void Chassis::forward(float distance, int max_velocity);
         void Chassis::turn(float target_angle, int max_velocity);
-        float Chassis::getEncoderCount();
+        float Chassis::leftEncoder(rotationUnits units);
+        float Chassis::rightEncoder(rotationUnits units);
 };      

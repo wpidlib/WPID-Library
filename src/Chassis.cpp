@@ -40,4 +40,10 @@ void Chassis::turn(float target_angle, int max_velocity){
     // }
 }
 
-float Chassis::getEncoderCount(){}
+float Chassis::leftEncoder(rotationUnits units){
+    return left->position(units);
+}
+
+float Chassis::rightEncoder(rotationUnits units){
+    return right->position(units);
+}
