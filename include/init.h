@@ -1,10 +1,12 @@
+#pragma once
 #include "main.h"
+
 using namespace vex;
 
-brain Brain;
-controller* con;
+extern brain Brain;
+extern controller* con;
 
-Chassis* chassis;
+extern Chassis* chassis;
 
 void init(void);
 void delay(int msec);

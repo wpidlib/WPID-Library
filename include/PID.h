@@ -8,5 +8,5 @@ class PID {
     public:
         PID() = default;
         PID(float kp, float ki, float kd);
-        float PID::updateVelocity(float dist_from_target);
+        float updateVelocity(float dist_from_target, float max_velocity);
 };      

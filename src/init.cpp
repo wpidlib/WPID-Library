@@ -17,7 +17,8 @@ motor_group rightGroup = motor_group(rightFront, rightBack);
 
 void init(void) {
     Brain.Screen.clearScreen();
-    chassis = new Chassis((12.5 + 12.75) / 2, 3.375, &leftGroup, &rightGroup);
+    chassis = new Chassis((12.5 + 12.75) / 2, 3.375/2, &leftGroup, &rightGroup);
+    chassis->setBrakeType(brakeType::hold);
 }
 
 void delay(int msec){
