@@ -1,5 +1,4 @@
 #include "main.h"
-#include <algorithm>
 
 PID::PID(float kp, float ki, float kd) : kp(kp), ki(ki), kd(kd) {}
 

@@ -1,5 +1,4 @@
 #include "main.h"
-#include <iostream>
 
 Chassis::Chassis(float wheel_base, float wheel_radius, motor_group* left, motor_group* right) : wheel_base(wheel_base), left(left), right(right) {
     wheel_circumference = 2 * M_PI * wheel_radius;
@@ -91,7 +90,5 @@ void Chassis::stop(){
 }
 
 void Chassis::engage(){
-    this->spin(2);
-    delay(250);
-    this->stop();
+//TODO
 }

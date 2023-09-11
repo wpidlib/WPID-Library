@@ -102,6 +102,7 @@ class Chassis {
         /**
          * @brief Engages the motors to reduce dead zone between gears.
          * Use this when you need to reset the precesision of the robot.
+         * @attention WIP
          */
         void engage();
 };      

@@ -5,11 +5,11 @@ double scale(double x) {
     return (x > 0 ? 100 : -100) * ((x/127) * (x/127)); 
 }
 
-void usercontrol(){ 
+void usercontrol(){
     chassis->forward(12, 25);
     chassis->forward(-12, 35);
 
-    //chassis->turn(-90, 20);
+    chassis->turn(-90, 20);
     delay(2000);
     //chassis->turn(90, 20);
     
