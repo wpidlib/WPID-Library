@@ -45,6 +45,8 @@ void Chassis::forward(float distance, int max_speed){
         this->spin(speed);
         delay(pidStraight.delay_time);
     }
+    debug ? LOG("Final Error: " << error) : true;
+    pidStraight.reset();
     this->stop();
 }
 
@@ -65,6 +67,8 @@ void Chassis::turn(float target_angle, int max_speed){
         this->spin(-speed, speed);
         delay(pidTurn.delay_time);
     }
+    debug ? LOG("Final Error: " << error) : true;
+    pidTurn.reset();
     this->stop();
 }
 

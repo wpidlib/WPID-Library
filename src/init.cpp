@@ -18,20 +18,18 @@ motor_group rightGroup = motor_group(rightFront, rightBack);
 void init(void) {
     Brain.Screen.clearScreen();
 
-    chassis = new Chassis((12.5 + 12.75) / 2, 3.375/2, &leftGroup, &rightGroup);
+    chassis = new Chassis((12.5 + 12.75) / 2, 3.25/2, &leftGroup, &rightGroup);
 
-    PID straight = PID(0.2, 0, 0);
-    straight.setErrorRange(5);
+    PID straight = PID(0.07, 0, 0.05); //ki = 0.01
+    straight.setErrorRange(1);
 
-    PID turn = PID(2, 0, 0);
-    straight.setErrorRange(5);
+    PID turn = PID(2, 0.02, 0);
+    turn.setErrorRange(1);
 
     chassis->setStraightPID(straight);
     chassis->setTurnPID(turn);
 
-    chassis->setBrakeType(brakeType::hold);
-
-
+    chassis->setBrakeType(brakeType::brake);
 }
 
 void delay(int msec){

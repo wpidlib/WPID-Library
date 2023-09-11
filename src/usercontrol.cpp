@@ -6,10 +6,12 @@ double scale(double x) {
 }
 
 void usercontrol(){ 
-    chassis->forward(12, 20);
-    chassis->turn(-90, 20);
+    chassis->forward(12, 25);
+    chassis->forward(-12, 35);
+
+    //chassis->turn(-90, 20);
     delay(2000);
-    chassis->turn(90, 20);
+    //chassis->turn(90, 20);
     
     // axis values on controller
     double axis3, axis4 = 0;

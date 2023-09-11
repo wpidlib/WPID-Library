@@ -3,8 +3,11 @@
 competition Comp;
 
 int main() {
+    init();
     Comp.autonomous(auton);
     Comp.drivercontrol(usercontrol);
-    init();
-    while(1){usercontrol();}
+
+    while (1) {
+        delay(20);
+    }
 }
