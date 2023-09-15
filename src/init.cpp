@@ -20,7 +20,11 @@ void init(void) {
 
     chassis = new Chassis((12.5 + 12.75) / 2, 3.25/2, &leftGroup, &rightGroup);
 
-    PID straight = PID(0.07, 0, 0.05); //ki = 0.01
+    // PID straight = PID(0.03, 0.008, 0.008); //ki = 0.01, kp = 0.07, kd = 0.05
+    PID straight = PID(0.15, 0.6, 0.015);
+    straight.delay_time = 50;
+    straight.bias = 0;  
+    straight.max_integral = 10;
     straight.setErrorRange(1);
 
     PID turn = PID(2, 0.02, 0);

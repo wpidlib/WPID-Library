@@ -9,6 +9,7 @@ class PID {
         float prev_error = 0;
         float prev_integral = 0;
     public:
+        float max_integral = 9999; // max integral value 
         int delay_time = 20; // delay in milliseconds
         int bias = 0; // lowest speed possible for PID to achieve
         /**

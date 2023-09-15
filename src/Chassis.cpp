@@ -1,5 +1,7 @@
 #include "main.h"
 #include <iostream>
+#include <fstream>
+using namespace std;
 
 Chassis::Chassis(float wheel_base, float wheel_radius, motor_group* left, motor_group* right) : wheel_base(wheel_base), left(left), right(right) {
     wheel_circumference = 2 * M_PI * wheel_radius;
@@ -30,15 +32,24 @@ void Chassis::resetEncoders(){
 }
 
 void Chassis::forward(float distance, int max_speed){
-    this->engage();
+    // this->engage();
     this->resetEncoders();
     float target = (distance / wheel_circumference) * 360;
     float error = target;
     float avg = 0;
-
+    // ofstream myfile;
+    // myfile.open ("LoggedDetails.txt");
+    // myfile << "Writing this to a file.\n";
+    // myfile.close();
+    int temp = 0;
+    while(abs(left->velocity(velocityUnits::pct)) < max_speed){
+        temp = distance < 0 ? temp-1 : temp+1;
+        this->spin(temp);
+        debug ? LOG("Ramp Up Speed: " << left->velocity(velocityUnits::pct)) : true;
+        delay(pidStraight.delay_time);
+    }
+    this->spin(distance > 0 ? max_speed : -max_speed);
     while (pidStraight.cont(error)) {
-        debug ? LOG("Error: " << error) : true;
-
         avg = (leftEncoder(rotationUnits::deg) + rightEncoder(rotationUnits::deg)) / 2; 
         error = target - avg;
         int speed = pidStraight.calculateSpeed(error, max_speed);
@@ -51,7 +62,7 @@ void Chassis::forward(float distance, int max_speed){
 }
 
 void Chassis::turn(float target_angle, int max_speed){
-    this->engage();
+    // this->engage();
     this->resetEncoders();
     float target = (wheel_base * M_PI * target_angle) / wheel_circumference;
     float error = target;
