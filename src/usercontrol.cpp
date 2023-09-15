@@ -5,21 +5,12 @@ double scale(double x) {
     return (x > 0 ? 100 : -100) * ((x/127) * (x/127)); 
 }
 
-<<<<<<< HEAD
 void usercontrol(){ 
     chassis->forward(-24, 35);
     delay(2000);
     chassis->forward(24, 25);
 
     //chassis->turn(-90, 20);
-=======
-void usercontrol(){
-    chassis->forward(12, 25);
-    chassis->forward(-12, 35);
-
-    chassis->turn(-90, 20);
-    delay(2000);
->>>>>>> a557be1cf99cc61a02e829e88a0065601748257f
     //chassis->turn(90, 20);
     
     // axis values on controller
