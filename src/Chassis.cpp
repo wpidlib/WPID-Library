@@ -31,22 +31,22 @@ void Chassis::resetEncoders(){
     right->resetPosition();
 }
 
+// ofstream myfile;
+    // myfile.open ("LoggedDetails.txt");
+    // myfile << "Writing this to a file.\n";
+    // myfile.close();
+
 void Chassis::forward(float distance, int max_speed){
-    // this->engage();
     this->resetEncoders();
     float target = (distance / wheel_circumference) * 360;
     float error = target;
     float avg = 0;
-    // ofstream myfile;
-    // myfile.open ("LoggedDetails.txt");
-    // myfile << "Writing this to a file.\n";
-    // myfile.close();
-    int temp = 0;
-    while(abs(left->velocity(velocityUnits::pct)) < max_speed){
-        temp = distance < 0 ? temp-1 : temp+1;
-        this->spin(temp);
-        debug ? LOG("Ramp Up Speed: " << left->velocity(velocityUnits::pct)) : true;
-        delay(pidStraight.delay_time);
+    int count = 0;
+    int half_speed = (int)fabs(pidStraight.calculateSpeed((error / 2), max_speed));
+    while(count != half_speed){
+        this->spin(distance > 0 ? count : -count);
+        count++;
+        delay(10);
     }
     this->spin(distance > 0 ? max_speed : -max_speed);
     while (pidStraight.cont(error)) {
@@ -62,15 +62,23 @@ void Chassis::forward(float distance, int max_speed){
 }
 
 void Chassis::turn(float target_angle, int max_speed){
-    // this->engage();
     this->resetEncoders();
     float target = (wheel_base * M_PI * target_angle) / wheel_circumference;
     float error = target;
     float avg = 0;
     
-    while(pidTurn.cont(error)){
-        debug ? LOG("Error: " << error) : true;
+    int spd = 0;
+    int count = 0;
+    int half_speed = (int)fabs(pidStraight.calculateSpeed((error / 2), max_speed));
+    while(count != half_speed){
+        spd = target > 0 ? count : -count;
+        this->spin(-spd, spd);
+        count++;
+        delay(10);
+    }
+    this->spin(-spd, spd);
 
+    while(pidTurn.cont(error)){
         avg = (fabs(leftEncoder(rotationUnits::deg)) + fabs(rightEncoder(rotationUnits::deg))) / 2; 
         avg = target_angle < 0 ? -avg : avg;
         error = target - avg;
