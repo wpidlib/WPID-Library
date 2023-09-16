@@ -7,6 +7,7 @@ class Chassis {
     private:
         bool debug = true;
         float wheel_base;
+        float track_width;
         float wheel_circumference;
         motor_group* left;
         motor_group* right;
@@ -16,12 +17,14 @@ class Chassis {
         /**
          * @brief Construct a new Chassis object. 
          * All distance units are assumed to be in inches.
-         * @param wheel_base 
-         * @param wheel_radius 
-         * @param left 
-         * @param right 
+         * 
+         * @param track_width the width between left and right
+         * @param wheel_base the distance from front to back of the wheel
+         * @param wheel_radius radius of the wheel 
+         * @param left motor group
+         * @param right motor group
          */
-        Chassis(float wheel_base, float wheel_radius, motor_group* left, motor_group* right);
+        Chassis(float track_width, float wheel_base, float wheel_radius, motor_group* left, motor_group* right);
         Chassis() = default;
 
         /**

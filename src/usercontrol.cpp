@@ -7,23 +7,25 @@ double scale(double x) {
 
 int displayEncoders(){
     while(1){
+        Brain.Screen.clearScreen();
         Brain.Screen.setCursor(1, 1);
-        Brain.Screen.print("Left:  %d", chassis->leftEncoder(rotationUnits::rev));
+        Brain.Screen.print("Left:  %f", chassis->leftEncoder(rotationUnits::deg));
         Brain.Screen.setCursor(2, 1);
-        Brain.Screen.print("Right: %d", chassis->rightEncoder(rotationUnits::rev));
+        Brain.Screen.print("Right: %f", chassis->rightEncoder(rotationUnits::deg));
         this_thread::sleep_for(25);
     }
     return 0;
 }
 
 void usercontrol(){ 
-    thread dispEnc = thread(displayEncoders);
-    chassis->turn(90, 25);
-    
-    // chassis->forward(24, 40);
-    // chassis->forward(6, 25);
-    // chassis->forward(12, 30);
-    // chassis->forward(-42, 50);
+    thread dispEnc = thread(displayEncoders);    
+    chassis->forward(24, 40);
+    chassis->turn(45, 25);
+    chassis->forward(6, 25);
+    chassis->turn(-45, 25);
+    chassis->forward(12, 30);
+    chassis->forward(-42, 50);
+    chassis->turn(-90, 25);
     
     // axis values on controller
     double axis3, axis4 = 0;

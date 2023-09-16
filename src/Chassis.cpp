@@ -3,10 +3,10 @@
 #include <fstream>
 using namespace std;
 
-Chassis::Chassis(float wheel_base, float wheel_radius, motor_group* left, motor_group* right) : wheel_base(wheel_base), left(left), right(right) {
-    wheel_circumference = 2 * M_PI * wheel_radius;
-    pidStraight = PID(0, 0, 0); 
-    pidTurn = PID(0, 0, 0);
+Chassis::Chassis(float track_width, float wheel_base, float wheel_radius, motor_group* left, motor_group* right) : wheel_base(wheel_base), track_width(track_width), left(left), right(right) {
+    wheel_circumference = 2.0 * M_PI * wheel_radius;
+    pidStraight = PID(1, 0, 0); 
+    pidTurn = PID(1, 0, 0);
 }
 
 void Chassis::setStraightPID(PID pid){
@@ -38,7 +38,7 @@ void Chassis::resetEncoders(){
 
 void Chassis::forward(float distance, int max_speed){
     this->resetEncoders();
-    float target = (distance / wheel_circumference) * 360;
+    float target = (distance / wheel_circumference) * 360.0;
     float error = target;
     float avg = 0;
     int count = 0;
@@ -63,10 +63,11 @@ void Chassis::forward(float distance, int max_speed){
 
 void Chassis::turn(float target_angle, int max_speed){
     this->resetEncoders();
-    float target = (wheel_base * M_PI * target_angle) / wheel_circumference;
+    float r = (pow(wheel_base, 2) + pow(track_width, 2)) / (track_width * (wheel_circumference/M_PI));
+    float target = (target_angle*M_PI*2*r) / wheel_circumference;
     float error = target;
     float avg = 0;
-    
+
     int spd = 0;
     int count = 0;
     int half_speed = (int)fabs(pidStraight.calculateSpeed((error / 2), max_speed));
