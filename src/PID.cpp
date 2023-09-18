@@ -2,16 +2,21 @@
 #include <algorithm>
 #include <string>
 #include <iostream>
+#include <sstream>
 #include <cmath>
 #include <iomanip>
+#include <fstream>
 using namespace std;
 
 PID::PID(float kp, float ki, float kd) : kp(kp), ki(ki), kd(kd) {}
 
-//std::cout << round(error*100.0)/100.0 << "," << round(speed*100.0)/100.0 << "," << round(integral*100.0)/100.0 << "," << round(derivative*100.0)/100.0 << std::endl;
 float PID::calculateSpeed(float error, float max_speed){
     // summation of error over time
     float integral = prev_integral + (error * (delay_time/(float)1000));
+
+    if(prev_error == MAXFLOAT){
+        prev_error = error > 0 ? error - 1 : error + 1; //for logging derivative
+    }
 
     // slope of error over time
     float derivative = (error - prev_error) / (delay_time/(float)1000); 
@@ -19,7 +24,7 @@ float PID::calculateSpeed(float error, float max_speed){
 
     // calculated speed value
     float speed = error*kp + integral*ki + derivative*kd; // calculated speed
-    float pre_speed = speed; // pre cap speed
+    float prev_speed = speed; // pre cap speed
 
     // cap speed at max speed if saturated (speed unobtainable)
     if(speed > max_speed){ speed = max_speed; }
@@ -28,7 +33,7 @@ float PID::calculateSpeed(float error, float max_speed){
     // if saturated, check if getting worse, if so then remove integral term
     // and dont add new integral to integral
     // basically only starts to integrate if our output is less than our maximum
-    if(speed != pre_speed && signbit(error) == signbit(pre_speed)){
+    if(speed != prev_speed && signbit(error) == signbit(prev_speed)){
         speed -= integral*ki;
         integral = prev_integral;
         speed += integral*ki;
@@ -40,7 +45,9 @@ float PID::calculateSpeed(float error, float max_speed){
     if (speed > -bias && speed < 0) { speed = -bias; }
 
     std::cout << std::fixed << std::setprecision(2);
-    LOG("| " << error << " | " << speed << " | " << error*kp << " | " << integral*ki << " | " << derivative*kd << " |"); 
+    //LOG("| " << error << " | " << speed << " | " << error*kp << " | " << integral*ki << " | " << derivative*kd << " |"); 
+    LOG("D: " << derivative*kd);
+    this->logData(error, speed, (error*kp), integral, derivative);
     return speed;
 }
 
@@ -53,6 +60,36 @@ bool PID::cont(float error){
 }
 
 void PID::reset(void){
-    prev_error = 0;
+    prev_error = MAXFLOAT;
     prev_integral = 0;
+}
+
+void PID::logData(float error, float speed, float proportional, float integral, float derivative){
+    ofstream myfile;
+    string suffix = ".csv";
+    if(fName.compare("LoggedData") == 0){
+        std::ostringstream ss;
+        ss << (int)timer::system();
+        fName += ss.str();
+        myfile.open(fName + suffix, ios::app);
+        myfile << "Time,Error,Speed,Proportional,Integral,Derivative\n";
+        myfile.close();
+    }
+    myfile.open(fName + suffix, ios::app);
+    myfile << timer::system();
+    myfile << ",";
+    myfile << round(error*100.0)/100.0;
+    myfile << ",";
+    myfile << round(speed*100.0)/100.0;
+    myfile << ",";
+    myfile << round(proportional*100.0)/100.0;
+    myfile << ",";
+    myfile << round(integral*100.0)/100.0;
+    myfile << ",";
+    myfile << round(derivative*100.0)/100.0;
+    myfile << '\n';
+    myfile.close();
+    if(!cont(error)){
+        fName = "LoggedData";
+    }
 }

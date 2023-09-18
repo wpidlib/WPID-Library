@@ -5,9 +5,10 @@ class PID {
         float kp;
         float ki;
         float kd;
-        float bound = 5;
-        float prev_error = 0;
+        float bound = 1; //default in case setErrorRange() is not called in init
+        float prev_error = MAXFLOAT;
         float prev_integral = 0;
+        std::string fName = "LoggedData";
     public:
         int delay_time = 20; // delay in milliseconds
         int bias = 0; // lowest speed possible for PID to achieve
@@ -49,4 +50,15 @@ class PID {
          * @brief Reset the previous error and previous integral values.
          */
         void reset(void);
+
+        /**
+         * @brief Logs the error, speed, integral and derivative values 
+         * to a text file on a micro SD card on the robot
+         * @param error is the robot error value
+         * @param speed is the robots speed
+         * @param proportional is the P value for PID
+         * @param integral is the I value for PID
+         * @param derivative is the D value for PID
+         */
+        void logData(float error, float speed, float proportional, float integral, float derivative);
 };      

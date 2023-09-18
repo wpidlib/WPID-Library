@@ -21,14 +21,10 @@ void init(void) {
     chassis = new Chassis(12.5, 11, 3.25/2.0, &leftGroup, &rightGroup);
     // Original Constants : ki = 0.01, kp = 0.07, kd = 0.05
     // Second Iteration   : 0.15, 0.6, 0.015
-    PID straight = PID(.15, .03, .04);
-    straight.delay_time = 25;
-    straight.bias = 0;  
-    straight.setErrorRange(1);
+    PID straight = PID(.15, .03, .04); // .04
 
     // old constants : 2, 0.02, 0
     PID turn = PID(.3, .06, .05);
-    turn.setErrorRange(1);
 
     chassis->setStraightPID(straight);
     chassis->setTurnPID(turn);
