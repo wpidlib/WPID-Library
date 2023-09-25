@@ -18,14 +18,15 @@ int displayEncoders(){
 }
 
 void usercontrol(){ 
-    thread dispEnc = thread(displayEncoders);    
-    chassis->forward(24, 40);
-    chassis->turn(45, 25);
-    chassis->forward(6, 25);
-    chassis->turn(-45, 25);
-    chassis->forward(12, 30);
-    chassis->forward(-42, 50);
-    chassis->turn(-90, 25);
+    thread dispEnc = thread(displayEncoders);   
+    for(int i = 0; i < 4; i++){
+        chassis->engage(1, 1);
+        chassis->forward(24, 40); 
+        chassis->engage(-1, 1);
+        chassis->turn(90, 25);
+    }
+        
+    
     
     // axis values on controller
     double axis3, axis4 = 0;

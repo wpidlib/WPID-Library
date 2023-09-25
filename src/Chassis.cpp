@@ -35,15 +35,15 @@ void Chassis::forward(float distance, int max_speed){
     float error = target;
     float avg = 0;
 
-    // int count = 0;
-    // int half_speed = (int)fabs(pidStraight.calculateSpeed((error / 2), max_speed));
-    // pidStraight.reset();
-    // while(count != half_speed){
-    //     this->spin(distance > 0 ? count : -count);
-    //     count++;
-    //     delay(10);
-    // }
-    // this->spin(distance > 0 ? max_speed : -max_speed);
+     int count = 0;
+     int half_speed = (int)fabs(pidStraight.calculateSpeed((error / 2), max_speed));
+     pidStraight.reset();
+     while(count != half_speed){
+         this->spin(distance > 0 ? count : -count);
+         count++;
+         delay(10);
+     }
+     this->spin(distance > 0 ? max_speed : -max_speed);
 
     while (pidStraight.cont(error)) {
         avg = (leftEncoder(rotationUnits::deg) + rightEncoder(rotationUnits::deg)) / 2; 
@@ -64,17 +64,17 @@ void Chassis::turn(float target_angle, int max_speed){
     float error = target;
     float avg = 0;
 
-    // int spd = 0;
-    // int count = 0;
-    // int half_speed = (int)fabs(pidStraight.calculateSpeed((error / 2), max_speed));
-    // pidTurn.reset();
-    // while(count != half_speed){
-    //     spd = target > 0 ? count : -count;
-    //     this->spin(-spd, spd);
-    //     count++;
-    //     delay(10);   
-    // }
-    // this->spin(-spd, spd);
+    int spd = 0;
+    int count = 0;
+    int half_speed = (int)fabs(pidStraight.calculateSpeed((error / 2), max_speed));
+    pidTurn.reset();
+    while(count != half_speed){
+        spd = target > 0 ? count : -count;
+        this->spin(-spd, spd);
+        count++;
+        delay(10);   
+    }
+    this->spin(-spd, spd);
 
     while(pidTurn.cont(error)){
         avg = (fabs(leftEncoder(rotationUnits::deg)) + fabs(rightEncoder(rotationUnits::deg))) / 2; 
@@ -107,7 +107,20 @@ void Chassis::stop(){
     spin(0);
 }
 
-void Chassis::engage(){
-//TODO
+void Chassis::engage(int l, int r){
+    left->spin(directionType::fwd, l, rpm);
+    right->spin(directionType::fwd, r, rpm);
+    delay(100);
 }
+
+    // int v = 650;
+    // while(1){
+    //     left->spin(directionType::fwd, v, voltageUnits::mV);
+    //     right->spin(directionType::fwd, v, voltageUnits::mV);
+    //     v += 10;
+    //     LOG("V: " << v);
+    //     LOG("LCurr: " << left->current() << " LTorq: " << left->torque() << " LPowr: " << left->power() << " LEff: " << left->efficiency());
+    //     LOG("RCurr: " << right->current() << " RTorq: " << right->torque() << " RPowr: " << right->power() << " REff: " << right->efficiency());
+    //     delay(2000);
+    // }   
 
