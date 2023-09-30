@@ -18,22 +18,31 @@ int displayEncoders(){
 }
 
 void usercontrol(){ 
-    thread dispEnc = thread(displayEncoders);   
+    thread dispEnc = thread(displayEncoders);
     for(int i = 0; i < 4; i++){
-        chassis->engage(1, 1);
-        chassis->forward(24, 40); 
-        chassis->engage(-1, 1);
+        chassis->forward(24, 50);
         chassis->turn(90, 25);
     }
-        
-    
-    
+
     // axis values on controller
     double axis3, axis4 = 0;
     while (1) {
         axis3 = scale(con->Axis3.value());
         axis4 = scale(con->Axis4.value());
-        chassis->spin(axis3 + axis4, axis3 - axis4); 
+        chassis->spin(axis3 + axis4, axis3 - axis4);
+
+        if(con->ButtonUp.pressing()){
+            chassis->spin(35, 35);
+        }
+        if(con->ButtonDown.pressing()){
+            chassis->spin(-35, -35);
+        }
+        if(con->ButtonLeft.pressing()){
+            chassis->spin(-35, 35);
+        }
+        if(con->ButtonRight.pressing()){
+            chassis->spin(35, -35);
+        }
 
         delay(20);
     }

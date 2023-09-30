@@ -13,7 +13,10 @@ class Chassis {
         motor_group* right;
         PID pidStraight;
         PID pidTurn;
+        encoder* leftEnc;
+        encoder* rightEnc;
     public:
+        double turn_offset = 0;
         /**
          * @brief Construct a new Chassis object. 
          * All distance units are assumed to be in inches.
@@ -79,6 +82,8 @@ class Chassis {
          * @param max_speed 
          */
         void turn(float target_angle, int max_speed);
+
+        float arc(float x, float y, float max_speed);
 
         /**
          * @brief Gets the current position of the left side of the chassis

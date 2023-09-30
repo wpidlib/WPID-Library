@@ -31,19 +31,20 @@ void Chassis::resetEncoders(){
 
 void Chassis::forward(float distance, int max_speed){
     this->resetEncoders();
+
     float target = (distance / wheel_circumference) * 360.0;
     float error = target;
     float avg = 0;
 
-     int count = 0;
-     int half_speed = (int)fabs(pidStraight.calculateSpeed((error / 2), max_speed));
-     pidStraight.reset();
-     while(count != half_speed){
-         this->spin(distance > 0 ? count : -count);
-         count++;
-         delay(10);
-     }
-     this->spin(distance > 0 ? max_speed : -max_speed);
+    int count = 0;
+    int half_speed = (int)fabs(pidStraight.calculateSpeed((error / 2), max_speed));
+    pidStraight.reset();
+    while(count != half_speed){
+        this->spin(distance > 0 ? count : -count);
+        count++;
+        delay(10);
+    }
+    this->spin(distance > 0 ? max_speed : -max_speed);
 
     while (pidStraight.cont(error)) {
         avg = (leftEncoder(rotationUnits::deg) + rightEncoder(rotationUnits::deg)) / 2; 
@@ -58,7 +59,16 @@ void Chassis::forward(float distance, int max_speed){
 }
 
 void Chassis::turn(float target_angle, int max_speed){
+    if(target_angle > 0){
+        target_angle += turn_offset;
+        this->engage(-1, 0);
+        
+    } else {
+        target_angle -= turn_offset;
+        this->engage(0, -1);
+    }
     this->resetEncoders();
+
     float r = (pow(wheel_base, 2) + pow(track_width, 2)) / (track_width * (wheel_circumference/M_PI));
     float target = (target_angle*M_PI*2*r) / wheel_circumference;
     float error = target;
@@ -87,16 +97,35 @@ void Chassis::turn(float target_angle, int max_speed){
     debug ? LOG("Final Error: " << error) : true;
     pidTurn.reset();
     this->stop();
+    if(target_angle > 0){
+        this->engage(1, 0);
+    } else {
+        this->engage(0, 1);
+    }
+}
+
+float Chassis::arc(float x, float y, float max_speed){
+    float theta = tan(x/y);
+    float s = theta*y/sin(theta);
+    float sl = theta > 0 ? s + track_width/2 : s - track_width;
+    float sr = theta > 0 ? s - track_width/2 : s + track_width;
+
+    return theta;
 }
 
 float Chassis::leftEncoder(rotationUnits units){
+    if(leftEnc != NULL) {
+        return leftEnc->position(units);
+    }
     return left->position(units);
 }
 
 float Chassis::rightEncoder(rotationUnits units){
+    if(rightEnc != NULL){
+        return rightEnc->position(units);
+    }
     return right->position(units);
 }
-
 
 void Chassis::setBrakeType(brakeType type){
     left->setStopping(type);
@@ -104,13 +133,14 @@ void Chassis::setBrakeType(brakeType type){
 }
 
 void Chassis::stop(){
-    spin(0);
+    left->stop(brakeType::hold);
+    right->stop(brakeType::hold);
 }
 
 void Chassis::engage(int l, int r){
-    left->spin(directionType::fwd, l, rpm);
-    right->spin(directionType::fwd, r, rpm);
-    delay(100);
+    double p = 40;
+    left->spinTo(left->position(rotationUnits::raw) + l*p, rotationUnits::raw);
+    right->spinTo(right->position(rotationUnits::raw) + r*p, rotationUnits::raw);
 }
 
     // int v = 650;
@@ -123,4 +153,3 @@ void Chassis::engage(int l, int r){
     //     LOG("RCurr: " << right->current() << " RTorq: " << right->torque() << " RPowr: " << right->power() << " REff: " << right->efficiency());
     //     delay(2000);
     // }   
-
