@@ -25,6 +25,11 @@ void Chassis::spin(int max_speed){
 }
 
 void Chassis::resetEncoders(){
+    if(leftEnc != nullptr && rightEnc != nullptr){
+        leftEnc->resetRotation();
+        rightEnc->resetRotation();
+        return;
+    } 
     left->resetPosition();
     right->resetPosition();
 }
@@ -61,46 +66,64 @@ void Chassis::forward(float distance, int max_speed){
 void Chassis::turn(float target_angle, int max_speed){
     if(target_angle > 0){
         target_angle += turn_offset;
-        this->engage(-1, 0);
+        this->engage(0, -1);
         
     } else {
         target_angle -= turn_offset;
-        this->engage(0, -1);
+        this->engage(-1, 0);
     }
+
+    // float r = (pow(wheel_base, 2) + pow(track_width, 2)) / (track_width * (wheel_circumference/M_PI));
+    // float target = (target_angle*M_PI*2*r) / wheel_circumference;
+    
     this->resetEncoders();
+    float targetL = ((track_width/2)*(target_angle*M_PI/180)/wheel_circumference)*360;
+    float targetR = -targetL;
+    float errorL, errorR = 999;
+    float leftDist, rightDist = 0;
 
-    float r = (pow(wheel_base, 2) + pow(track_width, 2)) / (track_width * (wheel_circumference/M_PI));
-    float target = (target_angle*M_PI*2*r) / wheel_circumference;
-    float error = target;
-    float avg = 0;
+    // int spd = 0;
+    // int count = 0;
+    // int half_speed = (int)fabs(pidStraight.calculateSpeed((error / 2), max_speed));
+    // pidTurn.reset();
+    // while(count != half_speed){
+    //     spd = target > 0 ? count : -count;
+    //     this->spin(-spd, spd);
+    //     count++;
+    //     delay(10);   
+    // }
+    // this->spin(-spd, spd);
 
-    int spd = 0;
-    int count = 0;
-    int half_speed = (int)fabs(pidStraight.calculateSpeed((error / 2), max_speed));
-    pidTurn.reset();
-    while(count != half_speed){
-        spd = target > 0 ? count : -count;
-        this->spin(-spd, spd);
-        count++;
-        delay(10);   
-    }
-    this->spin(-spd, spd);
+    left->spinTo(targetL, rotationUnits::deg, max_speed, velocityUnits::pct, false);
+    right->spinTo(targetR, rotationUnits::deg, max_speed, velocityUnits::pct, false);
+    delay(2000);
 
-    while(pidTurn.cont(error)){
-        avg = (fabs(leftEncoder(rotationUnits::deg)) + fabs(rightEncoder(rotationUnits::deg))) / 2; 
-        avg = target_angle < 0 ? -avg : avg;
-        error = target - avg;
-        int speed = pidTurn.calculateSpeed(error, max_speed);
-        this->spin(-speed, speed);
+    PID pidTemp = pidTurn.copy(); //Creating a temporary PID object
+   
+    while(pidTurn.cont(errorL) || pidTemp.cont(errorR)){
+        leftDist = leftEncoder(rotationUnits::deg);
+        rightDist = rightEncoder(rotationUnits::deg);
+
+        errorL = targetL - leftDist;
+        errorR = targetR - rightDist;
+
+        int speedL = pidTurn.calculateSpeed(errorL, max_speed);
+        int speedR = pidTemp.calculateSpeed(errorR, max_speed);
+        
+        this->spin(speedL, speedR);
+        
         delay(pidTurn.delay_time);
     }
-    debug ? LOG("Final Error: " << error) : true;
+    debug ? LOG("Final Error L: " << errorL) : true;
+    debug ? LOG("Final Error R: " << errorR) : true;
     pidTurn.reset();
+    pidTemp.reset();
     this->stop();
+    
     if(target_angle > 0){
-        this->engage(1, 0);
-    } else {
         this->engage(0, 1);
+    } else {
+        this->engage(1, 0);
     }
 }
 
@@ -114,17 +137,22 @@ float Chassis::arc(float x, float y, float max_speed){
 }
 
 float Chassis::leftEncoder(rotationUnits units){
-    if(leftEnc != NULL) {
+    if(leftEnc != nullptr) {
         return leftEnc->position(units);
     }
     return left->position(units);
 }
 
 float Chassis::rightEncoder(rotationUnits units){
-    if(rightEnc != NULL){
+    if(rightEnc != nullptr){
         return rightEnc->position(units);
     }
     return right->position(units);
+}
+
+void Chassis::setEncoders(encoder* left, encoder* right){
+    this->leftEnc = left;
+    this->rightEnc = right;
 }
 
 void Chassis::setBrakeType(brakeType type){
@@ -133,12 +161,12 @@ void Chassis::setBrakeType(brakeType type){
 }
 
 void Chassis::stop(){
-    left->stop(brakeType::hold);
-    right->stop(brakeType::hold);
+    left->stop();
+    right->stop();
 }
 
 void Chassis::engage(int l, int r){
-    double p = 40;
+    double p = 30;
     left->spinTo(left->position(rotationUnits::raw) + l*p, rotationUnits::raw);
     right->spinTo(right->position(rotationUnits::raw) + r*p, rotationUnits::raw);
 }

@@ -6,6 +6,7 @@ double scale(double x) {
 }
 
 int displayEncoders(){
+    float l, r;
     while(1){
         Brain.Screen.clearScreen();
         Brain.Screen.setCursor(1, 1);
@@ -19,9 +20,12 @@ int displayEncoders(){
 
 void usercontrol(){ 
     thread dispEnc = thread(displayEncoders);
-    for(int i = 0; i < 4; i++){
-        chassis->forward(24, 50);
+
+    for (size_t i = 0; i < 4; i++) {
+        chassis->forward(24, 35);
+        delay(500);
         chassis->turn(90, 25);
+        delay(500);
     }
 
     // axis values on controller

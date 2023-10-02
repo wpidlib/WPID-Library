@@ -46,7 +46,6 @@ float PID::calculateSpeed(float error, float max_speed){
 
     std::cout << std::fixed << std::setprecision(2);
     //LOG("| " << error << " | " << speed << " | " << error*kp << " | " << integral*ki << " | " << derivative*kd << " |"); 
-    LOG("D: " << derivative*kd);
     this->logData(error, speed, (error*kp), integral, derivative);
     return speed;
 }
@@ -92,4 +91,8 @@ void PID::logData(float error, float speed, float proportional, float integral, 
     if(!cont(error)){
         fName = "LoggedData";
     }
+}
+
+PID PID::copy(){
+    return PID(kp, ki, kd);
 }

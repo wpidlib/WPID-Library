@@ -15,14 +15,18 @@ motor rightBack = motor(PORT2, ratio18_1, true);
 motor_group leftGroup = motor_group(leftFront, leftBack);
 motor_group rightGroup = motor_group(rightFront, rightBack);
 
-// encoder lenc = encoder(1);
+
+// triport ThreeWirePort = triport(PORT22);
+// encoder lenc = encoder(ThreeWirePort.B);
+// encoder renc = encoder(ThreeWirePort.A);
 
 
 void init(void) {
     Brain.Screen.clearScreen();
 
-    //12.5625
-    chassis = new Chassis(8.5, 11, 3.25/2.0, &leftGroup, &rightGroup);
+    //8.5
+    chassis = new Chassis(9.175, 11, 3.25/2.0, &leftGroup, &rightGroup);
+    //chassis->setEncoders(&lenc, &renc);
     PID straight = PID(.15, .03, .04); // .04
     PID turn = PID(.3, .06, .05);
 

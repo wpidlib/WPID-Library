@@ -61,4 +61,6 @@ class PID {
          * @param derivative is the D value for PID
          */
         void logData(float error, float speed, float proportional, float integral, float derivative);
+
+        PID copy();
 };      

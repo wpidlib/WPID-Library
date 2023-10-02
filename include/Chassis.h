@@ -13,8 +13,9 @@ class Chassis {
         motor_group* right;
         PID pidStraight;
         PID pidTurn;
-        encoder* leftEnc;
-        encoder* rightEnc;
+        PID temp;
+        encoder* leftEnc = nullptr;
+        encoder* rightEnc = nullptr;
     public:
         double turn_offset = 0;
         /**
@@ -83,6 +84,14 @@ class Chassis {
          */
         void turn(float target_angle, int max_speed);
 
+        /**
+         * @brief Drive the chassis on an arc
+         * 
+         * @param x 
+         * @param y 
+         * @param max_speed 
+         * @return float 
+         */
         float arc(float x, float y, float max_speed);
 
         /**
@@ -100,6 +109,14 @@ class Chassis {
          * @return float 
          */
         float rightEncoder(rotationUnits units);
+
+        /**
+         * @brief Sets the encoders
+         * 
+         * @param left The left encoder
+         * @param right The right encoder
+         */
+        void setEncoders(encoder* left, encoder* right);
 
         /**
          * @brief Sets the brake type of the chassis by passing a brake type as a parameter.
