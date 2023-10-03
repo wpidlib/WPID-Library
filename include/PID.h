@@ -41,7 +41,7 @@ class PID {
 
         /**
          * @brief check if the current error is within the error range
-         * @param error 
+         * @param error true if continue, false if stop
          * @return boolean
          */
         bool cont(float error);
@@ -60,7 +60,7 @@ class PID {
          * @param integral is the I value for PID
          * @param derivative is the D value for PID
          */
-        void logData(float error, float speed, float proportional, float integral, float derivative);
+        void logCSV(float error, float speed, float proportional, float integral, float derivative);
 
         PID copy();
 };      

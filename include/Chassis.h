@@ -13,9 +13,21 @@ class Chassis {
         motor_group* right;
         PID pidStraight;
         PID pidTurn;
-        PID temp;
         encoder* leftEnc = nullptr;
         encoder* rightEnc = nullptr;
+
+        /**
+         * @brief Sets the target position of each side of the chassis.
+         * This uses an open loop algorithm to move the robot with PID to its target.
+         * Does not use odometry to calculate error. Cannot adjust for sideways error.
+         * @param left_target the left side's target in SOME UNITS
+         * @param right_target the right side's target in SOME UNITS
+         * @param l_max_spd the max speed the left side should spin
+         * @param r_max_spd the max speed the right side should spin
+         * @param PID PID object to rely on
+         */
+        void setTarget(float left_target, float right_target, int l_max_spd, int r_max_spd, PID pid);
+
     public:
         double turn_offset = 0;
         /**
@@ -82,7 +94,7 @@ class Chassis {
          * @param target_angle 
          * @param max_speed 
          */
-        void turn(float target_angle, int max_speed);
+        void turn(int target_angle, int max_speed);
 
         /**
          * @brief Drive the chassis on an arc
@@ -92,7 +104,8 @@ class Chassis {
          * @param max_speed 
          * @return float 
          */
-        float arc(float x, float y, float max_speed);
+        float arc(float x, float y, int max_speed);
+        void arc(float r, int target_angle, int max_speed);
 
         /**
          * @brief Gets the current position of the left side of the chassis

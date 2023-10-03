@@ -46,7 +46,7 @@ float PID::calculateSpeed(float error, float max_speed){
 
     std::cout << std::fixed << std::setprecision(2);
     //LOG("| " << error << " | " << speed << " | " << error*kp << " | " << integral*ki << " | " << derivative*kd << " |"); 
-    this->logData(error, speed, (error*kp), integral, derivative);
+    this->logCSV(error, speed, (error*kp), integral, derivative);
     return speed;
 }
 
@@ -63,7 +63,7 @@ void PID::reset(void){
     prev_integral = 0;
 }
 
-void PID::logData(float error, float speed, float proportional, float integral, float derivative){
+void PID::logCSV(float error, float speed, float proportional, float integral, float derivative){
     ofstream myfile;
     string suffix = ".csv";
     if(fName.compare("LoggedData") == 0){
