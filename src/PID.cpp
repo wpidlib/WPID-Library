@@ -8,7 +8,9 @@
 #include <fstream>
 using namespace std;
 
-PID::PID(float kp, float ki, float kd) : kp(kp), ki(ki), kd(kd) {}
+PID::PID(float kp, float ki, float kd) : kp(kp), ki(ki), kd(kd) {
+    
+}
 
 float PID::calculateSpeed(float error, float max_speed){
     // summation of error over time
@@ -45,7 +47,7 @@ float PID::calculateSpeed(float error, float max_speed){
     if (speed > -bias && speed < 0) { speed = -bias; }
 
     std::cout << std::fixed << std::setprecision(2);
-    //LOG("| " << error << " | " << speed << " | " << error*kp << " | " << integral*ki << " | " << derivative*kd << " |"); 
+    LOG("| " << error << " | " << speed << " | " << error*kp << " | " << integral*ki << " | " << derivative*kd << " |"); 
     this->logCSV(error, speed, (error*kp), integral, derivative);
     return speed;
 }

@@ -54,10 +54,26 @@ float Chassis::arc(float x, float y, int max_speed){
     return theta;
 }
 
+void Chassis::arc(float r, int target_angle, int max_speed){
+    float theta = (((float)target_angle*M_PI)/180);
+    float sl = target_angle > 0 ? theta * (r + track_width/2) : theta * (r - track_width);
+    float sr = target_angle > 0 ? theta * (r - track_width/2) : theta * (r + track_width);
+    sl = (sl/wheel_circumference)*360;
+    sr = (sr/wheel_circumference)*360;
+    float lspd = (sl/sr)*(float)max_speed;
+    float rspd = (sr/sl)*(float)max_speed;
+    // left->spinTo(sl, rotationUnits::deg, lspd, velocityUnits::pct, false);
+    // right->spinTo(sr, rotationUnits::deg, rspd, velocityUnits::pct, false);
+    this->spin(lspd,rspd);
+    delay(20000);
+    //this->setTarget(sl, sr, max_speed, (sr/sl)*(float)max_speed, pidStraight);
+}
+
 void Chassis::setTarget(float left_target, float right_target, int l_max_spd, int r_max_spd, PID pid){
     left_target += this->leftEncoder(rotationUnits::deg); // retains state
     right_target += this->rightEncoder(rotationUnits::deg); // retains state
-    float left_error, right_error = 999; // make large to enter loop
+    float left_error = 999;
+    float right_error = 999; // make large to enter loop
     float left_state, right_state = 0;
     PID pidTemp = pid.copy(); //Creating a temporary PID object
    

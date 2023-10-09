@@ -27,7 +27,7 @@ void init(void) {
     //8.5
     chassis = new Chassis(9.175, 11, 3.25/2.0, &leftGroup, &rightGroup);
     //chassis->setEncoders(&lenc, &renc);
-    PID straight = PID(.15, .03, .04); // .04
+    PID straight = PID(.15, .03, .01); // .04
     PID turn = PID(.3, .06, .05);
 
     chassis->setStraightPID(straight);

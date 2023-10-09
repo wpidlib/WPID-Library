@@ -105,7 +105,7 @@ class Chassis {
          * @return float 
          */
         float arc(float x, float y, int max_speed);
-        void arc(float r, int target_angle, int max_speed);
+        void arc(float r, int theta, int max_speed);
 
         /**
          * @brief Gets the current position of the left side of the chassis
