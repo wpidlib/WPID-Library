@@ -6,7 +6,6 @@ double scale(double x) {
 }
 
 int displayEncoders(){
-    float l, r;
     while(1){
         Brain.Screen.clearScreen();
         Brain.Screen.setCursor(1, 1);
@@ -20,47 +19,13 @@ int displayEncoders(){
 
 void usercontrol(){ 
     thread dispEnc = thread(displayEncoders);
-
-    // chassis->arc(42.43,90,50);
-    // delay(5000);
-    //chassis->turn(-90, 25);
-    // chassis->forward(-24, 30);
-    // chassis->forward(24,30);
-    chassis->arc(20, 90, 30);
-    
-    // delay(2000);
-    // chassis->turn(-90,20);
-    // delay(2000);
-    // chassis->arc(-16,45,50);
-    // delay(5000);
-
-    // for (size_t i = 0; i < 4; i++) {
-    //     chassis->forward(24, 35);
-    //     delay(500);
-    //     chassis->turn(90, 25);
-    //     delay(500);
-    // }
-
+    auton();
     // axis values on controller
     double axis3, axis4 = 0;
     while (1) {
         axis3 = scale(con->Axis3.value());
         axis4 = scale(con->Axis4.value());
         chassis->spin(axis3 + axis4, axis3 - axis4);
-
-        if(con->ButtonUp.pressing()){
-            chassis->spin(35, 35);
-        }
-        if(con->ButtonDown.pressing()){
-            chassis->spin(-35, -35);
-        }
-        if(con->ButtonLeft.pressing()){
-            chassis->spin(-35, 35);
-        }
-        if(con->ButtonRight.pressing()){
-            chassis->spin(35, -35);
-        }
-
         delay(20);
     }
 }

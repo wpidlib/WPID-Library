@@ -47,8 +47,7 @@ float PID::calculateSpeed(float error, float max_speed){
     if (speed > -bias && speed < 0) { speed = -bias; }
 
     std::cout << std::fixed << std::setprecision(2);
-    LOG("| " << error << " | " << speed << " | " << error*kp << " | " << integral*ki << " | " << derivative*kd << " |"); 
-    this->logCSV(error, speed, (error*kp), integral, derivative);
+    //this->logCSV(error, speed, (error*kp), integral, derivative);
     return speed;
 }
 
