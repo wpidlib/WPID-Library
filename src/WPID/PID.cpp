@@ -1,16 +1,4 @@
-#include "main.h"
-#include <algorithm>
-#include <string>
-#include <iostream>
-#include <sstream>
-#include <cmath>
-#include <iomanip>
-#include <fstream>
-using namespace std;
-
-PID::PID(float kp, float ki, float kd) : kp(kp), ki(ki), kd(kd) {
-    
-}
+#include "WPID/PID.h"
 
 float PID::calculateSpeed(float error, float max_speed){
     // summation of error over time
@@ -35,7 +23,7 @@ float PID::calculateSpeed(float error, float max_speed){
     // if saturated, check if getting worse, if so then remove integral term
     // and dont add new integral to integral
     // basically only starts to integrate if our output is less than our maximum
-    if(speed != prev_speed && signbit(error) == signbit(prev_speed)){
+    if(speed != prev_speed && std::signbit(error) == std::signbit(prev_speed)){
         speed -= integral*ki;
         integral = prev_integral;
         speed += integral*ki;
@@ -65,18 +53,18 @@ void PID::reset(void){
 }
 
 void PID::logCSV(float error, float speed, float proportional, float integral, float derivative){
-    ofstream myfile;
-    string suffix = ".csv";
+    std::ofstream myfile;
+    std::string suffix = ".csv";
     if(fName.compare("LoggedData") == 0){
         std::ostringstream ss;
-        ss << (int)timer::system();
+        ss << (int)vex::timer::system();
         fName += ss.str();
-        myfile.open(fName + suffix, ios::app);
+        myfile.open(fName + suffix, std::ios::app);
         myfile << "Time,Error,Speed,Proportional,Integral,Derivative\n";
         myfile.close();
     }
-    myfile.open(fName + suffix, ios::app);
-    myfile << timer::system();
+    myfile.open(fName + suffix, std::ios::app);
+    myfile << vex::timer::system();
     myfile << ",";
     myfile << round(error*100.0)/100.0;
     myfile << ",";

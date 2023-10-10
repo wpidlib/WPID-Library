@@ -1,9 +1,8 @@
 #pragma once
 #include <cmath>
 #include <string.h>
-#include "v5.h"
 #include "v5_vcs.h"
-#include "Tank.h"
+#include "WPID/Tank.h"
 
 using namespace vex;
 

@@ -1,6 +1,12 @@
 #pragma once
+#include "v5_vcs.h"
+#include "stdint.h"
+#include <sstream>
+#include <cmath>
 #include <math.h>
-#include <string>
+#include <iomanip>
+#include <fstream>
+#include <iostream>
 
 class PID {
     private:
@@ -22,7 +28,7 @@ class PID {
          * @param ki integral constant
          * @param kd derrivative constant
          */
-        PID(float kp, float ki, float kd);
+        PID(float kp, float ki, float kd) : kp(kp), ki(ki), kd(kd){};
         PID() = default;
 
         /**

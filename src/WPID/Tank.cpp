@@ -1,4 +1,4 @@
-#include "Tank.h"
+#include "WPID/Tank.h"
 using namespace vex;
 
 Tank::Tank(float track_width, float wheel_radius, vex::motor_group* left, vex::motor_group* right){
