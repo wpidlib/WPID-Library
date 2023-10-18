@@ -20,7 +20,6 @@ class Tank : public Chassis{
         // offsets to fix steady state error
         float straight_offset = 0;
         float turn_offset = 0;
-
         /**
          * @brief Sets the target position of each side of the chassis.
          * This uses an open loop algorithm to move the robot with PID to its target.
@@ -34,6 +33,8 @@ class Tank : public Chassis{
         void setTarget(float left_target, float right_target, int l_max_spd, int r_max_spd, PID pid);
 
     public:
+        float max_acceleration = .5;
+
         /**
          * @brief Construct a new Chassis object. 
          * All distance units are assumed to be in inches.
@@ -51,13 +52,13 @@ class Tank : public Chassis{
          * @brief Sets the straight line PID constants 
          * @param pid 
          */
-        void setStraightPID(PID pid);
+        void setStraightPID(PID pid) override;
 
         /**
          * @brief Sets the turning PID constants
          * @param pid 
          */
-        void setTurnPID(PID pid);
+        void setTurnPID(PID pid) override;
 
         /**
          * @brief Spin the entire chassis by specified velocities for each
@@ -66,23 +67,23 @@ class Tank : public Chassis{
          * @param left_velocity 
          * @param right_velocity 
          */
-        void spin(int left_velocity, int right_velocity);
+        void spin(int left_velocity, int right_velocity) override;
 
         /**
          * @brief Spin the entire chassis by specified velocities for both sides
          * @param velocity 
          */
-        void spin(int velocity);
+        void spin(int velocity) override;
 
         /**
          * @brief Stops the chassis from moving
          */
-        void stop();
+        void stop() override;
 
         /**
          * @brief Reset the left and right encoders to 0.
          */
-        void resetEncoders();
+        void resetEncoders() override;
 
         /**
          * @brief Move the chassis forward with the specified PID constants.
@@ -90,7 +91,7 @@ class Tank : public Chassis{
          * @param distance 
          * @param max_speed 
          */
-        void forward(float distance, int max_speed);
+        void forward(float distance, int max_speed) override;
 
         /**
          * @brief Turn the chassis on the spot with the specified PID constants.
@@ -98,7 +99,7 @@ class Tank : public Chassis{
          * @param target_angle 
          * @param max_speed 
          */
-        void turn(int target_angle, int max_speed);
+        void turn(int target_angle, int max_speed) override;
 
         /**
          * @brief Gets the current position of the left side of the chassis

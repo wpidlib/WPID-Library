@@ -49,12 +49,13 @@ void Tank::setTarget(float left_target, float right_target, int l_max_spd, int r
     this->resetEncoders();
     left_target += this->leftEncoder(rotationUnits::deg); // retains state
     right_target += this->rightEncoder(rotationUnits::deg); // retains state
-    
+
     float left_error = 999;
     float right_error = 999; // make large to enter loop
     float left_state, right_state = 0;
     PID pidTemp = pid.copy(); //Creating a temporary PID object
-   
+
+    float ramp = 0;
     while(pid.cont(left_error) || pidTemp.cont(right_error)){
         left_state = leftEncoder(rotationUnits::deg); // get the state of the left side
         right_state = rightEncoder(rotationUnits::deg); // get the state of the right side
@@ -65,8 +66,14 @@ void Tank::setTarget(float left_target, float right_target, int l_max_spd, int r
         int left_calc = pid.calculateSpeed(left_error, l_max_spd); // calculate PID speed for the left side
         int right_calc = pid.calculateSpeed(right_error, r_max_spd); // calculate PID speed for the right side
         
+        if(left_error > left_target*.75 && ramp <= l_max_spd) {
+            left_calc = left_target < 0 ? 0.0-ramp : ramp;
+            right_calc = right_target < 0 ? 0.0-ramp : ramp;
+            ramp += max_acceleration;
+            std::cout << "Ramp: " << ramp << "Speed: " << left_calc << std::endl;
+        }
+
         this->spin(left_calc, right_calc); // spin the motors at speed
-        
         wait(pid.delay_time, msec); // delay by pid.delay_time milliseconds
     }
     pid.reset();
