@@ -50,7 +50,7 @@ class Chassis {
          * @param distance 
          * @param max_speed 
          */
-        virtual void forward(float distance, int max_speed) = 0;
+        virtual void straight(float distance, int max_speed) = 0;
 
         /**
          * @brief Turn the chassis on the spot with the specified PID constants.

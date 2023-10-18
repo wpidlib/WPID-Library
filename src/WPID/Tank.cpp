@@ -35,7 +35,7 @@ void Tank::resetEncoders(){
     right->resetPosition();
 }
 
-void Tank::forward(float distance, int max_speed){
+void Tank::straight(float distance, int max_speed){
     float target = ((distance + straight_offset) / wheel_circumference) * 360.0;
     this->setTarget(target, target, max_speed, max_speed, this->pidStraight);
 }

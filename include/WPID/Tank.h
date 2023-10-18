@@ -91,7 +91,7 @@ class Tank : public Chassis{
          * @param distance 
          * @param max_speed 
          */
-        void forward(float distance, int max_speed) override;
+        void straight(float distance, int max_speed) override;
 
         /**
          * @brief Turn the chassis on the spot with the specified PID constants.
