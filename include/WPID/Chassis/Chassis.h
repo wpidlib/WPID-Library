@@ -70,9 +70,4 @@ class Chassis {
          * @param PID PID object to rely on
          */
         virtual void setTarget(float left_target, float right_target, int l_max_spd, int r_max_spd, PID pid) = 0;
-
-    private:   
-        float straight_offset = 0;
-        float turn_offset = 0;
-        float max_acceleration = 0;
 };

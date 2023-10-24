@@ -26,6 +26,6 @@ void usercontrol(){
         axis3 = scale(con->Axis3.value());
         axis4 = scale(con->Axis4.value());
         chassis->spin(axis3 + axis4, axis3 - axis4);
-        delay(20);
+        wait(20, msec);
     }
 }

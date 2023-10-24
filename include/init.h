@@ -2,7 +2,7 @@
 #include <cmath>
 #include <string.h>
 #include "v5_vcs.h"
-#include "WPID/Tank.h"
+#include "WPID/Chassis/Tank.h"
 
 using namespace vex;
 

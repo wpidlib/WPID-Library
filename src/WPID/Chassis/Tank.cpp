@@ -1,4 +1,4 @@
-#include "WPID/Tank.h"
+#include "WPID/Chassis/Tank.h"
 using namespace vex;
 
 Tank::Tank(float track_width, float wheel_radius, vex::motor_group* left, vex::motor_group* right){
@@ -66,11 +66,10 @@ void Tank::setTarget(float left_target, float right_target, int l_max_spd, int r
         int left_calc = pid.calculateSpeed(left_error, l_max_spd); // calculate PID speed for the left side
         int right_calc = pid.calculateSpeed(right_error, r_max_spd); // calculate PID speed for the right side
         
-        if(left_error > left_target*.75 && ramp <= l_max_spd) {
+        if(left_error > left_target*.75 && ramp <= l_max_spd && ramp > 0) {
             left_calc = left_target < 0 ? 0.0-ramp : ramp;
             right_calc = right_target < 0 ? 0.0-ramp : ramp;
             ramp += max_acceleration;
-            std::cout << "Ramp: " << ramp << "Speed: " << left_calc << std::endl;
         }
 
         this->spin(left_calc, right_calc); // spin the motors at speed
@@ -113,38 +112,3 @@ void Tank::stop(){
     left->stop();
     right->stop();
 }
-
-void Tank::engage(int l, int r){
-    double p = 30;
-    left->spinTo(left->position(rotationUnits::raw) + l*p, rotationUnits::raw);
-    right->spinTo(right->position(rotationUnits::raw) + r*p, rotationUnits::raw);
-}
-
-
-void ramp(){
-    // int spd = 0;
-    // int count = 0;
-    // int half_speed = (int)fabs(pidStraight.calculateSpeed((error / 2), max_speed));
-    // pidTurn.reset();
-    // while(count != half_speed){
-    //     spd = target > 0 ? count : -count;
-    //     this->spin(-spd, spd);
-    //     count++;
-    //     delay(10);   
-    // }
-    // this->spin(-spd, spd);
-}
-
-void torque(){
-    // int v = 650;
-    // while(1){
-    //     left->spin(directionType::fwd, v, voltageUnits::mV);
-    //     right->spin(directionType::fwd, v, voltageUnits::mV);
-    //     v += 10;
-    //     LOG("V: " << v);
-    //     LOG("LCurr: " << left->current() << " LTorq: " << left->torque() << " LPowr: " << left->power() << " LEff: " << left->efficiency());
-    //     LOG("RCurr: " << right->current() << " RTorq: " << right->torque() << " RPowr: " << right->power() << " REff: " << right->efficiency());
-    //     delay(2000);
-    // }   
-} 
-    

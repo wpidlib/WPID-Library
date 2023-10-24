@@ -16,13 +16,12 @@ motor_group rightGroup = motor_group(rightFront, rightBack);
 // triport ThreeWirePort = triport(PORT22);
 // encoder lenc = encoder(ThreeWirePort.B);
 // encoder renc = encoder(ThreeWirePort.A);
+// chassis->setEncoders(&lenc, &renc);
 
 void init(void) {
     Brain.Screen.clearScreen();
     chassis = new Tank(8.75, 3.25/2.0, &leftGroup, &rightGroup);
-    // chassis->setOffset(.25, -.75);
     chassis->setOffset(.25, 0.85);
-    //chassis->setEncoders(&lenc, &renc);
 
     PID straight = PID(.15, .035, .005); // .04
     straight.setErrorRange(.5);
@@ -33,8 +32,6 @@ void init(void) {
     chassis->setTurnPID(turn);
 
     chassis->setBrakeType(brakeType::brake);
-}
 
-void delay(int msec){
-    wait(msec, timeUnits::msec);
+    chassis->setMaxAcceleration(.5);
 }

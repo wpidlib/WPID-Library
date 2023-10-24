@@ -8,6 +8,6 @@ int main() {
     Comp.drivercontrol(usercontrol);
 
     while (1) {
-        delay(20);
+        wait(20, msec);
     }
 }
