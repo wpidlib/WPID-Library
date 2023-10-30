@@ -27,8 +27,8 @@ void HDrive::spin(int left_velocity, int right_velocity, int center_velocity){
     center->spin(directionType::fwd, center_velocity, velocityUnits::pct);
 }
 
-void HDrive::spin(int velocity){
-    this->spin(velocity, velocity, 0);
+void HDrive::spin(int sides, int center){
+    this->spin(sides, sides, center);
 }
 
 void HDrive::resetEncoders(){

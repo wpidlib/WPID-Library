@@ -18,7 +18,7 @@ void Mechanism::setAngle(float angle, float max_speed){
     float target = angle / gear_ratio;
     this->resetPosition();
     target += this->getPosition(rotationUnits::deg); // retains state
-
+    
     float error = 999;
     float state = 0;
 

@@ -64,7 +64,7 @@ void Tank::setTarget(float left_target, float right_target, int l_max_spd, int r
         right_error = right_target - right_state; // difference between target and state
 
         int left_calc = pid.calculateSpeed(left_error, l_max_spd); // calculate PID speed for the left side
-        int right_calc = pid.calculateSpeed(right_error, r_max_spd); // calculate PID speed for the right side
+        int right_calc = pidTemp.calculateSpeed(right_error, r_max_spd); // calculate PID speed for the right side
         
         if(left_error > left_target*.75 && ramp <= l_max_spd && ramp > 0) {
             left_calc = left_target < 0 ? 0.0-ramp : ramp;

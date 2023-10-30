@@ -86,7 +86,7 @@ class HDrive: public Tank {
          * 
          * @param velocity 
          */
-        void spin(int velocity) override;
+        void spin(int sides, int center) override;
 
         /**
          * @brief Stops the chassis from moving
