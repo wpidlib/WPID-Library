@@ -7,7 +7,9 @@ Mechanism::Mechanism(motor_group* motors, float gear_ratio){
 }
 
 void Mechanism::spin(int velocity){
-    motors->spin(directionType::fwd, velocity, velocityUnits::pct);
+    if(this->getPosition(rotationUnits::deg) > lower_bound && this->getPosition(rotationUnits::deg) < upper_bound){
+        motors->spin(directionType::fwd, velocity, velocityUnits::pct);
+    }
 }
 
 void Mechanism::stop(){
@@ -64,4 +66,9 @@ void Mechanism::setOffset(float offset){
 
 void Mechanism::setMaxAcceleration(float max_accel){
     this->max_acceleration = max_accel;
+}
+
+void Mechanism::setBounds(float upper_bound, float lower_bound){
+    this->upper_bound = upper_bound;
+    this->lower_bound = lower_bound;
 }

@@ -13,6 +13,8 @@ private:
     float offset = 0;
 
     float max_acceleration = 0;
+    float upper_bound = MAXFLOAT;
+    float lower_bound = -1;
 public:
     /**
      * @brief Construct a new Mechanism object.
@@ -76,4 +78,12 @@ public:
     void setOffset(float offset);
 
     void setMaxAcceleration(float max_accel);
+
+    /**
+     * @brief Set the manual bounds of the mechanism, such that it is unable to spin past these points
+     * 
+     * @param upper_bound the highest encoder value the mechanism may move to
+     * @param lower_bound the lowest encoder value the mechanism may move to
+     */
+    void setBounds(float upper_bound, float lower_bound);
 };
