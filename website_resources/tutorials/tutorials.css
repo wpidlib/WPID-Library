@@ -1,0 +1,11 @@
+body,h1,h2,h3,h4,h5,h6,p {
+    font-family: "Verdana", sans-serif;
+}
+
+.w3-bar-block .w3-bar-item {
+    padding:20px;
+}
+
+header {
+    background-color:#0789d4;
+}
