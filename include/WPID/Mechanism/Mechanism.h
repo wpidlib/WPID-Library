@@ -10,6 +10,7 @@ private:
     motor_group* motors;
     float gear_ratio;
     PID pid;
+    float offset = 0;
 
     float max_acceleration = 0;
 public:
@@ -24,7 +25,7 @@ public:
 
     /**
      * @brief Spins the motor group at the specified speed.
-     *  
+     * @param velocity the velocity of the lift
      */
     void spin(int velocity);
 
@@ -66,4 +67,13 @@ public:
      * @param PID a PID object
      */
     void setPID(PID pid);
+
+    /**
+     * @brief Set the offset of the mechanism to add or subtract a constant angle
+     * 
+     * @param offset the offset
+     */
+    void setOffset(float offset);
+
+    void setMaxAcceleration(float max_accel);
 };

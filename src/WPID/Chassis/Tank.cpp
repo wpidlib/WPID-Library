@@ -25,16 +25,6 @@ void Tank::spin(int velocity){
     this->spin(velocity, velocity);
 }
 
-void Tank::resetEncoders(){
-    if(leftEnc != nullptr && rightEnc != nullptr){
-        leftEnc->resetRotation();
-        rightEnc->resetRotation();
-        return;
-    } 
-    left->resetPosition();
-    right->resetPosition();
-}
-
 void Tank::straight(float distance, int max_speed){
     float target = ((distance + straight_offset) / wheel_circumference) * 360.0;
     this->setTarget(target, target, max_speed, max_speed, this->pidStraight);
@@ -93,6 +83,16 @@ float Tank::rightEncoder(rotationUnits units){
     return right->position(units);
 }
 
+void Tank::resetEncoders(){
+    if(leftEnc != nullptr && rightEnc != nullptr){
+        leftEnc->resetRotation();
+        rightEnc->resetRotation();
+        return;
+    } 
+    left->resetPosition();
+    right->resetPosition();
+}
+
 void Tank::setEncoders(encoder* left, encoder* right){
     this->leftEnc = left;
     this->rightEnc = right;
@@ -111,4 +111,8 @@ void Tank::setOffset(float straight, float turn){
 void Tank::stop(){
     left->stop();
     right->stop();
+}
+
+void Tank::setMaxAcceleration(float max_accel){
+    this->max_acceleration = max_accel;
 }

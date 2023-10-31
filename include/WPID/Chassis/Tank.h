@@ -20,6 +20,9 @@ class Tank : public Chassis{
         // offsets to fix steady state error
         float straight_offset = 0;
         float turn_offset = 0;
+        // maximum acceleration for ramp
+        float max_acceleration = .5;
+
         /**
          * @brief Sets the target position of each side of the chassis.
          * This uses an open loop algorithm to move the robot with PID to its target.
@@ -33,8 +36,6 @@ class Tank : public Chassis{
         void setTarget(float left_target, float right_target, int l_max_spd, int r_max_spd, PID pid);
 
     public:
-        float max_acceleration = .5;
-
         /**
          * @brief Construct a new Chassis object. 
          * All distance units are assumed to be in inches.
@@ -81,11 +82,6 @@ class Tank : public Chassis{
         void stop() override;
 
         /**
-         * @brief Reset the left and right encoders to 0.
-         */
-        void resetEncoders() override;
-
-        /**
          * @brief Move the chassis forward with the specified PID constants.
          * Chassis will always stay at or below the maximum speed.
          * @param distance 
@@ -118,6 +114,11 @@ class Tank : public Chassis{
         float rightEncoder(rotationUnits units);
 
         /**
+         * @brief Reset the left and right encoders to 0.
+         */
+        void resetEncoders() override;
+
+        /**
          * @brief Sets the encoders
          * 
          * @param left The left encoder
@@ -139,7 +140,10 @@ class Tank : public Chassis{
          */
         void setOffset(float straight, float turn);
 
-        void setMaxAcceleration(float max_accel){
-            this->max_acceleration = max_accel;
-        }
+        /**
+         * @brief Set the max acceleration for the ramp up
+         * 
+         * @param max_accel 
+         */
+        void setMaxAcceleration(float max_accel);
 };

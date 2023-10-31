@@ -23,7 +23,7 @@ void init(void) {
     chassis = new Tank(12.5, 3.25/2.0, &leftGroup, &rightGroup);
     chassis->setOffset(.25, 0.85);
 
-    PID straight = PID(.15, .04, .04); // .04
+    PID straight = PID(.15, .04, .04);
     straight.setErrorRange(.5);
     PID turn = PID(.3, .065, .04);
     turn.setErrorRange(.5);
@@ -34,11 +34,12 @@ void init(void) {
     chassis->setBrakeType(brakeType::hold);
     chassis->setMaxAcceleration(.5);
 
+    // Fourbar setup
     fourbar = new Mechanism(&mechGroup, 0.25);
     PID lift = PID(1, 0, 0);
     fourbar->setPID(lift);
-
     fourbar->setBrakeType(brakeType::hold);
+    fourbar->setMaxAcceleration(.25);
 }
 
 // TANK SETUP

@@ -15,7 +15,7 @@ void Mechanism::stop(){
 }
 
 void Mechanism::setAngle(float angle, float max_speed){
-    float target = angle / gear_ratio;
+    float target = (angle + offset) / gear_ratio;
     this->resetPosition();
     target += this->getPosition(rotationUnits::deg); // retains state
     
@@ -56,4 +56,12 @@ void Mechanism::setBrakeType(brakeType type){
 
 void Mechanism::setPID(PID pid){
     this->pid = pid;
+}
+
+void Mechanism::setOffset(float offset){
+    this->offset = offset;
+}
+
+void Mechanism::setMaxAcceleration(float max_accel){
+    this->max_acceleration = max_accel;
 }
