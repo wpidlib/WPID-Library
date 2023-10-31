@@ -54,4 +54,16 @@ public:
      * 
      */
     void resetPosition();
+
+    /**
+     * @brief Sets the brake type of the motors
+     * @param brakeType the brake type (coast, brake or hold)
+     */
+    void setBrakeType(brakeType type);
+
+    /**
+     * @brief Set the PID constants and object to the mechanism
+     * @param PID a PID object
+     */
+    void setPID(PID pid);
 };

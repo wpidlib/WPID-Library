@@ -31,11 +31,14 @@ void init(void) {
     chassis->setStraightPID(straight);
     chassis->setTurnPID(turn);
 
-    chassis->setBrakeType(brakeType::brake);
-
+    chassis->setBrakeType(brakeType::hold);
     chassis->setMaxAcceleration(.5);
 
     fourbar = new Mechanism(&mechGroup, 0.25);
+    PID lift = PID(1, 0, 0);
+    fourbar->setPID(lift);
+
+    fourbar->setBrakeType(brakeType::hold);
 }
 
 // TANK SETUP

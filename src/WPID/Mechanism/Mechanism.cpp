@@ -49,3 +49,11 @@ float Mechanism::getPosition(rotationUnits units){
 void Mechanism::resetPosition(){
     motors->resetPosition();
 }
+
+void Mechanism::setBrakeType(brakeType type){
+    motors->setStopping(type);
+}
+
+void Mechanism::setPID(PID pid){
+    this->pid = pid;
+}
