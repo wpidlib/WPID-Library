@@ -6,9 +6,20 @@ Mechanism::Mechanism(motor_group* motors, float gear_ratio){
     this->gear_ratio = gear_ratio;
 }
 
+void legalMove(int velocity, float position){
+    int upper_bound, lower_bound = 0;
+    if (velocity > 0 && position <= upper_bound){
+
+    }
+}
+
 void Mechanism::spin(int velocity){
-    if(this->getPosition(rotationUnits::deg) > lower_bound && this->getPosition(rotationUnits::deg) < upper_bound){
+    float position = this->getPosition(rotationUnits::deg);
+    if(velocity > 0 && position < upper_bound 
+    || velocity < 0 && position > lower_bound){
         motors->spin(directionType::fwd, velocity, velocityUnits::pct);
+    } else {
+        motors->stop();
     }
 }
 

@@ -1,6 +1,6 @@
 #include "WPID/Conversion.h"
 
-Conversion:: Conversion(){this->setEnum();}
+Conversion::Conversion(){this->setEnum();}
 
 void Conversion::setEnum(){
     this->measurements["ft"] = ft;

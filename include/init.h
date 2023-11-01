@@ -2,9 +2,9 @@
 #include <cmath>
 #include <string.h>
 #include "v5_vcs.h"
-#include "WPID/Chassis/HDrive.h"
-#include "WPID/Mechanism/Mechanism.h"
+#include "WPID/wpid.h"
 
+using namespace wpid;
 using namespace vex;
 
 extern brain Brain;

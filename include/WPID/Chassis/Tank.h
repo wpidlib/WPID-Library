@@ -1,6 +1,6 @@
 #pragma once
 #include "Chassis.h"
-
+namespace wpid{
 class Tank : public Chassis{
     private:
         // Chassis scales specific for Tank Drive
@@ -145,3 +145,4 @@ class Tank : public Chassis{
          */
         void setMaxAcceleration(float max_accel);
 };
+}
