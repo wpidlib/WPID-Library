@@ -9,7 +9,9 @@ tree = [
     ["Mechanism Class",
         ["MFunc1", "Func1 Desc"], ["MFunc2", "Func2 Desc"]],
     ["PID.cpp",
-        ["PFunc1", "Func1 Desc"], ["PFunc2", "Func2 Desc"]]
+        ["PFunc1", "Func1 Desc"], ["PFunc2", "Func2 Desc"]],
+    ["init.cpp",
+        ["iFunc1", "Func1 Desc"], ["iFunc2", "Func2 Desc"]]
 ]
 
 def generateCardTree(subList, headNum, head, col, body, accordion):
@@ -25,9 +27,13 @@ def generateCardTree(subList, headNum, head, col, body, accordion):
             with a.div(klass = "card-body"):
                 accordion = accordion + "-" + str(headNum)
                 with a.div(id = accordion):
+                    #print(subList)
                     for x in range(1, len(subList)):
-                        print(subList[x])
-                        if(len(subList[x])>2):
+                        #print(type(subList[x][1]))
+                        #print(subList[x])
+                        #print(type(subList[x][1]) is list)
+                        if(type(subList[x][1]) is list):
+                            #print(subList[x])
                             generateCardTree(subList[x], x, head, col, body, accordion)
                         else:
 
