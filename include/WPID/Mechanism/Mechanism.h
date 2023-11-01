@@ -7,14 +7,17 @@ using namespace vex;
 
 class Mechanism {
 private:
+    // Mechanism motors
     motor_group* motors;
-    float gear_ratio;
-    PID pid;
-    float offset = 0;
+    float gear_ratio; // the gear ration from motor to output
+    PID pid; // the pid constants
+    float offset = 0; // an offset to account for consistent error
 
+    // Mechanism traits
     float max_acceleration = 0;
     float upper_bound = MAXFLOAT;
     float lower_bound = -1;
+    int timeout = 0;
 public:
     /**
      * @brief Construct a new Mechanism object.
@@ -37,13 +40,13 @@ public:
     void stop();
 
     /**
-     * @brief Set the angle of the mechanism. The angle is the relative angle of your arm, in degrees.
+     * @brief Set the position of the mechanism. The position is the relative angle of your arm, in rotationUnit units.
      * 
      * 
-     * @param angle 
-     * @param max_speed 
+     * @param position the position of the motor in the set rotationUnit
+     * @param max_speed the maximum speed of the motors
      */
-    void setAngle(float angle, float max_speed);
+    void setPosition(float position, float max_speed);
 
     /**
      * @brief Gets the position of the mechanism
@@ -77,6 +80,11 @@ public:
      */
     void setOffset(float offset);
 
+    /**
+     * @brief Set the max acceleration of the mechanism
+     * 
+     * @param max_accel an arbitrary value to increment to ramp the speed up
+     */
     void setMaxAcceleration(float max_accel);
 
     /**
@@ -86,4 +94,10 @@ public:
      * @param lower_bound the lowest encoder value the mechanism may move to
      */
     void setBounds(float upper_bound, float lower_bound);
+    
+    /**
+     * @brief Set the timeout of the mechanism. Limits the time a `setPosition()` call takes. 
+     * @param timeout the timeout in milliseconds
+     */
+    void setTimeout(int timeout);
 };

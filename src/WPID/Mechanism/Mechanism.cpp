@@ -20,21 +20,22 @@ void Mechanism::stop(){
     motors->stop();
 }
 
-void Mechanism::setAngle(float angle, float max_speed){
+void Mechanism::setPosition(float angle, float max_speed){
     float target = (angle + offset) / gear_ratio;
-    this->resetPosition();
     target += this->getPosition(rotationUnits::deg); // retains state
     
-    float error = 999;
     float state = 0;
-
+    float error = 999;
+    int calc = 0;
     float ramp = 0;
+
+    int startTime = (int)vex::timer::system();
+
     while(pid.cont(error)){
+        if((int)vex::timer::system() == startTime + timeout) {break;}
         state = this->getPosition(rotationUnits::deg); // get the state of the motors
-
         error = target - state; // difference between target and state
-
-        int calc = pid.calculateSpeed(error, max_speed); // calculate PID speed for the left side
+        calc = pid.calculateSpeed(error, max_speed); // calculate PID speed for the left side
         
         if(error > target*.75 && ramp <= max_speed && ramp > 0) {
             calc = target < 0 ? 0.0-ramp : ramp;
@@ -75,4 +76,8 @@ void Mechanism::setMaxAcceleration(float max_accel){
 void Mechanism::setBounds(float upper_bound, float lower_bound){
     this->upper_bound = upper_bound;
     this->lower_bound = lower_bound;
+}
+
+void Mechanism::setTimeout(int timeout){
+    this->timeout = timeout;
 }

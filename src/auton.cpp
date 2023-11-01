@@ -2,9 +2,9 @@
 #include <iostream>
 
 void auton(){
-  std::cout << "Setting Angle" << std::endl;
-  fourbar->setAngle(90,10);
-  wait(1000, msec);
+  //chassis->setTimeout(2000, msec);
+  chassis->straight(12.0, 20);
+  chassis->turn(90, 20);
 }
 
   // chassis->strafe(24,20);
