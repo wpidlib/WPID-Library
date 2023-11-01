@@ -15,6 +15,7 @@ If you include our library it should look like this:
 `vex/mkenv` line `05`:
 
 ![Alt text](image-1.png)
-the file structure:
+
+The .a file and header files (WPID folder) in the project:
 
 ![Alt text](image.png)
