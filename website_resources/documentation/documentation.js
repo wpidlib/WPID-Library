@@ -5,4 +5,3 @@ $(function(){
 $(function(){
 $("#footer").load("../layout/_footer.html");  
 });
-

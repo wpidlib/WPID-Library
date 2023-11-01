@@ -29,4 +29,16 @@
   body,h1,h2,h3,h4,h5,h6,p {font-family: "Verdana", sans-serif}
         .w3-bar-block .w3-bar-item {padding:20px}
 
-      
+.mb-0 > a {
+  display: block;
+  position: relative;
+}
+.mb-0 > a:after {
+  content: "\f078"; /* fa-chevron-down */
+  font-family: 'FontAwesome';
+  position: absolute;
+  right: 0;
+}
+.mb-0 > a[aria-expanded="true"]:after {
+  content: "\f077"; /* fa-chevron-up */
+}
