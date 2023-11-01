@@ -1,6 +1,5 @@
 #pragma once
-#include "WPID/Chassis/Chassis.h"
-#include "WPID/Chassis/Tank.h"
+#include "Tank.h"
 
 class HDrive: public Tank {
     private:

@@ -1,9 +1,0 @@
-To create a lib:
-build the Project
-the use ar rcs libYOURLIBNAME.a YOURLIBNAME.o
-
-do this for each cpp and h file you intend on importing
-
-then copy over each h file to your new project and the .a files into your project somewhere also
-
-in mkenv.mk add the locaiton of the .a files to LNK_FLAGS and -lYOURLIBNAME to LIBS
