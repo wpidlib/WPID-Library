@@ -1,7 +1,7 @@
 #pragma once
 #include "Tank.h"
 
-class HDrive: public Tank {
+class HDrive: public wpid::Tank {
     private:
         // Chassis scales specific for Tank Drive
         float track_width;

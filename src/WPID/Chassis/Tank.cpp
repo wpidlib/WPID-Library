@@ -1,6 +1,6 @@
 #include "WPID/Chassis/Tank.h"
 using namespace vex;
-
+using namespace wpid;
 Tank::Tank(float track_width, float wheel_radius, vex::motor_group* left, vex::motor_group* right){
     this->track_width = track_width;
     this->wheel_circumference = 2.0 * M_PI * wheel_radius;
