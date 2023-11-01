@@ -2,11 +2,14 @@
 #include "v5.h"
 #include "v5_vcs.h"
 #include "../PID.h"
+#include <string>
 
 using namespace vex;
 
 class Mechanism {
 private:
+    //
+    std::string name = "Mechanism";
     // Mechanism motors
     motor_group* motors;
     float gear_ratio; // the gear ration from motor to output
@@ -100,4 +103,11 @@ public:
      * @param timeout the timeout in milliseconds
      */
     void setTimeout(int timeout);
+
+    /**
+     * @brief Set the name of the mechanism
+     * 
+     * @param name the name of the mechanism
+     */
+    void setName(char* name);
 };

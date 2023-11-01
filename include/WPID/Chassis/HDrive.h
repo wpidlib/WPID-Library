@@ -1,8 +1,10 @@
 #pragma once
 #include "Tank.h"
+#include <string>
 
 class HDrive: public wpid::Tank {
     private:
+        std::string name = "HDrive Chassis";
         // Chassis scales specific for Tank Drive
         float track_width;
         float wheel_circumference;
@@ -176,7 +178,17 @@ class HDrive: public wpid::Tank {
          */
         void setOffset(float straight, float turn, float strafe);
 
-        void setMaxAcceleration(float max_accel){
-            this->max_acceleration = max_accel;
-        }
+        /**
+         * @brief Set the max acceleration of the mechanism
+         * 
+         * @param max_accel an arbitrary value to increment to ramp the speed up
+         */
+        void setMaxAcceleration(float max_accel);
+
+        /**
+         * @brief Set the name of the chassis
+         * 
+         * @param name the name of the chassis
+         */
+        void setName(char* name);
 };

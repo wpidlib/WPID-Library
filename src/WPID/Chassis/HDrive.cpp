@@ -154,3 +154,12 @@ void HDrive::stop(){
     right->stop();
     center->stop();
 }
+
+void HDrive::setMaxAcceleration(float max_accel){
+    this->max_acceleration = max_accel;
+}
+
+void HDrive::setName(char* name){
+    std::string t = std::string(name);
+    this->name = t;
+}

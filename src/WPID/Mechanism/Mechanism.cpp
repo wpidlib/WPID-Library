@@ -81,3 +81,8 @@ void Mechanism::setBounds(float upper_bound, float lower_bound){
 void Mechanism::setTimeout(int timeout){
     this->timeout = timeout;
 }
+
+void Mechanism::setName(char* name){
+    std::string t = std::string(name);
+    this->name = t;
+}
