@@ -33,3 +33,25 @@ float Conversion::convertTo(float value, measurement output_type){
             return value;
     }
 }
+
+float Conversion::standardize(float value, float gearset, vex::rotationUnits value_type){
+    switch(value_type){
+        case vex::rotationUnits::rev:
+            return value * REV_TO_DEG;
+        case vex::rotationUnits::raw:
+            return value * (gearset * RAW_TO_DEG);
+        default:
+            return value;
+    }
+}
+
+float Conversion::convertTo(float value, float gearset, vex::rotationUnits output_type){
+    switch(output_type){
+        case vex::rotationUnits::rev:
+            return value / REV_TO_DEG;
+        case vex::rotationUnits::raw:
+            return value / (gearset * RAW_TO_DEG);
+        default:
+            return value;
+    }
+}

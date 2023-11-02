@@ -1,5 +1,7 @@
+#pragma once
 #include <iostream>
 #include <map>
+#include "v5_vcs.h"
 using namespace std;
 
 class Conversion {
@@ -9,6 +11,8 @@ class Conversion {
         static constexpr float M_TO_IN = 39.3701;
         static constexpr float CM_TO_IN = 0.393701;
         static constexpr float MM_TO_IN = 0.0393701;
+        static constexpr float REV_TO_DEG = 360;
+        static constexpr float RAW_TO_DEG = 50;
 
     public:
     
@@ -43,4 +47,18 @@ class Conversion {
      * @param output_type the enum representing the desired output type of data
     */
     static float convertTo(float value, measurement output_type);
+
+    /**
+     * @brief Converts any measured rotation unit to the standardized units used in this library
+     * @param value the numeric value
+     * @param value_type the enum representing the type of input data
+    */
+    static float standardize(float value, float gearset, vex::rotationUnits value_type);
+
+    /**
+     * @brief Converts any measured rotation unit to the standardized units used in this library
+     * @param value the numeric value
+     * @param output_type the enum representing the type of input data
+    */
+    static float convertTo(float value, float gearset, vex::rotationUnits output_type);
 };
