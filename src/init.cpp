@@ -20,7 +20,7 @@ motor_group mechGroup = motor_group(mech);
 
 void init(void) {
     Brain.Screen.clearScreen();
-    chassis = new Tank(12.5, 3.25/2.0, &leftGroup, &rightGroup);
+    chassis = new Tank(12.5, 3.25/2.0, &leftGroup, &rightGroup, 1);
     chassis->setOffset(.25, 0.85);
 
     PID straight = PID(.15, .04, .04);
@@ -39,7 +39,8 @@ void init(void) {
     PID lift = PID(1, 0, 0);
     fourbar->setPID(lift);
     fourbar->setBrakeType(brakeType::hold);
-    fourbar->setMaxAcceleration(.25);
+    fourbar->setMaxAcceleration(0);
+    fourbar->setBounds(0, 110);
 }
 
 // TANK SETUP
@@ -47,7 +48,7 @@ void init(void) {
 // HDRIVE SETUP
     // chassis = new HDrive(
     //     12.5, 3.25/2.0, 3.25/2.0, 
-    //     &leftGroup, &rightGroup, &centerGroup);
+    //     &leftGroup, &rightGroup, &centerGroup, 1);
 
     // PID straight = PID(.16, .05, .04);
     // PID turn = PID(.3, .065, .04);

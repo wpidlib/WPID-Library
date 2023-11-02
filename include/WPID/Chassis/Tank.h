@@ -1,6 +1,7 @@
 #pragma once
 #include "Chassis.h"
 #include <string>
+
 namespace wpid{
 class Tank : public Chassis{
     private:
@@ -9,14 +10,11 @@ class Tank : public Chassis{
         float track_width;
         float wheel_circumference;
         // Left and Right motor groups for Tank
-        motor_group* left;
-        motor_group* right;
+        Mechanism* left;
+        Mechanism* right;
         // seperate PID objects for turning and straight motion
         PID pidStraight;
         PID pidTurn;
-        // external encoders to track left and right side
-        encoder* leftEnc = nullptr;
-        encoder* rightEnc = nullptr;
         // offsets to fix steady state error
         float straight_offset = 0;
         float turn_offset = 0;
@@ -31,9 +29,8 @@ class Tank : public Chassis{
          * @param right_target the right side's target in SOME UNITS
          * @param l_max_spd the max speed the left side should spin
          * @param r_max_spd the max speed the right side should spin
-         * @param PID PID object to rely on
          */
-        void setTarget(float left_target, float right_target, int l_max_spd, int r_max_spd, PID pid);
+        void setTarget(float left_target, float right_target, int l_max_spd, int r_max_spd);
 
     public:
         /**
@@ -46,7 +43,7 @@ class Tank : public Chassis{
          * @param left motor group
          * @param right motor group
          */
-        Tank(float track_width, float wheel_radius, motor_group* left, motor_group* right);
+        Tank(float track_width, float wheel_radius, motor_group* left, motor_group* right, float drive_gear_ratio);
         Tank() = default;
 
         /**
@@ -117,14 +114,6 @@ class Tank : public Chassis{
          * @brief Reset the left and right encoders to 0.
          */
         void resetEncoders() override;
-
-        /**
-         * @brief Sets the encoders
-         * 
-         * @param left The left encoder
-         * @param right The right encoder
-         */
-        void setEncoders(encoder* left, encoder* right);
 
         /**
          * @brief Sets the brake type of the chassis by passing a brake type as a parameter.

@@ -2,6 +2,7 @@
 #include "v5.h"
 #include "v5_vcs.h"
 #include "../PID.h"
+#include "../Mechanism/Mechanism.h"
 
 using namespace vex;
 
@@ -69,5 +70,5 @@ class Chassis {
          * @param r_max_spd the max speed the right side should spin
          * @param PID PID object to rely on
          */
-        virtual void setTarget(float left_target, float right_target, int l_max_spd, int r_max_spd, PID pid) = 0;
+        virtual void setTarget(float left_target, float right_target, int l_max_spd, int r_max_spd) = 0;
 };

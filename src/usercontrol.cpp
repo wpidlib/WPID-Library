@@ -1,11 +1,12 @@
 #include "main.h"
+#include <iostream>
 
 // cubes value and returns as a proportion
 double scale(double x) {
     return (x > 0 ? 100 : -100) * ((x/127) * (x/127)); 
 }
 
-int printAngle(){
+int opPrint(){
     while(1){
         Brain.Screen.clearScreen();
         Brain.Screen.setCursor(1, 1);
@@ -16,12 +17,12 @@ int printAngle(){
 }
 
 void usercontrol(){ 
-    //auton();
-    thread disp = thread(printAngle);
+    auton();
+    thread disp = thread(opPrint);
+
     // axis values on controller
     double axis3, axis4 = 0;
     while (1) {
-        std::cout << "hi" << std::endl;
         axis3 = scale(con->Axis3.value());
         axis4 = scale(con->Axis4.value());
 

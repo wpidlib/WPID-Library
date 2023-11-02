@@ -10,17 +10,13 @@ class HDrive: public wpid::Tank {
         float wheel_circumference;
         float center_wheel_circumference;
         // Left and Right motor groups for Tank
-        motor_group* left;
-        motor_group* right;
-        motor_group* center;
+        Mechanism* left;
+        Mechanism* right;
+        Mechanism* center;
         // seperate PID objects for turning and straight motion
         PID pidStraight;
         PID pidTurn;
         PID pidStrafe;
-        // external encoders to track left and right side
-        encoder* leftEnc = nullptr;
-        encoder* rightEnc = nullptr;
-        encoder* centerEnc = nullptr;
         // offsets to fix steady state error
         float straight_offset = 0;
         float turn_offset = 0;
@@ -36,9 +32,8 @@ class HDrive: public wpid::Tank {
          * @param l_max_spd the max speed the left side should spin
          * @param r_max_spd the max speed the right side should spin
          * @param c_max_spd the max speed the center wheel should spin
-         * @param PID PID object to rely on
          */
-        void setTarget(float left_target, float right_target, float center_target, int l_max_spd, int r_max_spd, int c_max_spd, PID pid);
+        void setTarget(float left_target, float right_target, float center_target, int l_max_spd, int r_max_spd, int c_max_spd);
     public:
         /**
          * @brief Construct a new Chassis object. 
@@ -50,8 +45,9 @@ class HDrive: public wpid::Tank {
          * @param left motor group
          * @param right motor group
          * @param center motor group
+         * @param drive_gear_ratio the internal gearset of the drive train
          */
-        HDrive(float track_width, float wheel_radius, float center_wheel_radius, motor_group* left, motor_group* right, motor_group* center);
+        HDrive(float track_width, float wheel_radius, float center_wheel_radius, motor_group* left, motor_group* right, motor_group* center, float drive_gear_ratio);
         HDrive() = default;
 
         /**

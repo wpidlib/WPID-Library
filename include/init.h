@@ -13,8 +13,4 @@ extern controller* con;
 extern Tank* chassis;
 extern Mechanism* fourbar;
 
-// extern triport tport;
-// extern encoder lenc;
-// extern encoder renc;
-
 void init(void);

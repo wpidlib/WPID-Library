@@ -18,9 +18,9 @@ private:
 
     // Mechanism traits
     float max_acceleration = 0;
-    float upper_bound = 0;
     float lower_bound = 0;
-    int timeout = -1;
+    float upper_bound = 0;
+    int timeout = -9999;
     const float MAX_RAMP_DURATION = .25; // maximum duration based on target
 public:
     /**
@@ -43,15 +43,34 @@ public:
      */
     void stop();
 
+
     /**
-     * @brief Set the position of the mechanism. The position is the relative angle of your arm, in rotationUnit units.
+     * @brief Move the mechanism an absolute position asynchronously
+     */
+    void moveRelativeAsync();
+
+    /**
+     * @brief Move the mechanism a relative position. Adds the position to the current state
      * 
      * 
      * @param position the position of the motor in the set rotationUnit
      * @param max_speed the maximum speed of the motors
      */
-    void setPosition(float position, float max_speed);
+    void moveRelative(float position, float max_speed);
 
+    /**
+     * @brief Move the mechanism a relative position asynchronously
+     */
+    void moveAbsoluteAsync();
+
+    /**
+     * @brief Move the mechanism to an absolute position
+     * 
+     * @param position the position of the motor in the set rotationUnit
+     * @param max_speed the maximum speed of the motors
+     */
+    void moveAbsolute(float position, float max_speed);
+    
     /**
      * @brief Gets the position of the mechanism
      * 
@@ -94,10 +113,10 @@ public:
     /**
      * @brief Set the manual bounds of the mechanism, such that it is unable to spin past these points
      * 
-     * @param upper_bound the highest encoder value the mechanism may move to
      * @param lower_bound the lowest encoder value the mechanism may move to
+     * @param upper_bound the highest encoder value the mechanism may move to
      */
-    void setBounds(float upper_bound, float lower_bound);
+    void setBounds(float lower_bound, float upper_bound);
     
     /**
      * @brief Set the timeout of the mechanism. Limits the time a `setPosition()` call takes. 
