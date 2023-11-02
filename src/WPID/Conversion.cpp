@@ -1,43 +1,33 @@
 #include "WPID/Conversion.h"
 
-Conversion::Conversion(){this->setEnum();}
-
-void Conversion::setEnum(){
-    this->measurements["ft"] = ft;
-    this->measurements["yd"] = yd;
-    this->measurements["m"] = m;
-    this->measurements["cm"] = cm;
-    this->measurements["mm"] = mm;
-}
-
-float Conversion::standardize(float value, string value_type){
-    switch(measurements[value_type]){
-        case ft:
+float Conversion::standardize(float value, measurement value_type){
+    switch(value_type){
+        case measurement::ft:
             return value * FT_TO_IN;
-        case yd:
+        case measurement::yd:
             return value * YD_TO_IN;
-        case m:
+        case measurement::m:
             return value * M_TO_IN;
-        case cm:
+        case measurement::cm:
             return value * CM_TO_IN;
-        case mm:
+        case measurement::mm:
             return value * MM_TO_IN;
         default:
             return value;
     }
 }
 
-float Conversion::convertTo(float value, string output_type){
-    switch(measurements[output_type]){
-        case ft:
+float Conversion::convertTo(float value, measurement output_type){
+    switch(output_type){
+        case measurement::ft:
             return value / FT_TO_IN;
-        case yd:
+        case measurement::yd:
             return value / YD_TO_IN;
-        case m:
+        case measurement::m:
             return value / M_TO_IN;
-        case cm:
+        case measurement::cm:
             return value / CM_TO_IN;
-        case mm:
+        case measurement::mm:
             return value / MM_TO_IN;
         default:
             return value;
