@@ -2,8 +2,10 @@
 #include <iostream>
 #include <map>
 #include "v5_vcs.h"
+
 using namespace std;
 
+namespace convert{
 class Conversion {
     private:
         static constexpr float FT_TO_IN = 12.0;
@@ -12,7 +14,7 @@ class Conversion {
         static constexpr float CM_TO_IN = 0.393701;
         static constexpr float MM_TO_IN = 0.0393701;
         static constexpr float REV_TO_DEG = 360;
-        static constexpr float RAW_TO_DEG = 50;
+        static constexpr float RAW_TO_DEG = 0.02;
 
     public:
     
@@ -62,3 +64,4 @@ class Conversion {
     */
     static float convertTo(float value, float gearset, vex::rotationUnits output_type);
 };
+}

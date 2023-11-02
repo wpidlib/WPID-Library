@@ -111,23 +111,14 @@ void HDrive::setTarget(float left_target, float right_target, float center_targe
 }
 
 float HDrive::leftEncoder(rotationUnits units){
-    if(leftEnc != nullptr) {
-        return leftEnc->position(units);
-    }
     return left->position(units);
 }
 
 float HDrive::rightEncoder(rotationUnits units){
-    if(rightEnc != nullptr){
-        return rightEnc->position(units);
-    }
     return right->position(units);
 }
 
 float HDrive::centerEncoder(rotationUnits units){
-    if(centerEnc != nullptr){
-        return centerEnc->position(units);
-    }
     return center->position(units);
 }
 

@@ -8,8 +8,9 @@ Mechanism::Mechanism(motor_group* motors, float gear_ratio){
 
 void Mechanism::spin(int velocity){
     float position = this->getPosition(rotationUnits::deg);
-    if((velocity > 0 && position < upper_bound) 
-    || (velocity < 0 && position > lower_bound)){
+    if((velocity > 0 && position < upper_bound)
+    || (velocity < 0 && position > lower_bound)
+    || (upper_bound == lower_bound)){
         motors->spin(directionType::fwd, velocity, velocityUnits::pct);
     } else {
         motors->stop();
@@ -20,8 +21,8 @@ void Mechanism::stop(){
     motors->stop();
 }
 
-void Mechanism::setPosition(float angle, float max_speed){
-    float target = (angle + offset) / gear_ratio;
+void Mechanism::setPosition(float position, float max_speed){
+    float target = (position + offset) * gear_ratio;
     target += this->getPosition(rotationUnits::deg); // retains state
     
     float state = 0;
@@ -32,13 +33,13 @@ void Mechanism::setPosition(float angle, float max_speed){
     int startTime = (int)vex::timer::system();
 
     while(pid.cont(error)){
-        if((int)vex::timer::system() == startTime + timeout) {break;}
+        if((int)vex::timer::system() >= startTime + timeout) {break;}
         state = this->getPosition(rotationUnits::deg); // get the state of the motors
         error = target - state; // difference between target and state
         calc = pid.calculateSpeed(error, max_speed); // calculate PID speed for the left side
         
-        if(error > target*.75 && ramp <= max_speed && ramp > 0) {
-            calc = target < 0 ? 0.0-ramp : ramp;
+        if(error > target*(1 - MAX_RAMP_DURATION) && ramp <= max_speed && ramp > 0) {
+            calc = target < 0 ? 0.0 - ramp : ramp;
             ramp += max_acceleration;
         }
 

@@ -18,9 +18,10 @@ private:
 
     // Mechanism traits
     float max_acceleration = 0;
-    float upper_bound = MAXFLOAT;
-    float lower_bound = -1;
-    int timeout = 0;
+    float upper_bound = 0;
+    float lower_bound = 0;
+    int timeout = -1;
+    const float MAX_RAMP_DURATION = .25; // maximum duration based on target
 public:
     /**
      * @brief Construct a new Mechanism object.

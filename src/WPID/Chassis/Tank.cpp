@@ -70,25 +70,14 @@ void Tank::setTarget(float left_target, float right_target, int l_max_spd, int r
 }
 
 float Tank::leftEncoder(rotationUnits units){
-    if(leftEnc != nullptr) {
-        return leftEnc->position(units);
-    }
     return left->position(units);
 }
 
 float Tank::rightEncoder(rotationUnits units){
-    if(rightEnc != nullptr){
-        return rightEnc->position(units);
-    }
     return right->position(units);
 }
 
 void Tank::resetEncoders(){
-    if(leftEnc != nullptr && rightEnc != nullptr){
-        leftEnc->resetRotation();
-        rightEnc->resetRotation();
-        return;
-    } 
     left->resetPosition();
     right->resetPosition();
 }

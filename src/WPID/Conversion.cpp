@@ -1,5 +1,7 @@
 #include "WPID/Conversion.h"
 
+using namespace convert;
+
 float Conversion::standardize(float value, measurement value_type){
     switch(value_type){
         case measurement::ft:
@@ -39,7 +41,7 @@ float Conversion::standardize(float value, float gearset, vex::rotationUnits val
         case vex::rotationUnits::rev:
             return value * REV_TO_DEG;
         case vex::rotationUnits::raw:
-            return value * (gearset * RAW_TO_DEG);
+            return value / (gearset * RAW_TO_DEG);
         default:
             return value;
     }
@@ -50,7 +52,7 @@ float Conversion::convertTo(float value, float gearset, vex::rotationUnits outpu
         case vex::rotationUnits::rev:
             return value / REV_TO_DEG;
         case vex::rotationUnits::raw:
-            return value / (gearset * RAW_TO_DEG);
+            return value * (gearset * RAW_TO_DEG);
         default:
             return value;
     }
