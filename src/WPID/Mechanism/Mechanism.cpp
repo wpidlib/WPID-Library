@@ -41,7 +41,7 @@ void Mechanism::moveRelative(float position, float max_speed){
 void Mechanism::moveAbsoluteAsync(float position, float max_speed){
     isSettled = false;
     void* arg = (void*)getParams(position, max_speed);
-    thread(moveMech, arg);
+    thread(setTarget, arg);
 }
 
 void Mechanism::moveAbsolute(float position, float max_speed){
@@ -49,7 +49,7 @@ void Mechanism::moveAbsolute(float position, float max_speed){
     this->waitUntilSettled();
 }
 
-void Mechanism::moveMech(void* args){
+void Mechanism::setTarget(void* args){
     params* input = (params*)args;
     Mechanism* mech = input->mech;
     float max_speed = input->spd;

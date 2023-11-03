@@ -91,7 +91,7 @@ public:
      * @brief Move a mechanism using the parameters struct
      * 
      */
-    static void moveMech(void* args);  
+    static void setTarget(void* args);  
 
     /**
      * @brief Gets the position of the mechanism
