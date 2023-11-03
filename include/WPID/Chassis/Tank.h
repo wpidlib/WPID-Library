@@ -78,6 +78,8 @@ class Tank : public Chassis{
          */
         void stop() override;
 
+        void waitUntilSettled();
+
         /**
          * @brief Move the chassis forward with the specified PID constants.
          * Chassis will always stay at or below the maximum speed.

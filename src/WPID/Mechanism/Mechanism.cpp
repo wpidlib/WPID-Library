@@ -1,4 +1,5 @@
 #include "WPID/Mechanism/Mechanism.h"
+#include <stdlib.h>
 using namespace vex;
 
 Mechanism::Mechanism(motor_group* motors, float gear_ratio){
@@ -21,26 +22,42 @@ void Mechanism::stop(){
     motors->stop();
 }
 
-void Mechanism::moveRelativeAsync(){}
-
-void Mechanism::moveRelative(float position, float max_speed){
-    float current = this->getPosition(deg);
-    this->moveAbsolute(position + current, max_speed);
+void Mechanism::waitUntilSettled(){
+    while(!this->isSettled){
+        wait(20, msec);
+    }
 }
 
-// Make moveAbsolute ASYNC first
-// store targets and speeds in class
-// set isMoving flag
-// is settled call 
-// delay intil is settled
-void Mechanism::moveAbsoluteAsync(){}
+void Mechanism::moveRelativeAsync(float position, float max_speed){
+    float current = this->getPosition(deg);
+    this->moveAbsoluteAsync(position + current, max_speed);
+}
+
+void Mechanism::moveRelative(float position, float max_speed){
+    this->moveRelativeAsync(position, max_speed);
+    this->waitUntilSettled();
+}
+
+void Mechanism::moveAbsoluteAsync(float position, float max_speed){
+    isSettled = false;
+    void* arg = (void*)getParams(position, max_speed);
+    thread(moveMech, arg);
+}
 
 void Mechanism::moveAbsolute(float position, float max_speed){
-    float target = (position + offset);
-    if(target > upper_bound){
-        target = upper_bound;
-    } else if (target < lower_bound) {
-        target = lower_bound;
+    this->moveAbsoluteAsync(position, max_speed);
+    this->waitUntilSettled();
+}
+
+void Mechanism::moveMech(void* args){
+    params* input = (params*)args;
+    Mechanism* mech = input->mech;
+    float max_speed = input->spd;
+    float target = (input->pos + mech->offset);
+    if(target > mech->upper_bound){
+        target = mech->upper_bound;
+    } else if (target < mech->lower_bound) {
+        target = mech->lower_bound;
     }
 
     float state = 0;
@@ -50,24 +67,23 @@ void Mechanism::moveAbsolute(float position, float max_speed){
 
     //int startTime = (int)vex::timer::system();
 
-    while(pid.cont(error)){
+    while(mech->pid.cont(error)){
         //if((int)vex::timer::system() >= startTime + timeout) {break;}
-        state = this->getPosition(rotationUnits::deg); // get the state of the motors
+        state = mech->getPosition(rotationUnits::deg); // get the state of the motors
         error = target - state; // difference between target and state
-        calc = pid.calculateSpeed(error, max_speed); // calculate PID speed for the left side
+        calc = mech->pid.calculateSpeed(error, max_speed); // calculate PID speed for the left side
         
-        if(error > target*(1 - MAX_RAMP_DURATION) && ramp <= max_speed && ramp > 0 && max_acceleration > 0) {
+        if(error > target*(1 - mech->MAX_RAMP_DURATION) && ramp <= max_speed && ramp > 0 && mech->max_acceleration > 0) {
             calc = target < 0 ? 0.0 - ramp : ramp;
-            ramp += max_acceleration;
+            ramp += mech->max_acceleration;
         }
 
-        std::cout << "Target: " << target << " State: " << state << " Error: " << error << " Speed: " << calc << std::endl;
-
-        this->spin(calc); // spin the motors at speed
-        wait(pid.delay_time, msec); // delay by pid.delay_time milliseconds
+        mech->spin(calc); // spin the motors at speed
+        wait(mech->pid.delay_time, msec); // delay by pid.delay_time milliseconds
     }
-    pid.reset();
-    this->stop();
+    mech->pid.reset();
+    mech->stop();
+    mech->isSettled = true;
 }
 
 float Mechanism::getPosition(rotationUnits units){

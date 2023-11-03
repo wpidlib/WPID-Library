@@ -22,7 +22,22 @@ private:
     float upper_bound = 0;
     int timeout = -9999;
     const float MAX_RAMP_DURATION = .25; // maximum duration based on target
+
+    typedef struct _params {
+        Mechanism* mech;
+        float pos;
+        float spd;
+    } params;
+
+    params* getParams(float position, float speed){
+        params* p;
+        p->mech = this;
+        p->pos = position;
+        p->spd = speed;
+        return p;
+    }
 public:
+    bool isSettled = true;
     /**
      * @brief Construct a new Mechanism object.
      * 
@@ -43,11 +58,12 @@ public:
      */
     void stop();
 
+    void waitUntilSettled();
 
     /**
      * @brief Move the mechanism an absolute position asynchronously
      */
-    void moveRelativeAsync();
+    void moveRelativeAsync(float position, float max_speed);
 
     /**
      * @brief Move the mechanism a relative position. Adds the position to the current state
@@ -61,7 +77,7 @@ public:
     /**
      * @brief Move the mechanism a relative position asynchronously
      */
-    void moveAbsoluteAsync();
+    void moveAbsoluteAsync(float position, float max_speed);
 
     /**
      * @brief Move the mechanism to an absolute position
@@ -71,6 +87,12 @@ public:
      */
     void moveAbsolute(float position, float max_speed);
     
+    /**
+     * @brief Move a mechanism using the parameters struct
+     * 
+     */
+    static void moveMech(void* args);  
+
     /**
      * @brief Gets the position of the mechanism
      * 

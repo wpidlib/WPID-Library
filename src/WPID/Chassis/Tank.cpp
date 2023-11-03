@@ -40,8 +40,9 @@ void Tank::turn(int target_angle, int max_speed){
 }
 
 void Tank::setTarget(float left_target, float right_target, int l_max_spd, int r_max_spd){    
-    left->moveRelative(left_target, l_max_spd);
-    right->moveRelative(right_target, r_max_spd);
+    left->moveRelativeAsync(left_target, l_max_spd);
+    right->moveRelativeAsync(right_target, r_max_spd);
+    waitUntilSettled();
 }   
 
 float Tank::leftEncoder(rotationUnits units){
@@ -79,4 +80,10 @@ void Tank::setMaxAcceleration(float max_accel){
 void Tank::setName(char* name){
     std::string t = std::string(name);
     this->name = t;
+}
+
+void Tank::waitUntilSettled(){
+    while(!left->isSettled && !right->isSettled){
+        wait(20, msec);
+    }
 }
