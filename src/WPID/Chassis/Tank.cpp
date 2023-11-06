@@ -1,6 +1,7 @@
 #include "WPID/Chassis/Tank.h"
 using namespace vex;
 using namespace wpid;
+
 Tank::Tank(float track_width, float wheel_radius, vex::motor_group* left, vex::motor_group* right, float drive_gear_ratio){
     this->track_width = track_width;
     this->wheel_circumference = 2.0 * M_PI * wheel_radius;
@@ -26,6 +27,11 @@ void Tank::spin(int velocity){
 }
 
 void Tank::straight(float distance, int max_speed){
+    this->straightAsync(distance, max_speed);
+    this->waitUntilSettled();
+}
+
+void Tank::straightAsync(float distance, int max_speed){
     float target = ((distance + straight_offset) / wheel_circumference) * 360.0;
     left->setPID(pidStraight);
     right->setPID(pidStraight);
@@ -33,6 +39,11 @@ void Tank::straight(float distance, int max_speed){
 }
 
 void Tank::turn(int target_angle, int max_speed){
+    this->turnAsync(target_angle, max_speed);
+    this->waitUntilSettled();
+}
+
+void Tank::turnAsync(float target_angle, int max_speed){
     float target = ((track_width/2)*((float)(target_angle+turn_offset)*M_PI/180)/wheel_circumference)*360;
     left->setPID(pidTurn);
     right->setPID(pidTurn);
@@ -42,7 +53,6 @@ void Tank::turn(int target_angle, int max_speed){
 void Tank::setTarget(float left_target, float right_target, int l_max_spd, int r_max_spd){    
     left->moveRelativeAsync(left_target, l_max_spd);
     right->moveRelativeAsync(right_target, r_max_spd);
-    waitUntilSettled();
 }   
 
 float Tank::leftEncoder(rotationUnits units){
@@ -83,7 +93,7 @@ void Tank::setName(char* name){
 }
 
 void Tank::waitUntilSettled(){
-    while(!left->isSettled && !right->isSettled){
+    while(!this->left->isSettled && !this->right->isSettled){
         wait(20, msec);
     }
 }

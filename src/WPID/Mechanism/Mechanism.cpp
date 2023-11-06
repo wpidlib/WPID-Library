@@ -54,11 +54,11 @@ void Mechanism::setTarget(void* args){
     Mechanism* mech = input->mech;
     float max_speed = input->spd;
     float target = (input->pos + mech->offset);
-    if(target > mech->upper_bound){
-        target = mech->upper_bound;
-    } else if (target < mech->lower_bound) {
-        target = mech->lower_bound;
-    }
+    // if(target > mech->upper_bound){
+    //     target = mech->upper_bound;
+    // } else if (target < mech->lower_bound) {
+    //     target = mech->lower_bound;
+    // }
 
     float state = 0;
     float error = 999;

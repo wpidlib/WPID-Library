@@ -89,6 +89,14 @@ class Tank : public Chassis{
         void straight(float distance, int max_speed) override;
 
         /**
+         * @brief Moves the chassis straight asynchronously
+         * 
+         * @param distance 
+         * @param max_speed 
+         */
+        void straightAsync(float distance, int max_speed);
+
+        /**
          * @brief Turn the chassis on the spot with the specified PID constants.
          * Chassis will always stay at or below the maximum speed.
          * @param target_angle 
@@ -97,9 +105,17 @@ class Tank : public Chassis{
         void turn(int target_angle, int max_speed) override;
 
         /**
+         * @brief Turns the robot asynchronously
+         * 
+         * @param target_angle 
+         * @param max_speed 
+         */
+        void turnAsync(float target_angle, int max_speed);
+
+        /**
          * @brief Gets the current position of the left side of the chassis
          * 
-         * @param units typically useing rotationUnits::deg
+         * @param units typically using rotationUnits::deg
          * @return float 
          */
         float leftEncoder(rotationUnits units);

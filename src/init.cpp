@@ -31,7 +31,7 @@ void init(void) {
     chassis->setStraightPID(straight);
     chassis->setTurnPID(turn);
 
-    chassis->setBrakeType(brakeType::hold);
+    chassis->setBrakeType(brakeType::brake);
     chassis->setMaxAcceleration(.5);
 
     // Fourbar setup
@@ -40,7 +40,7 @@ void init(void) {
     fourbar->setPID(lift);
     fourbar->setBrakeType(brakeType::hold);
     fourbar->setMaxAcceleration(0);
-    fourbar->setBounds(0, 110);
+    fourbar->setBounds(0, 90);
 }
 
 // TANK SETUP

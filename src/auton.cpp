@@ -13,11 +13,11 @@ int printAngle(){
 
 void auton(){
   thread disp = thread(printAngle);
-  fourbar->moveAbsolute(60, 20);
-  fourbar->moveAbsolute(-10, 20);
-  //fourbar->moveAbsolute(0, 20);
+  chassis->straightAsync(50, 15);
+  fourbar->moveAbsolute(60, 30);
+  fourbar->moveAbsolute(0, 30);
+  chassis->waitUntilSettled();
+  // std::cout << "Moving" << std::endl;
+  // fourbar->waitUntilSettled();
+  // std::cout << "Stopped" << std::endl;
 }
-
-  // chassis->strafe(24,20);
-  // wait(1000, msec);
-  // chassis->diagonal(-24,-24,20);

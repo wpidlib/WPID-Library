@@ -18,19 +18,19 @@ private:
 
     // Mechanism traits
     float max_acceleration = 0;
-    float lower_bound = 0;
-    float upper_bound = 0;
+    float lower_bound = -MAXFLOAT;
+    float upper_bound = MAXFLOAT;
     int timeout = -9999;
     const float MAX_RAMP_DURATION = .25; // maximum duration based on target
 
-    typedef struct _params {
+    typedef struct params {
         Mechanism* mech;
         float pos;
         float spd;
-    } params;
+    }params;
 
     params* getParams(float position, float speed){
-        params* p;
+        params* p = new params;
         p->mech = this;
         p->pos = position;
         p->spd = speed;
