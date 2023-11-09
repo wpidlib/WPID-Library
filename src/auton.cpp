@@ -13,7 +13,7 @@ int printAngle(){
 
 void auton(){
   thread disp = thread(printAngle);
-  chassis->straightAsync(50, 15);
+  chassis->straightAsync(20, 15);
   fourbar->moveAbsolute(60, 30);
   fourbar->moveAbsolute(0, 30);
   chassis->waitUntilSettled();

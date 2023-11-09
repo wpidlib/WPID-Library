@@ -1,4 +1,5 @@
 #include "WPID/Chassis/Tank.h"
+
 using namespace vex;
 using namespace wpid;
 
@@ -85,11 +86,6 @@ void Tank::stop(){
 
 void Tank::setMaxAcceleration(float max_accel){
     this->max_acceleration = max_accel;
-}
-
-void Tank::setName(char* name){
-    std::string t = std::string(name);
-    this->name = t;
 }
 
 void Tank::waitUntilSettled(){

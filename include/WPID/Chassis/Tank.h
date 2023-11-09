@@ -3,24 +3,8 @@
 #include <string>
 
 namespace wpid{
-class Tank : public Chassis{
+class Tank : public wpid::Chassis{
     private:
-        std::string name = "Tank Chassis";
-        // Chassis scales specific for Tank Drive
-        float track_width;
-        float wheel_circumference;
-        // Left and Right motor groups for Tank
-        Mechanism* left;
-        Mechanism* right;
-        // seperate PID objects for turning and straight motion
-        PID pidStraight;
-        PID pidTurn;
-        // offsets to fix steady state error
-        float straight_offset = 0;
-        float turn_offset = 0;
-        // maximum acceleration for ramp
-        float max_acceleration = .5;
-
         /**
          * @brief Sets the target position of each side of the chassis.
          * This uses an open loop algorithm to move the robot with PID to its target.
@@ -31,7 +15,6 @@ class Tank : public Chassis{
          * @param r_max_spd the max speed the right side should spin
          */
         void setTarget(float left_target, float right_target, int l_max_spd, int r_max_spd);
-
     public:
         /**
          * @brief Construct a new Chassis object. 
@@ -65,20 +48,24 @@ class Tank : public Chassis{
          * @param left_velocity 
          * @param right_velocity 
          */
-        void spin(int left_velocity, int right_velocity) override;
+        void spin(int left_velocity, int right_velocity);
 
         /**
          * @brief Spin the entire chassis by specified velocities for both sides
          * @param velocity 
          */
-        void spin(int velocity) override;
+        void spin(int velocity);
 
         /**
          * @brief Stops the chassis from moving
          */
         void stop() override;
 
-        void waitUntilSettled();
+        /**
+         * @brief 
+         * 
+         */
+        void waitUntilSettled() override;
 
         /**
          * @brief Move the chassis forward with the specified PID constants.
@@ -94,7 +81,7 @@ class Tank : public Chassis{
          * @param distance 
          * @param max_speed 
          */
-        void straightAsync(float distance, int max_speed);
+        void straightAsync(float distance, int max_speed) override;
 
         /**
          * @brief Turn the chassis on the spot with the specified PID constants.
@@ -110,7 +97,7 @@ class Tank : public Chassis{
          * @param target_angle 
          * @param max_speed 
          */
-        void turnAsync(float target_angle, int max_speed);
+        void turnAsync(float target_angle, int max_speed) override;
 
         /**
          * @brief Gets the current position of the left side of the chassis
@@ -118,7 +105,7 @@ class Tank : public Chassis{
          * @param units typically using rotationUnits::deg
          * @return float 
          */
-        float leftEncoder(rotationUnits units);
+        float leftEncoder(rotationUnits units) override;
 
         /**
          * @brief Gets the current position of the right side of the chassis
@@ -126,7 +113,7 @@ class Tank : public Chassis{
          * @param units typically useing rotationUnits::deg
          * @return float 
          */
-        float rightEncoder(rotationUnits units);
+        float rightEncoder(rotationUnits units) override;
 
         /**
          * @brief Reset the left and right encoders to 0.
@@ -137,7 +124,7 @@ class Tank : public Chassis{
          * @brief Sets the brake type of the chassis by passing a brake type as a parameter.
          * @param type The brake type can be set to coast, brake, or hold.  
          */
-        void setBrakeType(brakeType type);
+        void setBrakeType(brakeType type) override;
 
         /**
          * @brief Set the offset for straight and turn functions.
@@ -152,13 +139,6 @@ class Tank : public Chassis{
         * 
         * @param max_accel an arbitrary value to increment to ramp the speed up
         */
-        void setMaxAcceleration(float max_accel);
-
-        /**
-         * @brief Set the name of the chassis
-         * 
-         * @param name the name of the chassis
-         */
-        void setName(char* name);
+        void setMaxAcceleration(float max_accel) override;
 };
 }

@@ -1,5 +1,7 @@
 #include "WPID/Chassis/HDrive.h"
 
+using namespace wpid;
+
 HDrive::HDrive(float track_width, float wheel_radius, float center_wheel_radius, vex::motor_group* left, vex::motor_group* right, vex::motor_group* center, float drive_gear_ratio){
     this->track_width = track_width;
     this->wheel_circumference = 2.0 * M_PI * wheel_radius;
@@ -39,6 +41,11 @@ void HDrive::resetEncoders(){
 }
 
 void HDrive::straight(float distance, int max_speed){
+    this->straightAsync(distance, max_speed);
+    this->waitUntilSettled();
+}
+
+void HDrive::straightAsync(float distance, int max_speed){
     float target = ((distance + straight_offset) / wheel_circumference) * 360.0;
     left->setPID(pidStraight);
     right->setPID(pidStraight);
@@ -46,6 +53,11 @@ void HDrive::straight(float distance, int max_speed){
 }
 
 void HDrive::turn(int target_angle, int max_speed){
+    this->turnAsync(target_angle, max_speed);
+    this->waitUntilSettled();
+}
+
+void HDrive::turnAsync(float target_angle, int max_speed){
     float target = ((track_width/2)*((float)(target_angle+turn_offset)*M_PI/180)/wheel_circumference)*360;
     left->setPID(pidTurn);
     right->setPID(pidTurn);
@@ -53,11 +65,21 @@ void HDrive::turn(int target_angle, int max_speed){
 }
 
 void HDrive::strafe(float distance, int max_speed){
+    this->strafeAsync(distance, max_speed);
+    this->waitUntilSettled();
+}
+
+void HDrive::strafeAsync(float distance, int max_speed){
     float target = ((distance + strafe_offset) / center_wheel_circumference) * 360.0;
     this->setTarget(0, 0, target, 0, 0, max_speed);
 }
 
 void HDrive::diagonal(float straight_distance, float strafe_distance, int straight_max_speed){
+    this->diagonalAsync(straight_distance, strafe_distance, straight_max_speed);
+    this->waitUntilSettled();
+}
+
+void HDrive::diagonalAsync(float straight_distance, float strafe_distance, int straight_max_speed){
     float straight_target = ((straight_distance + straight_offset) / wheel_circumference) * 360.0;
     float strafe_target = ((strafe_distance + strafe_offset) / center_wheel_circumference) * 360.0;
     float center_max_speed = straight_max_speed*(strafe_distance / straight_distance);
@@ -106,7 +128,8 @@ void HDrive::setMaxAcceleration(float max_accel){
     this->max_acceleration = max_accel;
 }
 
-void HDrive::setName(char* name){
-    std::string t = std::string(name);
-    this->name = t;
+void HDrive::waitUntilSettled(){
+    while(!this->left->isSettled && !this->right->isSettled && !this->center->isSettled){
+        wait(20, msec);
+    }
 }

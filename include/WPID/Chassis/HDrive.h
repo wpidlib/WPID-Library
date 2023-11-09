@@ -2,33 +2,24 @@
 #include "Tank.h"
 #include <string>
 
+namespace wpid {
 class HDrive: public wpid::Tank {
     private:
-        std::string name = "HDrive Chassis";
         // Chassis scales specific for Tank Drive
-        float track_width;
-        float wheel_circumference;
         float center_wheel_circumference;
         // Left and Right motor groups for Tank
-        Mechanism* left;
-        Mechanism* right;
         Mechanism* center;
         // seperate PID objects for turning and straight motion
-        PID pidStraight;
-        PID pidTurn;
         PID pidStrafe;
         // offsets to fix steady state error
-        float straight_offset = 0;
-        float turn_offset = 0;
         float strafe_offset = 0;
-        float max_acceleration = 0;
         /**
          * @brief Sets the target position of each side of the chassis.
          * This uses an open loop algorithm to move the robot with PID to its target.
          * Does not use odometry to calculate error. Cannot adjust for sideways error.
          * @param left_target the left side's target in SOME UNITS
          * @param right_target the right side's target in SOME UNITS
-         * @param center_target the center wheels' target in SOME UNITES
+         * @param center_target the center wheels' target in SOME UNITS
          * @param l_max_spd the max speed the left side should spin
          * @param r_max_spd the max speed the right side should spin
          * @param c_max_spd the max speed the center wheel should spin
@@ -83,12 +74,18 @@ class HDrive: public wpid::Tank {
          * 
          * @param velocity 
          */
-        void spin(int sides, int center) override;
+        void spin(int sides, int center);
 
         /**
          * @brief Stops the chassis from moving
          */
         void stop() override;
+
+        /**
+         * @brief 
+         * 
+         */
+        void waitUntilSettled() override;
 
         /**
          * @brief Reset the left and right encoders to 0.
@@ -103,6 +100,14 @@ class HDrive: public wpid::Tank {
          */
         void straight(float distance, int max_speed) override;
 
+          /**
+         * @brief Moves the chassis straight asynchronously
+         * 
+         * @param distance 
+         * @param max_speed 
+         */
+        void straightAsync(float distance, int max_speed) override;
+
         /**
          * @brief Turn the chassis on the spot with the specified PID constants.
          * Chassis will always stay at or below the maximum speed.
@@ -112,6 +117,14 @@ class HDrive: public wpid::Tank {
         void turn(int target_angle, int max_speed) override;
 
         /**
+         * @brief Turns the robot asynchronously
+         * 
+         * @param target_angle 
+         * @param max_speed 
+         */
+        void turnAsync(float target_angle, int max_speed) override;
+
+        /**
          * @brief Strage the chassis sideways a specified distance. 
          * 
          * @param distance sideways distance to travel
@@ -119,14 +132,31 @@ class HDrive: public wpid::Tank {
          */
         void strafe(float distance, int max_speed);
 
+         /**
+         * @brief Strafes the robot asynchronously
+         * 
+         * @param distance 
+         * @param max_speed 
+         */
+        void strafeAsync(float distance, int max_speed);
+
         /**
-         * @brief Drives the robot on a diiagonal using the center and side wheels.
+         * @brief Drives the robot on a diagonal using the center and side wheels.
          * 
          * @param straight_distance forward and backwards distance
          * @param strafe_distance distance for the center wheel to travel
          * @param max_speed maximum speed for the robot
          */
         void diagonal(float straight_distance, float strafe_distance, int straight_max_speed);
+
+        /**
+         * @brief Drives the robot asynchronously on a diagonal using the center and side wheels.
+         * 
+         * @param straight_distance forward and backwards distance
+         * @param strafe_distance distance for the center wheel to travel
+         * @param max_speed maximum speed for the robot
+         */
+        void diagonalAsync(float straight_distance, float strafe_distance, int straight_max_speed);
 
         /**
          * @brief Gets the current position of the left side of the chassis
@@ -153,14 +183,6 @@ class HDrive: public wpid::Tank {
         float centerEncoder(rotationUnits units);
 
         /**
-         * @brief Sets the encoders
-         * 
-         * @param left The left encoder
-         * @param right The right encoder
-         */
-        void setEncoders(encoder* left, encoder* right, encoder* center);
-
-        /**
          * @brief Sets the brake type of the chassis by passing a brake type as a parameter.
          * @param type The brake type can be set to coast, brake, or hold.  
          */
@@ -180,11 +202,5 @@ class HDrive: public wpid::Tank {
          * @param max_accel an arbitrary value to increment to ramp the speed up
          */
         void setMaxAcceleration(float max_accel);
-
-        /**
-         * @brief Set the name of the chassis
-         * 
-         * @param name the name of the chassis
-         */
-        void setName(char* name);
 };
+}
