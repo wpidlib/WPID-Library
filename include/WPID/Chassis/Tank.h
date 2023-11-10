@@ -7,8 +7,8 @@ class Tank : public wpid::Chassis{
     private:
         /**
          * @brief Sets the target position of each side of the chassis.
-         * This uses an open loop algorithm to move the robot with PID to its target.
-         * Does not use odometry to calculate error. Cannot adjust for sideways error.
+         * Uses the PID algorithm to determine speeds of the motors.
+         * This function is inaccessable and is used as a helper.
          * @param left_target the left side's target in SOME UNITS
          * @param right_target the right side's target in SOME UNITS
          * @param l_max_spd the max speed the left side should spin
@@ -30,74 +30,72 @@ class Tank : public wpid::Chassis{
         Tank() = default;
 
         /**
-         * @brief Sets the straight line PID constants 
-         * @param pid 
+         * @brief Sets the straight line PID object.
+         * @param pid a PID object holding the constants for driving straight 
          */
         void setStraightPID(PID pid) override;
 
         /**
-         * @brief Sets the turning PID constants
-         * @param pid 
+         * @brief Sets the turning PID constants.
+         * @param pid a PID object holding the constants for turning on the spot
          */
         void setTurnPID(PID pid) override;
 
         /**
          * @brief Spin the entire chassis by specified velocities for each
-         * side of the chassis. Negative values spin the weel backwards
-         * 
-         * @param left_velocity 
-         * @param right_velocity 
+         * side of the chassis. Negative values spin the wheel backwards.
+         * @param left_velocity the left side velocity in percent units
+         * @param right_velocity the right side velocity in percent units
          */
         void spin(int left_velocity, int right_velocity);
 
         /**
-         * @brief Spin the entire chassis by specified velocities for both sides
-         * @param velocity 
+         * @brief Spin the entire chassis by specified velocities for both sides.
+         * @param velocity the velocity in percent units
          */
         void spin(int velocity);
 
         /**
-         * @brief Stops the chassis from moving
-         */
-        void stop() override;
-
-        /**
-         * @brief 
-         * 
-         */
-        void waitUntilSettled() override;
-
-        /**
-         * @brief Move the chassis forward with the specified PID constants.
+         * @brief Move the chassis forward a specific distance with PID.
          * Chassis will always stay at or below the maximum speed.
-         * @param distance 
-         * @param max_speed 
+         * @param distance the distance in inches
+         * @param max_speed the maximum speed the robot will travel
          */
         void straight(float distance, int max_speed) override;
 
         /**
-         * @brief Moves the chassis straight asynchronously
-         * 
-         * @param distance 
-         * @param max_speed 
+         * @brief Move the chassis forward asynchronously a specific distance with PID.
+         * Chassis will always stay at or below the maximum speed.
+         * @param distance the distance in inches
+         * @param max_speed the maximum speed the robot will travel
          */
         void straightAsync(float distance, int max_speed) override;
 
         /**
-         * @brief Turn the chassis on the spot with the specified PID constants.
+         * @brief Turn the chassis on the spot with PID.
          * Chassis will always stay at or below the maximum speed.
-         * @param target_angle 
-         * @param max_speed 
+         * @param target_angle the target angle in degrees
+         * @param max_speed the maximum speed in percent units
          */
         void turn(int target_angle, int max_speed) override;
 
         /**
-         * @brief Turns the robot asynchronously
-         * 
-         * @param target_angle 
-         * @param max_speed 
+         * @brief Turn the chassis on the spot asynchronously with PID.
+         * Chassis will always stay at or below the maximum speed.
+         * @param target_angle the target angle in degrees
+         * @param max_speed the maximum speed in percent units
          */
         void turnAsync(float target_angle, int max_speed) override;
+
+        /**
+         * @brief Stops the chassis using the default brake mode.
+         */
+        void stop() override;
+
+        /**
+         * @brief Waits for the robot to finish a motion.
+         */
+        void waitUntilSettled() override;
 
         /**
          * @brief Gets the current position of the left side of the chassis
@@ -127,18 +125,19 @@ class Tank : public wpid::Chassis{
         void setBrakeType(brakeType type) override;
 
         /**
-         * @brief Set the offset for straight and turn functions.
-         * 
-         * @param straight 
-         * @param turn 
+         * @brief Set the max acceleration of the mechanism. 
+         * The value is arbitrary, between 0 and 1.
+         * @param max_accel an arbitrary value to increment to ramp the speed up
+         */
+        void setMaxAcceleration(float max_accel) override;
+
+        /**
+         * @brief Set the offset for the straight and turn functions.
+         * This value is in inches, and will add to the input of each movement funciton.
+         * @param straight the distance to offset straight motion in inches
+         * @param turn the angle to offset turns in degrees
          */
         void setOffset(float straight, float turn);
 
-        /**
-        * @brief Set the max acceleration of the mechanism
-        * 
-        * @param max_accel an arbitrary value to increment to ramp the speed up
-        */
-        void setMaxAcceleration(float max_accel) override;
 };
 }

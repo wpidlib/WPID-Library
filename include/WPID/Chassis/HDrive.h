@@ -13,10 +13,11 @@ class HDrive: public wpid::Tank {
         PID pidStrafe;
         // offsets to fix steady state error
         float strafe_offset = 0;
+        
         /**
          * @brief Sets the target position of each side of the chassis.
-         * This uses an open loop algorithm to move the robot with PID to its target.
-         * Does not use odometry to calculate error. Cannot adjust for sideways error.
+         * Uses the PID algorithm to determine speeds of the motors.
+         * This function is inaccessable and is used as a helper.
          * @param left_target the left side's target in SOME UNITS
          * @param right_target the right side's target in SOME UNITS
          * @param center_target the center wheels' target in SOME UNITS
@@ -42,165 +43,169 @@ class HDrive: public wpid::Tank {
         HDrive() = default;
 
         /**
-         * @brief Sets the straight line PID constants 
-         * @param pid 
+         * @brief Sets the straight line PID object.
+         * @param pid a PID object holding the constants for driving straight 
          */
         void setStraightPID(PID pid) override;
 
         /**
-         * @brief Sets the turning PID constants
-         * @param pid 
+         * @brief Sets the turning PID object.
+         * @param pid a PID object holding the constants for turning on the spot
          */
         void setTurnPID(PID pid) override;
 
         /**
-         * @brief Sets the strafe PID constants
-         * @param pid 
+         * @brief Sets the strafing PID object.
+         * @param pid a PID object holding the constants for strafing sideways
          */
         void setStrafePID(PID pid);
         
         /**
          * @brief Spin the entire chassis by specified velocities for each
-         * side of the chassis. Negative values spin the weel backwards
-         * 
-         * @param left_velocity 
-         * @param right_velocity 
-         * @param center_velocity
+         * side of the chassis. Negative values spin the wheel backwards.
+         * @param left_velocity the left side velocity in percent units
+         * @param right_velocity the right side velocity in percent units
+         * @param center_velocity the center wheel velocity in percent units
          */
         void spin(int left_velocity, int right_velocity, int center_velocity);
 
         /**
-         * @brief 
-         * 
-         * @param velocity 
+         * @brief Spin the entire chassis by specified velocities for each
+         * side of the chassis. Negative values spin the wheel backwards.
+         * @param sides the side wheels' velocity in percent units
+         * @param center the center wheel velocity in percent units
          */
         void spin(int sides, int center);
 
-        /**
-         * @brief Stops the chassis from moving
-         */
-        void stop() override;
-
-        /**
-         * @brief 
-         * 
-         */
-        void waitUntilSettled() override;
-
-        /**
-         * @brief Reset the left and right encoders to 0.
-         */
-        void resetEncoders() override;
-
-        /**
-         * @brief Move the chassis forward with the specified PID constants.
+         /**
+         * @brief Move the chassis forward a specific distance with PID.
          * Chassis will always stay at or below the maximum speed.
-         * @param distance 
-         * @param max_speed 
+         * @param distance the distance in inches
+         * @param max_speed the maximum speed the robot will travel
          */
         void straight(float distance, int max_speed) override;
 
-          /**
-         * @brief Moves the chassis straight asynchronously
-         * 
-         * @param distance 
-         * @param max_speed 
+        /**
+         * @brief Move the chassis forward asynchronously a specific distance with PID.
+         * Chassis will always stay at or below the maximum speed.
+         * @param distance the distance in inches
+         * @param max_speed the maximum speed the robot will travel
          */
         void straightAsync(float distance, int max_speed) override;
 
         /**
-         * @brief Turn the chassis on the spot with the specified PID constants.
+         * @brief Turn the chassis on the spot with PID.
          * Chassis will always stay at or below the maximum speed.
-         * @param target_angle 
-         * @param max_speed
+         * @param target_angle the target angle in degrees
+         * @param max_speed the maximum speed in percent units
          */
         void turn(int target_angle, int max_speed) override;
 
         /**
-         * @brief Turns the robot asynchronously
-         * 
-         * @param target_angle 
-         * @param max_speed 
+         * @brief Turn the chassis on the spot asynchronously with PID.
+         * Chassis will always stay at or below the maximum speed.
+         * @param target_angle the target angle in degrees
+         * @param max_speed the maximum speed in percent units
          */
         void turnAsync(float target_angle, int max_speed) override;
 
         /**
-         * @brief Strage the chassis sideways a specified distance. 
-         * 
-         * @param distance sideways distance to travel
-         * @param max_speed 
+         * @brief Strafe the chassis sideways with PID.
+         * Chassis will always stay at or below the maximum speed.
+         * @param distance the distance to travel in inches
+         * @param max_speed the maximum speed in percent units
          */
         void strafe(float distance, int max_speed);
 
-         /**
-         * @brief Strafes the robot asynchronously
-         * 
-         * @param distance 
-         * @param max_speed 
+        /**
+         * @brief Strafe the chassis sideways asyncrhonously with PID.
+         * Chassis will always stay at or below the maximum speed.
+         * @param distance the distance to travel in inches
+         * @param max_speed the maximum speed in percent units
          */
         void strafeAsync(float distance, int max_speed);
 
-        /**
-         * @brief Drives the robot on a diagonal using the center and side wheels.
-         * 
-         * @param straight_distance forward and backwards distance
-         * @param strafe_distance distance for the center wheel to travel
-         * @param max_speed maximum speed for the robot
+         /**
+         * @brief Move the chassis on a diagonal a specific distance with PID.
+         * Chassis will always stay at or below the maximum speed.
+         * The speed of the center wheel is calculated in the function as being proportional to the distance traveled.
+         * If the straight distance is 100, and center is 30, the center wheel will spin at 30% the speed of straight_max_speed.
+         * @param straight_distance the distance going forward or backwards in inches
+         * @param strafe_distance the distance going sideways in inches
+         * @param straight_max_speed the maximum speed the robot will travel
          */
         void diagonal(float straight_distance, float strafe_distance, int straight_max_speed);
 
-        /**
-         * @brief Drives the robot asynchronously on a diagonal using the center and side wheels.
-         * 
-         * @param straight_distance forward and backwards distance
-         * @param strafe_distance distance for the center wheel to travel
-         * @param max_speed maximum speed for the robot
+         /**
+         * @brief Move the chassis on a diagonal asynchronously a specific distance with PID.
+         * Chassis will always stay at or below the maximum speed.
+         * The speed of the center wheel is calculated in the function as being proportional to the distance traveled.
+         * If the straight distance is 100, and center is 30, the center wheel will spin at 30% the speed of straight_max_speed.
+         * @param straight_distance the distance going forward or backwards in inches
+         * @param strafe_distance the distance going sideways in inches
+         * @param straight_max_speed the maximum speed the robot will travel
          */
         void diagonalAsync(float straight_distance, float strafe_distance, int straight_max_speed);
 
         /**
-         * @brief Gets the current position of the left side of the chassis
+         * @brief Stops the chassis using the default brake mode.
+         */
+        void stop() override;
+
+        /**
+         * @brief Waits for the robot to finish a motion.
+         */
+        void waitUntilSettled() override;
+
+         /**
+         * @brief Gets the current position of the left side of the chassis.
          * 
-         * @param units typically useing rotationUnits::deg
-         * @return float 
+         * @param unit the rotation units you want to return
+         * @return the position in the specified units
          */
         float leftEncoder(rotationUnits units);
 
-        /**
-         * @brief Gets the current position of the right side of the chassis
+         /**
+         * @brief Gets the current position of the right side of the chassis.
          * 
-         * @param units typically useing rotationUnits::deg
-         * @return float 
+         * @param unit the rotation units you want to return
+         * @return the position in the specified units
          */
         float rightEncoder(rotationUnits units);
 
-        /**
-         * @brief Gets the current position of the center wheel(s) of the chassis.
+         /**
+         * @brief Gets the current position of the center wheel of the chassis.
          * 
-         * @param units 
-         * @return float
+         * @param unit the rotation units you want to return
+         * @return the position in the specified units
          */
         float centerEncoder(rotationUnits units);
 
         /**
-         * @brief Sets the brake type of the chassis by passing a brake type as a parameter.
+         * @brief Reset all encoders to 0.
+         */
+        void resetEncoders() override;
+
+        /**
+         * @brief Sets the brake type of the chassis.
          * @param type The brake type can be set to coast, brake, or hold.  
          */
         void setBrakeType(brakeType type);
 
         /**
-         * @brief Set the offset for straight and turn functions.
-         * 
-         * @param straight 
-         * @param turn 
-         */
-        void setOffset(float straight, float turn, float strafe);
-
-        /**
-         * @brief Set the max acceleration of the mechanism
-         * 
+         * @brief Set the max acceleration of the mechanism. 
+         * The value is arbitrary, between 0 and 1.
          * @param max_accel an arbitrary value to increment to ramp the speed up
          */
         void setMaxAcceleration(float max_accel);
+
+        /**
+         * @brief Set the offset for the straight and turn functions.
+         * This value is in inches, and will add to the input of each movement funciton.
+         * @param straight the distance to offset straight motion in inches
+         * @param turn the angle to offset turns in degrees
+         * @param strafe the distance to offset strafe motion in inches
+         */
+        void setOffset(float straight, float turn, float strafe);
 };
 }

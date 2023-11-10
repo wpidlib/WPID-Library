@@ -5,7 +5,7 @@
 #include <string>
 
 using namespace vex;
-
+namespace wpid{
 class Mechanism {
 private:
     //
@@ -18,17 +18,24 @@ private:
 
     // Mechanism traits
     float max_acceleration = 0;
-    float lower_bound = -MAXFLOAT;
-    float upper_bound = MAXFLOAT;
-    int timeout = -9999;
+    float upper_bound = MAXFLOAT; // the upper bound to limit motion
+    float lower_bound = -MAXFLOAT; // the lower bound to limit motion
     const float MAX_RAMP_DURATION = .25; // maximum duration based on target
 
+    // A struct to store position, speed and the pointer to this mechanism
     typedef struct params {
         Mechanism* mech;
         float pos;
         float spd;
     }params;
 
+    /**
+     * @brief Get an instance of a param struct pointer to pass to setTarget.
+     * Used as a helper funciton to pass multple parameters into a thread.
+     * @param position the position target
+     * @param speed the max speed
+     * @return params* a parameter pointer
+     */
     params* getParams(float position, float speed){
         params* p = new params;
         p->mech = this;
@@ -36,6 +43,14 @@ private:
         p->spd = speed;
         return p;
     }
+
+    /**
+     * @brief Sets the target position of the mechanism.
+     * Uses the PID algorithm to determine speeds of the motors.
+     * This function is inaccessable and is used as a helper.
+     * @param args the parameter arguments to set the target
+     */
+    static void setTarget(void* args);  
 public:
     bool isSettled = true;
     /**
@@ -48,72 +63,75 @@ public:
     Mechanism() = default;
 
     /**
-     * @brief Spins the motor group at the specified speed.
-     * @param velocity the velocity of the lift
+     * @brief Spins the motor group at the specified velocity.
+     * Negative values will spin the motors backwards.
+     * @param velocity the velocity of the mechanism
      */
     void spin(int velocity);
 
     /**
-     * @brief stops the motors
+     * @brief stops the motors using the default brake mode.
      */
     void stop();
 
+    /**
+     * @brief Waits for the mechanism to finish motion.
+     */
     void waitUntilSettled();
 
     /**
-     * @brief Move the mechanism an absolute position asynchronously
-     */
-    void moveRelativeAsync(float position, float max_speed);
-
-    /**
-     * @brief Move the mechanism a relative position. Adds the position to the current state
+     * @brief Move the mechanism to a relative angle.
      * 
-     * 
-     * @param position the position of the motor in the set rotationUnit
-     * @param max_speed the maximum speed of the motors
+     * @param position the relative angle to move to in degrees
+     * @param max_speed the max speed of the motors
      */
     void moveRelative(float position, float max_speed);
 
     /**
-     * @brief Move the mechanism a relative position asynchronously
+     * @brief Move the mechanism to a relative angle asynchronously
+     * 
+     * @param position the relative angle to move to in degrees
+     * @param max_speed the max speed of the motors
      */
-    void moveAbsoluteAsync(float position, float max_speed);
+    void moveRelativeAsync(float position, float max_speed);
 
     /**
-     * @brief Move the mechanism to an absolute position
+     * @brief Move the mechanism to an absolute angle.
      * 
-     * @param position the position of the motor in the set rotationUnit
-     * @param max_speed the maximum speed of the motors
+     * @param position the absolute angle to move to in degrees
+     * @param max_speed the max speed of the motors
      */
     void moveAbsolute(float position, float max_speed);
-    
-    /**
-     * @brief Move a mechanism using the parameters struct
-     * 
-     */
-    static void setTarget(void* args);  
 
     /**
-     * @brief Gets the position of the mechanism
+     * @brief Move the mechanism to an absolute angle asynchronously
      * 
-     * @return float
+     * @param position the absolute angle to move to in degrees
+     * @param max_speed the max speed of the motors
+     */
+    void moveAbsoluteAsync(float position, float max_speed);
+    
+    /**
+     * @brief Get the position of the first motor in the group in the specified units.
+     * 
+     * @param units the rotation units to return
+     * @return float the position of the motor
      */
     float getPosition(rotationUnits units);
 
     /**
-     * @brief resets the motor position
-     * 
+     * @brief Resets the encoders in the group to 0.
      */
     void resetPosition();
 
     /**
-     * @brief Sets the brake type of the motors
-     * @param brakeType the brake type (coast, brake or hold)
+     * @brief Sets the brake type of the chassis.
+     * @param type The brake type can be set to coast, brake, or hold.  
      */
     void setBrakeType(brakeType type);
 
     /**
-     * @brief Set the PID constants and object to the mechanism
+     * @brief Set a PID object to the mechanism
      * @param PID a PID object
      */
     void setPID(PID pid);
@@ -121,35 +139,23 @@ public:
     /**
      * @brief Set the offset of the mechanism to add or subtract a constant angle
      * 
-     * @param offset the offset
+     * @param offset the offset in degrees
      */
     void setOffset(float offset);
 
     /**
-     * @brief Set the max acceleration of the mechanism
-     * 
+     * @brief Set the max acceleration of the mechanism. 
+     * The value is arbitrary, between 0 and 1.
      * @param max_accel an arbitrary value to increment to ramp the speed up
      */
     void setMaxAcceleration(float max_accel);
 
     /**
-     * @brief Set the manual bounds of the mechanism, such that it is unable to spin past these points
+     * @brief Set the manual bounds of the mechanism, such that it is unable to spin past these points.
      * 
      * @param lower_bound the lowest encoder value the mechanism may move to
      * @param upper_bound the highest encoder value the mechanism may move to
      */
     void setBounds(float lower_bound, float upper_bound);
-    
-    /**
-     * @brief Set the timeout of the mechanism. Limits the time a `setPosition()` call takes. 
-     * @param timeout the timeout in milliseconds
-     */
-    void setTimeout(int timeout);
-
-    /**
-     * @brief Set the name of the mechanism
-     * 
-     * @param name the name of the mechanism
-     */
-    void setName(char* name);
 };
+}

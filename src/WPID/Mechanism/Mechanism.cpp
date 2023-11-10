@@ -1,6 +1,7 @@
 #include "WPID/Mechanism/Mechanism.h"
 #include <stdlib.h>
 using namespace vex;
+using namespace wpid;
 
 Mechanism::Mechanism(motor_group* motors, float gear_ratio){
     this->motors = motors;
@@ -54,26 +55,25 @@ void Mechanism::setTarget(void* args){
     Mechanism* mech = input->mech;
     float max_speed = input->spd;
     float target = (input->pos + mech->offset);
-    // if(target > mech->upper_bound){
-    //     target = mech->upper_bound;
-    // } else if (target < mech->lower_bound) {
-    //     target = mech->lower_bound;
-    // }
+
+    // limit target to bounds if calcluations exceed bounds
+    if(target > mech->upper_bound){
+        target = mech->upper_bound;
+    } else if (target < mech->lower_bound) {
+        target = mech->lower_bound;
+    }
 
     float state = 0;
     float error = 999;
     int calc = 0;
     float ramp = 0;
 
-    //int startTime = (int)vex::timer::system();
-
     while(mech->pid.cont(error)){
-        //if((int)vex::timer::system() >= startTime + timeout) {break;}
         state = mech->getPosition(rotationUnits::deg); // get the state of the motors
         error = target - state; // difference between target and state
         calc = mech->pid.calculateSpeed(error, max_speed); // calculate PID speed for the left side
         
-        if(error > target*(1 - mech->MAX_RAMP_DURATION) && ramp <= max_speed && ramp > 0 && mech->max_acceleration > 0) {
+        if(mech->max_acceleration > 0 && fabs(error) > fabs(target*(1 - mech->MAX_RAMP_DURATION)) && ramp <= max_speed){
             calc = target < 0 ? 0.0 - ramp : ramp;
             ramp += mech->max_acceleration;
         }
@@ -113,13 +113,4 @@ void Mechanism::setMaxAcceleration(float max_accel){
 void Mechanism::setBounds(float lower_bound, float upper_bound){
     this->lower_bound = lower_bound;
     this->upper_bound = upper_bound;
-}
-
-void Mechanism::setTimeout(int timeout){
-    this->timeout = timeout;
-}
-
-void Mechanism::setName(char* name){
-    std::string t = std::string(name);
-    this->name = t;
 }
