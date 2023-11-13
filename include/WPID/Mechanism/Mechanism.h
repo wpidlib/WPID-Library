@@ -1,6 +1,7 @@
 #pragma once
 #include "v5.h"
 #include "v5_vcs.h"
+#include "../Logger.h"
 #include "../PID.h"
 #include <string>
 
@@ -15,6 +16,7 @@ private:
     float gear_ratio; // the gear ration from motor to output
     PID pid; // the pid constants
     float offset = 0; // an offset to account for consistent error
+    std::string mech_id; // the string identifier for the motor group for logging purposes
 
     // Mechanism traits
     float max_acceleration = 0;
@@ -58,8 +60,9 @@ public:
      * 
      * @param motors the motors used on the mechanism
      * @param gear_ratio the external gear ratio between motor group and mechanism
+     * @param motor_id the string identifier for the motor group to enable per motor logging
      */
-    Mechanism(motor_group* motors, float gear_ratio);
+    Mechanism(motor_group* motors, float gear_ratio, std::string mech_id);
     Mechanism() = default;
 
     /**

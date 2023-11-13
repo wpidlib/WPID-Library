@@ -67,8 +67,8 @@ We are a group of students from Worcester Polytechnic Institute pursuing degrees
 
 #### Authors:
 - Brianna Sahagian
-- Austin Rebello
 - Jair Meza
+- Austin Rebello
 
 ## Acknowledgments
 - George Heineman, MQP Advisor
@@ -77,11 +77,7 @@ We are a group of students from Worcester Polytechnic Institute pursuing degrees
 
 ### Features to come
 - Finish unit conversion class
-- Integrate Mechanism into Chassis
-- Async motion (might happen with Mechanism integration)
 - Debug logging
 - Pace modes
-- External Encoders for Mechanism (and by extension all of chassis)
 - PID Filtering for Derrivative
-- Engage function
 - Test library importing

@@ -6,9 +6,15 @@ HDrive::HDrive(float track_width, float wheel_radius, float center_wheel_radius,
     this->track_width = track_width;
     this->wheel_circumference = 2.0 * M_PI * wheel_radius;
     this->center_wheel_circumference = 2.0 * M_PI * center_wheel_radius;
-    this->left = new Mechanism(left, drive_gear_ratio);
-    this->right = new Mechanism(right, drive_gear_ratio);
-    this->center = new Mechanism(center, drive_gear_ratio);
+    //this->left = new Mechanism(left, drive_gear_ratio);
+    //this->right = new Mechanism(right, drive_gear_ratio);
+    //this->center = new Mechanism(center, drive_gear_ratio);
+
+    this->left = new Mechanism(left, drive_gear_ratio, "LEFT");
+    this->right = new Mechanism(right, drive_gear_ratio, "RIGHT");
+    this->center = new Mechanism(center, drive_gear_ratio, "CENTER");
+
+
     this->center->setPID(pidStrafe);
 }
 
@@ -129,7 +135,7 @@ void HDrive::setMaxAcceleration(float max_accel){
 }
 
 void HDrive::waitUntilSettled(){
-    while(!this->left->isSettled && !this->right->isSettled && !this->center->isSettled){
+    while(!this->left->isSettled || !this->right->isSettled || !this->center->isSettled){
         wait(20, msec);
     }
 }

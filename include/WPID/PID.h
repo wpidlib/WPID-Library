@@ -6,7 +6,7 @@
 #include <math.h>
 #include <iomanip>
 #include <fstream>
-#include <iostream>
+#include "./Logger.h"
 
 class PID {
     private:
@@ -15,7 +15,8 @@ class PID {
         float kd; // derivative constant
         float bound = 1; //the error bound
         float prev_error = MAXFLOAT; // the previous error
-        float prev_integral = 0; // the previous integral 
+        float prev_integral = 0; // the previous integral
+        std::string fName = "LoggedData";
     public:
         int delay_time = 20; // delay in milliseconds
         int bias = 0; // lowest speed possible for PID to achieve
@@ -36,9 +37,10 @@ class PID {
          * 
          * @param error the remaining distance to the target, any unit is allowed
          * @param max_speed maximum velocity allowed, any unit is allowed
+         * @param mech_id string identifier for motor group to log
          * @return a calculated speed based on all parameters
          */
-        float calculateSpeed(float error, float max_speed);
+        float calculateSpeed(float error, float max_speed, std::string mech_id);
 
         /**
          * @brief Set the error range.
@@ -57,4 +59,23 @@ class PID {
          * @brief Reset the previous error and previous integral values.
          */
         void reset(void);
+
+        /**
+         * @brief Duplicates the PID object by copying constants and returning a new PID object.
+         * Used as a helper for using the same constants on multiple mechanisms.
+         * @return PID 
+         */
+        PID copy(void);
+
+        /**
+         * @brief Logs the error, speed, integral and derivative values 
+         * to a text file on a micro SD card on the robot
+         * @param error is the robot error value
+         * @param speed is the robots speed
+         * @param proportional is the P value for PID
+         * @param integral is the I value for PID
+         * @param derivative is the D value for PID
+         * @param motor_id is the motor identifier for graphing
+         */
+        void fileLogging(float error, float speed, float proportional, float integral, float derivative, std::string mech_id);
 };      

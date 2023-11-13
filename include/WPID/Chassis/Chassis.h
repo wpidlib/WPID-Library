@@ -3,6 +3,7 @@
 #include "v5_vcs.h"
 #include "../PID.h"
 #include "../Mechanism/Mechanism.h"
+#include "../Logger.h"
 
 using namespace vex;
 
