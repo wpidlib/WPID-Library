@@ -1,49 +1,81 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
+import sys
 
-def graphColumn(fileName, runNum):
-    allData = pd.read_csv("VexLogs/"+fileName)
-    allData["Time"] = allData["Time"] - allData["Time"][0]
+def graphMotorGroup(dataframe, motorName, arguments):
 
     figure, axis = plt.subplots(4, 1)
 
-
-    axis[0].plot(allData["Time"], allData["Error"])
+    axis[0].plot(dataframe["Time"], dataframe["Error"])
 
     axis[0].set_xlabel('Time')
     axis[0].set_ylabel('Error')
-    axis[0].set_title('Error Over Time on Instruction '+runNum)
+    axis[0].set_title('Error Over Time for '+motorName)
 
-
-    axis[1].plot(allData["Time"], allData["Speed"])
+    axis[1].plot(dataframe["Time"], dataframe["Speed"])
 
     axis[1].set_xlabel('Time')
     axis[1].set_ylabel('Speed')
-    axis[1].set_title('Speed Over Time on Instruction '+runNum)
+    axis[1].set_title('Speed Over Time for '+motorName)
 
-    axis[2].plot(allData["Time"], allData["Proportional"], color = 'tab:red')
-    axis[2].plot(allData["Time"], allData["Integral"], color = 'tab:blue')
-    axis[2].plot(allData["Time"], allData["Derivative"], color = 'tab:green')
+    pidLegendPlots = []
+    pidLegendNames = []
+
+    if 'P' in arguments:
+        P, = axis[2].plot(dataframe["Time"], dataframe["Proportional"], color = 'tab:red')
+        pidLegendPlots.append(P)
+        pidLegendNames.append("P")
+    if 'I' in arguments:
+        I, = axis[2].plot(dataframe["Time"], dataframe["Integral"], color = 'tab:blue')
+        pidLegendPlots.append(I)
+        pidLegendNames.append("I")
+    if 'D' in arguments:
+        D, = axis[2].plot(dataframe["Time"], dataframe["Derivative"], color = 'tab:green')
+        pidLegendPlots.append(D)
+        pidLegendNames.append("D")
+
 
     axis[2].set_xlabel('Time')
     axis[2].set_ylabel('P I and D')
-    axis[2].set_title('PID Over Time on Instruction '+runNum)
+    axis[2].set_title('PID Over Time for '+motorName)
+    axis[2].legend(pidLegendPlots, pidLegendNames)
 
-    axis[3].plot(allData["Time"], abs(allData["Error"]-allData["Error"][0]), color = 'tab:red')
+    axis[3].plot(dataframe["Time"], dataframe["Error"], color = 'tab:red')
     axis[3].set_xlabel('Time')
     axis[3].set_ylabel('Distance to Target')
-    axis[3].set_title('Distance to Target on Instruction '+runNum)
+    axis[3].set_title('Distance to Target for '+motorName)
 
     figure.tight_layout()
+    manager = plt.get_current_fig_manager()
+    manager.window.state('zoomed')
 
     plt.show()
 
 
+arguments = []
+
+if len(sys.argv) > 1:
+    for argument in sys.argv:
+        arguments.append(argument)
+
+if(len(sys.argv)==1):
+    arguments = ['P', 'I', 'D']
+
 allFiles =  os.listdir("VexLogs/")
 allFiles.sort(key = len)
 
-count = 1
+dFs = []
+
 for file in allFiles:
-    graphColumn(file, str(count))
-    count+=1
+    data = pd.read_csv("VexLogs/"+file)
+    dFs.append(data)
+
+result = pd.concat(dFs)
+result['Speed'] = result['Speed'].fillna(0)
+
+dFs = [result[result['Name'] == 'LEFT'], result[result['Name'] == 'RIGHT'], result[result['Name'] == 'CENTER'], result[result['Name'] == 'MECHANISM']]
+
+for frame in dFs:
+    if(not frame.empty):
+        graphMotorGroup(frame, frame['Name'].iloc[0], arguments)

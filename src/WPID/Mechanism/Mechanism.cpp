@@ -82,7 +82,7 @@ void Mechanism::setTarget(void* args){
     int calc = 0;
     float ramp = 0;
     
-    while(mech->pid.cont(error)){
+    while(mech->pid.unfinished(error)){
         state = mech->getPosition(rotationUnits::deg); // get the state of the motors
         error = target - state; // difference between target and state
         //calc = mech->pid.calculateSpeed(error, max_speed); // calculate PID speed

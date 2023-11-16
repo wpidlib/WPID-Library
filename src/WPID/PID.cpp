@@ -43,7 +43,7 @@ void PID::setErrorRange(float bound){
     this->bound = bound;
 }
 
-bool PID::cont(float error){
+bool PID::unfinished(float error){
     return std::fabs(error) > bound ? true : false;
 }
 
@@ -59,7 +59,7 @@ PID PID::copy(void){
     return dupe;
 }
 
-void PID::fileLogging(float error, float speed, float proportional, float integral, float derivative, std::string motor_id){
+void PID::fileLogging(float error, float speed, float proportional, float integral, float derivative, std::string mech_id){
     ofstream myfile;
     string suffix = ".csv";
     if(fName.compare("LoggedData") == 0){
@@ -67,7 +67,7 @@ void PID::fileLogging(float error, float speed, float proportional, float integr
         ss << (int)vex::timer::system();
         fName += ss.str();
         myfile.open(fName + suffix, std::ios::app);
-        myfile << "Time,Error,Speed,Proportional,Integral,Derivative,ID\n";
+        myfile << "Time,Error,Speed,Proportional,Integral,Derivative,Name\n";
         myfile.close();
     }
     myfile.open(fName + suffix, std::ios::app);
@@ -83,10 +83,10 @@ void PID::fileLogging(float error, float speed, float proportional, float integr
     myfile << ",";
     myfile << round(derivative*100.0)/100.0;
     myfile << ",";
-    myfile << motor_id;
+    myfile << mech_id;
     myfile << '\n';
     myfile.close();
-    if(!cont(error)){
+    if(!unfinished(error)){
         fName = "LoggedData";
     }
 }

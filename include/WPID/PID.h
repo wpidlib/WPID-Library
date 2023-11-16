@@ -53,7 +53,7 @@ class PID {
          * @param error the current error of the system
          * @return true if the error is outside the bounds, false if it is within the bounds
          */
-        bool cont(float error);
+        bool unfinished(float error);
 
         /**
          * @brief Reset the previous error and previous integral values.

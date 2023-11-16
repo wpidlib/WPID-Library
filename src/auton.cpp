@@ -14,8 +14,14 @@ int printAngle(){
 void auton(){
   //thread disp = thread(printAngle);
   for (size_t i = 0; i < 4; i++){
-    chassis->straight(24,40);
-    chassis->turn(90,30);
-    std::cout << std::endl;
+    chassis->straight(10,40);
+    //chassis->waitUntilSettled();
+    chassis->turn(90,20);
+    //chassis->waitUntilSettled();
+    //chassis->waitUntilSettled();
+    // chassis->waitUntilSettled();
+    // std::cout << "Finished straight" << std::endl;
+    // chassis->turn(90,30);
+    // std::cout << std::endl;
   }
 }

@@ -25,9 +25,9 @@ void init(void) {
 
     PID straight = PID(0.06, 0.008, 0);
     straight.bias = 2;
-    straight.setErrorRange(1);
+    straight.setErrorRange(2);
     PID turn = PID(0.06, 0.008, 0);
-    turn.setErrorRange(1);
+    turn.setErrorRange(2);
 
     chassis->setStraightPID(straight);
     chassis->setTurnPID(turn);
