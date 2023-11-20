@@ -33,7 +33,7 @@ float PID::calculateSpeed(float error, float max_speed, std::string mech_id){
     if (speed < bias && speed > 0) { speed = bias; }
     if (speed > -bias && speed < 0) { speed = -bias; }
 
-    LOG(mech_id << " err: " << error << " spd: " << speed << " P: " << error*kp << " I: " << integral << " D: " << derivative);
+    LOG_INFO(mech_id << " err: " << error << " spd: " << speed << " P: " << error*kp << " I: " << integral << " D: " << derivative);
     this->fileLogging(error, speed, (error*kp), integral, derivative, mech_id);
 
     return speed;

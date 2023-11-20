@@ -14,7 +14,7 @@ class Tank : public wpid::Chassis{
          * @param l_max_spd the max speed the left side should spin
          * @param r_max_spd the max speed the right side should spin
          */
-        void setTarget(float left_target, float right_target, int l_max_spd, int r_max_spd);
+        void spinToTarget(float left_target, float right_target, int l_max_spd, int r_max_spd);
     public:
         /**
          * @brief Construct a new Chassis object. 
@@ -103,7 +103,7 @@ class Tank : public wpid::Chassis{
          * @param units typically using rotationUnits::deg
          * @return float 
          */
-        float leftEncoder(rotationUnits units) override;
+        float getLeftPosition(rotationUnits units) override;
 
         /**
          * @brief Gets the current position of the right side of the chassis
@@ -111,12 +111,12 @@ class Tank : public wpid::Chassis{
          * @param units typically useing rotationUnits::deg
          * @return float 
          */
-        float rightEncoder(rotationUnits units) override;
+        float getRightPosition(rotationUnits units) override;
 
         /**
          * @brief Reset the left and right encoders to 0.
          */
-        void resetEncoders() override;
+        void resetPosition() override;
 
         /**
          * @brief Sets the brake type of the chassis by passing a brake type as a parameter.

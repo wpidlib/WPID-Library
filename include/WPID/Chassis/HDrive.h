@@ -25,7 +25,7 @@ class HDrive: public wpid::Tank {
          * @param r_max_spd the max speed the right side should spin
          * @param c_max_spd the max speed the center wheel should spin
          */
-        void setTarget(float left_target, float right_target, float center_target, int l_max_spd, int r_max_spd, int c_max_spd);
+        void spinToTarget(float left_target, float right_target, float center_target, int l_max_spd, int r_max_spd, int c_max_spd);
     public:
         /**
          * @brief Construct a new Chassis object. 
@@ -163,7 +163,7 @@ class HDrive: public wpid::Tank {
          * @param unit the rotation units you want to return
          * @return the position in the specified units
          */
-        float leftEncoder(rotationUnits units);
+        float getLeftPosition(rotationUnits units);
 
          /**
          * @brief Gets the current position of the right side of the chassis.
@@ -171,7 +171,7 @@ class HDrive: public wpid::Tank {
          * @param unit the rotation units you want to return
          * @return the position in the specified units
          */
-        float rightEncoder(rotationUnits units);
+        float getRightPosition(rotationUnits units);
 
          /**
          * @brief Gets the current position of the center wheel of the chassis.
@@ -179,12 +179,12 @@ class HDrive: public wpid::Tank {
          * @param unit the rotation units you want to return
          * @return the position in the specified units
          */
-        float centerEncoder(rotationUnits units);
+        float getCenterPosition(rotationUnits units);
 
         /**
          * @brief Reset all encoders to 0.
          */
-        void resetEncoders() override;
+        void resetPosition() override;
 
         /**
          * @brief Sets the brake type of the chassis.

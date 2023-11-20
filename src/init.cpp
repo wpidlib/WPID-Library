@@ -23,7 +23,7 @@ void init(void) {
     chassis = new Tank(12.5, 3.25/2.0, &leftGroup, &rightGroup, 1);
     chassis->setOffset(.25, 0.85);
 
-    PID straight = PID(0.06, 0.008, 0);
+    PID straight = PID(0.07, 0.008, 0);
     straight.bias = 2;
     straight.setErrorRange(2);
     PID turn = PID(0.06, 0.008, 0);

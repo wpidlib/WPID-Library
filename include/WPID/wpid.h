@@ -6,3 +6,5 @@
 
 // Mechanism headers
 #include "./Mechanism/Mechanism.h"
+
+#include "./Logger.h"

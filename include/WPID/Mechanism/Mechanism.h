@@ -52,7 +52,7 @@ private:
      * This function is inaccessable and is used as a helper.
      * @param args the parameter arguments to set the target
      */
-    static void setTarget(void* args);  
+    static void spinToTarget(void* args);  
 public:
     bool isSettled = true;
     /**

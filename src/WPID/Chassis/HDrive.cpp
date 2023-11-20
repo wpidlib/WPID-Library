@@ -6,16 +6,10 @@ HDrive::HDrive(float track_width, float wheel_radius, float center_wheel_radius,
     this->track_width = track_width;
     this->wheel_circumference = 2.0 * M_PI * wheel_radius;
     this->center_wheel_circumference = 2.0 * M_PI * center_wheel_radius;
-    //this->left = new Mechanism(left, drive_gear_ratio);
-    //this->right = new Mechanism(right, drive_gear_ratio);
-    //this->center = new Mechanism(center, drive_gear_ratio);
 
     this->left = new Mechanism(left, drive_gear_ratio, "LEFT");
     this->right = new Mechanism(right, drive_gear_ratio, "RIGHT");
     this->center = new Mechanism(center, drive_gear_ratio, "CENTER");
-
-
-    this->center->setPID(pidStrafe);
 }
 
 void HDrive::setStraightPID(PID pid){
@@ -40,12 +34,6 @@ void HDrive::spin(int sides, int center){
     this->spin(sides, sides, center);
 }
 
-void HDrive::resetEncoders(){
-    left->resetPosition();
-    right->resetPosition();
-    center->resetPosition();
-}
-
 void HDrive::straight(float distance, int max_speed){
     this->straightAsync(distance, max_speed);
     this->waitUntilSettled();
@@ -55,7 +43,7 @@ void HDrive::straightAsync(float distance, int max_speed){
     float target = ((distance + straight_offset) / wheel_circumference) * 360.0;
     left->setPID(pidStraight);
     right->setPID(pidStraight);
-    this->setTarget(target, target, 0, max_speed, max_speed, 0);
+    this->spinToTarget(target, target, 0, max_speed, max_speed, 0);
 }
 
 void HDrive::turn(int target_angle, int max_speed){
@@ -67,7 +55,7 @@ void HDrive::turnAsync(float target_angle, int max_speed){
     float target = ((track_width/2)*((float)(target_angle+turn_offset)*M_PI/180)/wheel_circumference)*360;
     left->setPID(pidTurn);
     right->setPID(pidTurn);
-    this->setTarget(target, -target, 0, max_speed, max_speed, 0);
+    this->spinToTarget(target, -target, 0, max_speed, max_speed, 0);
 }
 
 void HDrive::strafe(float distance, int max_speed){
@@ -77,7 +65,7 @@ void HDrive::strafe(float distance, int max_speed){
 
 void HDrive::strafeAsync(float distance, int max_speed){
     float target = ((distance + strafe_offset) / center_wheel_circumference) * 360.0;
-    this->setTarget(0, 0, target, 0, 0, max_speed);
+    this->spinToTarget(0, 0, target, 0, 0, max_speed);
 }
 
 void HDrive::diagonal(float straight_distance, float strafe_distance, int straight_max_speed){
@@ -91,25 +79,43 @@ void HDrive::diagonalAsync(float straight_distance, float strafe_distance, int s
     float center_max_speed = straight_max_speed*(strafe_distance / straight_distance);
     left->setPID(pidStraight);
     right->setPID(pidStraight);
-    this->setTarget(straight_target, straight_target, strafe_target, straight_max_speed, straight_max_speed, center_max_speed);
+    this->spinToTarget(straight_target, straight_target, strafe_target, straight_max_speed, straight_max_speed, center_max_speed);
 }
 
-void HDrive::setTarget(float left_target, float right_target, float center_target, int l_max_spd, int r_max_spd, int c_max_spd){
+void HDrive::spinToTarget(float left_target, float right_target, float center_target, int l_max_spd, int r_max_spd, int c_max_spd){
     left->moveRelative(left_target, l_max_spd);
     right->moveRelative(right_target, r_max_spd);
     center->moveRelative(center_target, c_max_spd);
 }
 
-float HDrive::leftEncoder(rotationUnits units){
+void HDrive::stop(){
+    left->stop();
+    right->stop();
+    center->stop();
+}
+
+void HDrive::waitUntilSettled(){
+    while(!this->left->isSettled || !this->right->isSettled || !this->center->isSettled){
+        wait(20, msec);
+    }
+}
+
+float HDrive::getLeftPosition(rotationUnits units){
     return left->getPosition(units);
 }
 
-float HDrive::rightEncoder(rotationUnits units){
+float HDrive::getRightPosition(rotationUnits units){
     return right->getPosition(units);
 }
 
-float HDrive::centerEncoder(rotationUnits units){
+float HDrive::getCenterPosition(rotationUnits units){
     return center->getPosition(units);
+}
+
+void HDrive::resetPosition(){
+    left->resetPosition();
+    right->resetPosition();
+    center->resetPosition();
 }
 
 void HDrive::setBrakeType(brakeType type){
@@ -124,18 +130,6 @@ void HDrive::setOffset(float straight, float turn, float center){
     strafe_offset = center;
 }
 
-void HDrive::stop(){
-    left->stop();
-    right->stop();
-    center->stop();
-}
-
 void HDrive::setMaxAcceleration(float max_accel){
     this->max_acceleration = max_accel;
-}
-
-void HDrive::waitUntilSettled(){
-    while(!this->left->isSettled || !this->right->isSettled || !this->center->isSettled){
-        wait(20, msec);
-    }
 }

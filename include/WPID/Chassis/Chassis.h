@@ -85,7 +85,7 @@ class Chassis {
          * @param unit the rotation units you want to return
          * @return the position in the specified units
          */
-        virtual float leftEncoder(rotationUnits units) = 0;
+        virtual float getLeftPosition(rotationUnits units) = 0;
         
          /**
          * @brief Gets the current position of the right side of the chassis.
@@ -93,12 +93,12 @@ class Chassis {
          * @param unit the rotation units you want to return
          * @return the position in the specified units
          */
-        virtual float rightEncoder(rotationUnits units) = 0;
+        virtual float getRightPosition(rotationUnits units) = 0;
         
         /**
          * @brief Reset all encoders to 0.
          */
-        virtual void resetEncoders() = 0;
+        virtual void resetPosition() = 0;
 
         /**
          * @brief Sets the brake type of the chassis.

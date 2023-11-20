@@ -1,5 +1,6 @@
 #include "WPID/Mechanism/Mechanism.h"
 #include <stdlib.h>
+
 using namespace vex;
 using namespace wpid;
 
@@ -34,43 +35,30 @@ void Mechanism::waitUntilSettled(){
     while(!this->isSettled){
         wait(20, msec);
     }
-    LOG("stopping mech");
 }
 
 void Mechanism::moveRelativeAsync(float position, float max_speed){
-    LOG("entering mech relative async");
     float current = this->getPosition(deg);
     this->moveAbsoluteAsync(position + current, max_speed);
-    LOG("exiting mech relative async");
-
 }
 
 void Mechanism::moveRelative(float position, float max_speed){
-    LOG("entering mech relative");
     this->moveRelativeAsync(position, max_speed);
     this->waitUntilSettled();
-    LOG("exiting mech relative");
 }
 
 void Mechanism::moveAbsoluteAsync(float position, float max_speed){
-    LOG("entering mech absolute async");
-    isSettled = false;  
+    isSettled = false;    
     void* arg = (void*)getParams(position, max_speed);
-    thread(setTarget, arg);
-    LOG("exiting mech absolute async");
-
+    thread(spinToTarget, arg);
 }
 
 void Mechanism::moveAbsolute(float position, float max_speed){
-    LOG("entering mech absolute");
     this->moveAbsoluteAsync(position, max_speed);
     this->waitUntilSettled();
-    LOG("exiting mech absolute");
-
 }
 
-void Mechanism::setTarget(void* args){
-    LOG("entering mech set target");
+void Mechanism::spinToTarget(void* args){
     params* input = (params*)args;
     Mechanism* mech = input->mech;
     float max_speed = input->spd;
@@ -85,26 +73,27 @@ void Mechanism::setTarget(void* args){
 
     float state = 0;
     float error = 999;
-    int calc = 0;
     float ramp = 0;
+    int calc = 0;
     
     while(mech->pid.unfinished(error)){
         state = mech->getPosition(rotationUnits::deg); // get the state of the motors
         error = target - state; // difference between target and state
-        //calc = mech->pid.calculateSpeed(error, max_speed); // calculate PID speed
+
         calc = mech->pid.calculateSpeed(error, max_speed, mech->mech_id); // calculate PID speed
-        // if(mech->max_acceleration > 0 && fabs(error) > fabs(target*(1 - mech->MAX_RAMP_DURATION)) && ramp <= max_speed){
-        //     calc = target < 0 ? 0.0 - ramp : ramp;
-        //     ramp += mech->max_acceleration;
-        // }
+
+        //limit to ramp speed if ramp is less than max_speed
+        if(mech->max_acceleration > 0 && fabs(ramp) < max_speed){
+            calc = ramp;
+            ramp += error < 0 ? -mech->max_acceleration : mech->max_acceleration;
+        }
 
         mech->spin(calc); // spin the motors at speed
         this_thread::sleep_for(mech->pid.delay_time); // delay by pid.delay_time milliseconds
     }
-    mech->pid.reset();
     mech->stop();
+    mech->pid.reset();
     mech->isSettled = true;
-    LOG("exiting mech set target");
     return;
 }
 

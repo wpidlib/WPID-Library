@@ -1,5 +1,6 @@
 #include "main.h"
 #include <iostream>
+#include <thread>
 
 // cubes value and returns as a proportion
 double scale(double x) {
