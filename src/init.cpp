@@ -36,7 +36,7 @@ void init(void) {
     chassis->setMaxAcceleration(.5);
 
     // Fourbar setup
-    fourbar = new Mechanism(&mechGroup, 0.25, "MECHANISM");
+    fourbar = new Mechanism(&mechGroup, 0.25);
     PID lift = PID(0.3, 0.05, 0);
     fourbar->setPID(lift);
     fourbar->setBrakeType(brakeType::hold);

@@ -85,11 +85,9 @@ for file in allFiles:
     dFs.append(data)
 
 result = pd.concat(dFs)
-#result = result.replace(0, np.NaN)
 
 dFs = [result[result['Name'] == 'LEFT'], result[result['Name'] == 'RIGHT'], result[result['Name'] == 'CENTER'], result[result['Name'] == 'MECHANISM']]
 
 for frame in dFs:
     if(not frame.empty):
         graphMotorGroup(frame, frame['Name'].iloc[0], arguments)
-        #print("hi")

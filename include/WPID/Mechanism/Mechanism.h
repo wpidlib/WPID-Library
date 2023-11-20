@@ -63,6 +63,7 @@ public:
      * @param motor_id the string identifier for the motor group to enable per motor logging
      */
     Mechanism(motor_group* motors, float gear_ratio, std::string mech_id);
+    Mechanism(motor_group* motors, float gear_ratio);
     Mechanism() = default;
 
     /**
