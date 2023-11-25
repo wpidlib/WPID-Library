@@ -5,8 +5,6 @@
 #include "../Mechanism/Mechanism.h"
 #include "../Logger.h"
 
-using namespace vex;
-
 namespace wpid {
 class Chassis {
     protected:
@@ -85,7 +83,7 @@ class Chassis {
          * @param unit the rotation units you want to return
          * @return the position in the specified units
          */
-        virtual float getLeftPosition(rotationUnits units) = 0;
+        virtual float getLeftPosition(vex::rotationUnits units) = 0;
         
          /**
          * @brief Gets the current position of the right side of the chassis.
@@ -93,7 +91,7 @@ class Chassis {
          * @param unit the rotation units you want to return
          * @return the position in the specified units
          */
-        virtual float getRightPosition(rotationUnits units) = 0;
+        virtual float getRightPosition(vex::rotationUnits units) = 0;
         
         /**
          * @brief Reset all encoders to 0.
@@ -104,7 +102,7 @@ class Chassis {
          * @brief Sets the brake type of the chassis.
          * @param type The brake type can be set to coast, brake, or hold.  
          */
-        virtual void setBrakeType(brakeType type) = 0;
+        virtual void setBrakeType(vex::brakeType type) = 0;
 
         /**
          * @brief Set the max acceleration of the chassis. 

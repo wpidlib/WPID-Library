@@ -3,7 +3,7 @@
 #include <string>
 
 namespace wpid {
-class HDrive: public wpid::Tank {
+class HDrive : public wpid::Tank {
     private:
         // Chassis scales specific for Tank Drive
         float center_wheel_circumference;
@@ -39,7 +39,7 @@ class HDrive: public wpid::Tank {
          * @param center motor group
          * @param drive_gear_ratio the internal gearset of the drive train
          */
-        HDrive(float track_width, float wheel_radius, float center_wheel_radius, motor_group* left, motor_group* right, motor_group* center, float drive_gear_ratio);
+        HDrive(float track_width, float wheel_radius, float center_wheel_radius, vex::motor_group* left, vex::motor_group* right, vex::motor_group* center, float drive_gear_ratio);
         HDrive() = default;
 
         /**
@@ -163,7 +163,7 @@ class HDrive: public wpid::Tank {
          * @param unit the rotation units you want to return
          * @return the position in the specified units
          */
-        float getLeftPosition(rotationUnits units);
+        float getLeftPosition(vex::rotationUnits units);
 
          /**
          * @brief Gets the current position of the right side of the chassis.
@@ -171,7 +171,7 @@ class HDrive: public wpid::Tank {
          * @param unit the rotation units you want to return
          * @return the position in the specified units
          */
-        float getRightPosition(rotationUnits units);
+        float getRightPosition(vex::rotationUnits units);
 
          /**
          * @brief Gets the current position of the center wheel of the chassis.
@@ -179,7 +179,7 @@ class HDrive: public wpid::Tank {
          * @param unit the rotation units you want to return
          * @return the position in the specified units
          */
-        float getCenterPosition(rotationUnits units);
+        float getCenterPosition(vex::rotationUnits units);
 
         /**
          * @brief Reset all encoders to 0.
@@ -190,7 +190,7 @@ class HDrive: public wpid::Tank {
          * @brief Sets the brake type of the chassis.
          * @param type The brake type can be set to coast, brake, or hold.  
          */
-        void setBrakeType(brakeType type);
+        void setBrakeType(vex::brakeType type);
 
         /**
          * @brief Set the max acceleration of the mechanism. 

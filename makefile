@@ -27,9 +27,8 @@ SRC_A  = makefile
 INC_F  = include
 
 # build targets
+# all: $(BUILD)/$(PROJECTLIB).a
 all: $(BUILD)/$(PROJECT).bin
-# $(BUILD)/$(PROJECT).bin
-# $(BUILD)/$(PROJECTLIB).a
 
 # include build rules
 include vex/mkrules.mk

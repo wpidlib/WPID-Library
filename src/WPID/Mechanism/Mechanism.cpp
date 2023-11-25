@@ -61,7 +61,7 @@ void Mechanism::moveAbsolute(float position, float max_speed){
 void Mechanism::spinToTarget(void* args){
     params* input = (params*)args;
     Mechanism* mech = input->mech;
-    float max_speed = input->spd;
+    float max_speed = fabs(input->spd); // make sure max_speed is a scalar
     float target = (input->pos + mech->offset);
 
     //limit target to bounds if calcluations exceed bounds
@@ -88,7 +88,7 @@ void Mechanism::spinToTarget(void* args){
             ramp += error < 0 ? -mech->max_acceleration : mech->max_acceleration;
         }
 
-        mech->spin(calc); // spin the motors at speed
+        mech->motors->spin(fwd, calc, pct); // spin the motors at speed
         this_thread::sleep_for(mech->pid.delay_time); // delay by pid.delay_time milliseconds
     }
     mech->stop();
@@ -122,6 +122,8 @@ void Mechanism::setMaxAcceleration(float max_accel){
 }
 
 void Mechanism::setBounds(float lower_bound, float upper_bound){
+    if(lower_bound >= upper_bound)
+        LOG_WARN("Bounds might be reversed. Double check.");
     this->lower_bound = lower_bound;
     this->upper_bound = upper_bound;
 }

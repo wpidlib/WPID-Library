@@ -26,7 +26,7 @@ class Tank : public wpid::Chassis{
          * @param left motor group
          * @param right motor group
          */
-        Tank(float track_width, float wheel_radius, motor_group* left, motor_group* right, float drive_gear_ratio);
+        Tank(float track_width, float wheel_radius, vex::motor_group* left, vex::motor_group* right, float drive_gear_ratio);
         Tank() = default;
 
         /**
@@ -103,7 +103,7 @@ class Tank : public wpid::Chassis{
          * @param units typically using rotationUnits::deg
          * @return float 
          */
-        float getLeftPosition(rotationUnits units) override;
+        float getLeftPosition(vex::rotationUnits units) override;
 
         /**
          * @brief Gets the current position of the right side of the chassis
@@ -111,7 +111,7 @@ class Tank : public wpid::Chassis{
          * @param units typically useing rotationUnits::deg
          * @return float 
          */
-        float getRightPosition(rotationUnits units) override;
+        float getRightPosition(vex::rotationUnits units) override;
 
         /**
          * @brief Reset the left and right encoders to 0.
@@ -122,7 +122,7 @@ class Tank : public wpid::Chassis{
          * @brief Sets the brake type of the chassis by passing a brake type as a parameter.
          * @param type The brake type can be set to coast, brake, or hold.  
          */
-        void setBrakeType(brakeType type) override;
+        void setBrakeType(vex::brakeType type) override;
 
         /**
          * @brief Set the max acceleration of the mechanism. 

@@ -3,8 +3,6 @@
 #include <map>
 #include "v5_vcs.h"
 
-using namespace std;
-
 namespace convert{
 class Conversion {
     private:

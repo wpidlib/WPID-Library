@@ -2,6 +2,7 @@
 
 using namespace std;
 using namespace vex;
+using namespace wpid;
 
 float PID::calculateSpeed(float error, float max_speed, std::string mech_id){
     // summation of error over time

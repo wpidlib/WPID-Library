@@ -1,5 +1,6 @@
 #include "WPID/Chassis/HDrive.h"
 
+using namespace vex;
 using namespace wpid;
 
 HDrive::HDrive(float track_width, float wheel_radius, float center_wheel_radius, vex::motor_group* left, vex::motor_group* right, vex::motor_group* center, float drive_gear_ratio){

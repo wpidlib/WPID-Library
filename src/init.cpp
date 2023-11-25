@@ -43,26 +43,3 @@ void init(void) {
     fourbar->setMaxAcceleration(0);
     fourbar->setBounds(0, 90);
 }
-
-// TANK SETUP
-
-// HDRIVE SETUP
-    // chassis = new HDrive(
-    //     12.5, 3.25/2.0, 3.25/2.0, 
-    //     &leftGroup, &rightGroup, &centerGroup, 1);
-
-    // PID straight = PID(.16, .05, .04);
-    // PID turn = PID(.3, .065, .04);
-    // PID strafe = PID(.3, .05, 0);
-
-    // chassis->setStraightPID(straight);
-    // chassis->setTurnPID(turn);
-    // chassis->setStrafePID(strafe);
-
-    // chassis->setMaxAcceleration(.25);
-
-// ENCODER SETUP
-// triport ThreeWirePort = triport(PORT22);
-// encoder lenc = encoder(ThreeWirePort.B);
-// encoder renc = encoder(ThreeWirePort.A);
-// chassis->setEncoders(&lenc, &renc);

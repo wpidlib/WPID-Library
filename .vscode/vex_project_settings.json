@@ -5,7 +5,7 @@
 	},
 	"project": {
 		"name": "wpid",
-		"description": "",
+		"description": "a simple PID library for VEXCode",
 		"creationDate": "8/30/2023, 10:23:01 PM",
 		"platform": "V5",
 		"language": "cpp",

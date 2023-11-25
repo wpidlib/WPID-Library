@@ -8,17 +8,18 @@
 #include <fstream>
 #include "./Logger.h"
 
+namespace wpid{
 class PID {
     private:
         float kp; // proportional constant
         float ki; // integral constant
         float kd; // derivative constant
-        float bound = 1; //the error bound
+        float bound = 1; //the error bound in rotationUnits::deg
         float prev_error = MAXFLOAT; // the previous error
         float prev_integral = 0; // the previous integral
         std::string fName = "LoggedData";
     public:
-        int delay_time = 20; // delay in milliseconds
+        int delay_time = 20; // PID loop delay in milliseconds
         int bias = 0; // lowest speed possible for PID to achieve
         /**
          * @brief Construct a new PID object.
@@ -32,31 +33,31 @@ class PID {
         PID() = default;
 
         /**
-         * @brief Used to update the velocity of a motor or motor group. The speed
-         * is proportional to the distance remaining from the target.
+         * @brief Used to calculate the velocity of a motor or motor group. 
+         * The speed is calculated using PID, with integral clamping, bias maintaining, and speed clamping. 
          * 
-         * @param error the remaining distance to the target, any unit is allowed
-         * @param max_speed maximum velocity allowed, any unit is allowed
+         * @param error the remaining distance to the target
+         * @param max_speed maximum velocity allowed in velocityUnits::pct
          * @param mech_id string identifier for motor group to log
-         * @return a calculated speed based on all parameters
+         * @return a calculated speed based on all PID parameters
          */
         float calculateSpeed(float error, float max_speed, std::string mech_id);
 
         /**
-         * @brief Set the error range.
-         * @param bound the absolute value of the bound of the error range
+         * @brief Set the error range in rotationUnits::deg.
+         * @param bound the absolute value of the bounds of the error range
          */
         void setErrorRange(float bound);
 
         /**
-         * @brief Checks if the current error is within the error range.
+         * @brief Checks if the movement is unfinished (error still outside the final bounds).
          * @param error the current error of the system
-         * @return true if the error is outside the bounds, false if it is within the bounds
+         * @return returns true if the error is outside the bounds, false if it is within the bounds
          */
         bool unfinished(float error);
 
         /**
-         * @brief Reset the previous error and previous integral values.
+         * @brief Resets the previous error and previous integral values.
          */
         void reset(void);
 
@@ -70,12 +71,13 @@ class PID {
         /**
          * @brief Logs the error, speed, integral and derivative values 
          * to a text file on a micro SD card on the robot
-         * @param error is the robot error value
-         * @param speed is the robots speed
-         * @param proportional is the P value for PID
-         * @param integral is the I value for PID
-         * @param derivative is the D value for PID
-         * @param motor_id is the motor identifier for graphing
+         * @param error the robot error value
+         * @param speed the calculated speed
+         * @param proportional result of the proportional calculation
+         * @param integral result of the integral calculation
+         * @param derivative result of the derivative calculation
+         * @param motor_id the motor identifier
          */
         void fileLogging(float error, float speed, float proportional, float integral, float derivative, std::string mech_id);
 };      
+}

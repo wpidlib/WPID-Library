@@ -5,14 +5,13 @@
 #include "../PID.h"
 #include <string>
 
-using namespace vex;
 namespace wpid{
 class Mechanism {
 private:
     //
     std::string name = "Mechanism";
     // Mechanism motors
-    motor_group* motors;
+    vex::motor_group* motors;
     float gear_ratio; // the gear ration from motor to output
     PID pid; // the pid constants
     float offset = 0; // an offset to account for consistent error
@@ -62,8 +61,8 @@ public:
      * @param gear_ratio the external gear ratio between motor group and mechanism
      * @param motor_id the string identifier for the motor group to enable per motor logging
      */
-    Mechanism(motor_group* motors, float gear_ratio, std::string mech_id);
-    Mechanism(motor_group* motors, float gear_ratio);
+    Mechanism(vex::motor_group* motors, float gear_ratio, std::string mech_id);
+    Mechanism(vex::motor_group* motors, float gear_ratio);
     Mechanism() = default;
 
     /**
@@ -121,7 +120,7 @@ public:
      * @param units the rotation units to return
      * @return float the position of the motor
      */
-    float getPosition(rotationUnits units);
+    float getPosition(vex::rotationUnits units);
 
     /**
      * @brief Resets the encoders in the group to 0.
@@ -132,7 +131,7 @@ public:
      * @brief Sets the brake type of the chassis.
      * @param type The brake type can be set to coast, brake, or hold.  
      */
-    void setBrakeType(brakeType type);
+    void setBrakeType(vex::brakeType type);
 
     /**
      * @brief Set a PID object to the mechanism
