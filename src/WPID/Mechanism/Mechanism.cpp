@@ -32,9 +32,8 @@ void Mechanism::stop(){
 }
 
 void Mechanism::waitUntilSettled(){
-    while(!this->isSettled){
-        wait(20, msec);
-    }
+    this->mech_thread->join();
+    delete(this->mech_thread);
 }
 
 void Mechanism::moveRelativeAsync(float position, float max_speed){
@@ -47,10 +46,9 @@ void Mechanism::moveRelative(float position, float max_speed){
     this->waitUntilSettled();
 }
 
-void Mechanism::moveAbsoluteAsync(float position, float max_speed){
-    isSettled = false;    
+void Mechanism::moveAbsoluteAsync(float position, float max_speed){  
     void* arg = (void*)getParams(position, max_speed);
-    thread(spinToTarget, arg);
+    this->mech_thread = new thread(spinToTarget, arg);
 }
 
 void Mechanism::moveAbsolute(float position, float max_speed){
@@ -67,16 +65,21 @@ void Mechanism::spinToTarget(void* args){
     //limit target to bounds if calcluations exceed bounds
     if(target > mech->upper_bound){
         target = mech->upper_bound;
+        LOG(WARN) << mech->mech_id << "'s upper bound was exceeded, reduced to " << mech->upper_bound;
     } else if (target < mech->lower_bound) {
         target = mech->lower_bound;
+        LOG(WARN) << mech->mech_id << "'s lower bound was exceeded, reduced to " << mech->lower_bound;
     }
+
+    LOG(INFO) << "moving " << mech->mech_id << " to " << target << " with max speed " << max_speed;
 
     float state = 0;
     float error = 999;
     float ramp = 0;
-    int calc = 0;
+    int calc = 999;
+    int final_speed;
     
-    while(mech->pid.unfinished(error)){
+    while(mech->pid.unfinished(error) || calc > mech->pid.bias){
         state = mech->getPosition(rotationUnits::deg); // get the state of the motors
         error = target - state; // difference between target and state
 
@@ -84,16 +87,17 @@ void Mechanism::spinToTarget(void* args){
 
         //limit to ramp speed if ramp is less than max_speed
         if(mech->max_acceleration > 0 && fabs(ramp) < max_speed){
-            calc = ramp;
+            final_speed = ramp;
             ramp += error < 0 ? -mech->max_acceleration : mech->max_acceleration;
+        } else {
+            final_speed = calc;
         }
 
-        mech->motors->spin(fwd, calc, pct); // spin the motors at speed
+        mech->motors->spin(fwd, final_speed, pct); // spin the motors at speed
         this_thread::sleep_for(mech->pid.delay_time); // delay by pid.delay_time milliseconds
     }
     mech->stop();
     mech->pid.reset();
-    mech->isSettled = true;
     return;
 }
 
@@ -123,7 +127,7 @@ void Mechanism::setMaxAcceleration(float max_accel){
 
 void Mechanism::setBounds(float lower_bound, float upper_bound){
     if(lower_bound >= upper_bound)
-        //LOG_WARN("Bounds might be reversed. Double check.");
+        LOG(WARN) << "Bounds might be reversed. Double check.";
     this->lower_bound = lower_bound;
     this->upper_bound = upper_bound;
 }

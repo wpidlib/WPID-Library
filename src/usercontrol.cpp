@@ -18,8 +18,12 @@ int opPrint(){
 }
 
 void usercontrol(){ 
-    auton();
+    //auton();
     thread disp = thread(opPrint);
+
+    LOG().setBaseLevel(DEBUG);
+    LOG(WARN) << "ERROR WAONFAOEF";
+    LOG(INFO) << "testing" << 123;
 
     // axis values on controller
     double axis3, axis4 = 0;

@@ -20,7 +20,7 @@ motor_group mechGroup = motor_group(mech);
 
 void init(void) {
     Brain.Screen.clearScreen();
-    chassis = new Tank(12.5, 3.25/2.0, &leftGroup, &rightGroup, 1);
+    chassis = new Tank(12.5, 1.625, &leftGroup, &rightGroup, 1);
     chassis->setOffset(.25, 0.85);
 
     PID straight = PID(0.07, 0.008, 0);
@@ -42,4 +42,5 @@ void init(void) {
     fourbar->setBrakeType(brakeType::hold);
     fourbar->setMaxAcceleration(0);
     fourbar->setBounds(0, 90);
+    //chassis->setMeasurementUnits(Conversion::measurement::m);
 }

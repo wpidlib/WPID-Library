@@ -4,6 +4,16 @@ using namespace vex;
 using namespace wpid;
 
 HDrive::HDrive(float track_width, float wheel_radius, float center_wheel_radius, vex::motor_group* left, vex::motor_group* right, vex::motor_group* center, float drive_gear_ratio){
+    if(drive_gear_ratio <= 0)
+        LOG(WARN) << "Cannot use a non-positive drive ratio";
+    if(left->count() == 0)
+        LOG(WARN) << "No motors found in \"LEFT\" motor group";
+    if(right->count() == 0)
+        LOG(WARN) << "No motors found in \"RIGHT\" motor group";
+    if(center->count() == 0)
+        LOG(WARN) << "No motors found in \"CENTER\" motor group";
+
+    
     this->track_width = track_width;
     this->wheel_circumference = 2.0 * M_PI * wheel_radius;
     this->center_wheel_circumference = 2.0 * M_PI * center_wheel_radius;
@@ -12,6 +22,7 @@ HDrive::HDrive(float track_width, float wheel_radius, float center_wheel_radius,
     this->right = new Mechanism(right, drive_gear_ratio, "RIGHT");
     this->center = new Mechanism(center, drive_gear_ratio, "CENTER");
 }
+
 
 void HDrive::setStraightPID(PID pid){
     pidStraight = pid;
@@ -77,8 +88,8 @@ void HDrive::diagonal(float straight_distance, float strafe_distance, int straig
 }
 
 void HDrive::diagonalAsync(float straight_distance, float strafe_distance, int straight_max_speed){
-    straight_distance = Conversion::standardize(distance, this->measure_units);
-    strafe_distance = Conversion::standardize(distance, this->measure_units);
+    straight_distance = Conversion::standardize(straight_distance, this->measure_units);
+    strafe_distance = Conversion::standardize(strafe_distance, this->measure_units);
     float straight_target = ((straight_distance + straight_offset) / wheel_circumference) * 360.0;
     float strafe_target = ((strafe_distance + strafe_offset) / center_wheel_circumference) * 360.0;
     float center_max_speed = straight_max_speed*(strafe_distance / straight_distance);
@@ -100,9 +111,9 @@ void HDrive::stop(){
 }
 
 void HDrive::waitUntilSettled(){
-    while(!this->left->isSettled || !this->right->isSettled || !this->center->isSettled){
-        wait(20, msec);
-    }
+    this->left->waitUntilSettled();
+    this->right->waitUntilSettled();
+    this->center->waitUntilSettled();
 }
 
 float HDrive::getLeftPosition(rotationUnits units){

@@ -12,16 +12,12 @@ int printAngle(){
 }
 
 void auton(){
-  //thread disp = thread(printAngle);
+  thread disp = thread(printAngle);
   for (size_t i = 0; i < 4; i++){
+    fourbar->moveAbsoluteAsync(60, 20);
     chassis->straight(10,20);
-    //chassis->waitUntilSettled();
+    fourbar->waitUntilSettled();
+    fourbar->moveAbsolute(0, 20);
     chassis->straight(-10,20);
-    //chassis->waitUntilSettled();
-    //chassis->waitUntilSettled();
-    // chassis->waitUntilSettled();
-    // std::cout << "Finished straight" << std::endl;
-    // chassis->turn(90,30);
-    // std::cout << std::endl;
   }
 }

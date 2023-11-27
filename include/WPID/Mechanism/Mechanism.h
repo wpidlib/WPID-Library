@@ -8,7 +8,6 @@
 namespace wpid{
 class Mechanism {
 private:
-    //
     std::string name = "Mechanism";
     // Mechanism motors
     vex::motor_group* motors;
@@ -52,8 +51,8 @@ private:
      * @param args the parameter arguments to set the target
      */
     static void spinToTarget(void* args);  
+    vex::thread* mech_thread;
 public:
-    bool isSettled = true;
     /**
      * @brief Construct a new Mechanism object.
      * 

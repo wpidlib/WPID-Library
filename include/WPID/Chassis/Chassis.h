@@ -6,8 +6,6 @@
 #include "../Logger.h"
 #include "../Conversion.h"
 
-using namespace convert;
-
 namespace wpid {
 class Chassis {
     protected:
