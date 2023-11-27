@@ -123,7 +123,7 @@ void Mechanism::setMaxAcceleration(float max_accel){
 
 void Mechanism::setBounds(float lower_bound, float upper_bound){
     if(lower_bound >= upper_bound)
-        LOG_WARN("Bounds might be reversed. Double check.");
+        //LOG_WARN("Bounds might be reversed. Double check.");
     this->lower_bound = lower_bound;
     this->upper_bound = upper_bound;
 }

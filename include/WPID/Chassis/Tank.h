@@ -139,5 +139,11 @@ class Tank : public wpid::Chassis{
          */
         void setOffset(float straight, float turn);
 
+        /**
+         * @brief Set the measurement units for chassis values.
+         * @param preferred_units the user's measurement system
+         */
+        void setMeasurementUnits(Conversion::measurement preferred_units);
+
 };
 }

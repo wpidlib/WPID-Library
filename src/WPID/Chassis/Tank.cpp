@@ -5,11 +5,11 @@ using namespace wpid;
 
 Tank::Tank(float track_width, float wheel_radius, vex::motor_group* left, vex::motor_group* right, float drive_gear_ratio){
     if(drive_gear_ratio <= 0)
-        LOG_WARN("Cannot use a non-positive drive ratio");
+        //LOG_WARN("Cannot use a non-positive drive ratio");
     if(left->count() == 0)
-        LOG_WARN("No motors found in \"LEFT\" motor group");
+        //LOG_WARN("No motors found in \"LEFT\" motor group");
     if(right->count() == 0)
-        LOG_WARN("No motors found in \"RIGHT\" motor group");
+        //LOG_WARN("No motors found in \"RIGHT\" motor group");
     
     this->track_width = track_width;
     this->wheel_circumference = 2.0 * M_PI * wheel_radius;
@@ -41,6 +41,7 @@ void Tank::straight(float distance, int max_speed){
 }
 
 void Tank::straightAsync(float distance, int max_speed){
+    distance = Conversion::standardize(distance, this->measure_units);
     float target = ((distance + straight_offset) / wheel_circumference) * 360.0;
     left->setPID(pidStraight.copy());
     right->setPID(pidStraight.copy());
@@ -100,8 +101,14 @@ void Tank::setOffset(float straight, float turn){
 
 void Tank::setMaxAcceleration(float max_accel){
     if(max_accel < 0)
-        LOG_WARN("Negative accelerations not allowed");
+        //LOG_WARN("Negative accelerations not allowed");
     this->max_acceleration = max_accel;
     this->left->setMaxAcceleration(max_accel);
     this->right->setMaxAcceleration(max_accel);
+}
+
+void Tank::setMeasurementUnits(Conversion::measurement preferred_units){
+    this->measure_units = preferred_units;
+    this->wheel_circumference = Conversion::standardize(this->wheel_circumference, preferred_units);
+    this->track_width = Conversion::standardize(this->track_width, preferred_units);
 }

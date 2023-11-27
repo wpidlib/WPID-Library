@@ -41,6 +41,7 @@ void HDrive::straight(float distance, int max_speed){
 }
 
 void HDrive::straightAsync(float distance, int max_speed){
+    distance = Conversion::standardize(distance, this->measure_units);
     float target = ((distance + straight_offset) / wheel_circumference) * 360.0;
     left->setPID(pidStraight);
     right->setPID(pidStraight);
@@ -65,6 +66,7 @@ void HDrive::strafe(float distance, int max_speed){
 }
 
 void HDrive::strafeAsync(float distance, int max_speed){
+    distance = Conversion::standardize(distance, this->measure_units);
     float target = ((distance + strafe_offset) / center_wheel_circumference) * 360.0;
     this->spinToTarget(0, 0, target, 0, 0, max_speed);
 }
@@ -75,6 +77,8 @@ void HDrive::diagonal(float straight_distance, float strafe_distance, int straig
 }
 
 void HDrive::diagonalAsync(float straight_distance, float strafe_distance, int straight_max_speed){
+    straight_distance = Conversion::standardize(distance, this->measure_units);
+    strafe_distance = Conversion::standardize(distance, this->measure_units);
     float straight_target = ((straight_distance + straight_offset) / wheel_circumference) * 360.0;
     float strafe_target = ((strafe_distance + strafe_offset) / center_wheel_circumference) * 360.0;
     float center_max_speed = straight_max_speed*(strafe_distance / straight_distance);
@@ -133,4 +137,10 @@ void HDrive::setOffset(float straight, float turn, float center){
 
 void HDrive::setMaxAcceleration(float max_accel){
     this->max_acceleration = max_accel;
+}
+
+void HDrive::setMeasurementUnits(Conversion::measurement preferred_units){
+    this->measure_units = preferred_units;
+    this->wheel_circumference = Conversion::standardize(this->wheel_circumference, preferred_units);
+    this->track_width = Conversion::standardize(this->track_width, preferred_units);
 }

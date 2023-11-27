@@ -207,5 +207,11 @@ class HDrive : public wpid::Tank {
          * @param strafe the distance to offset strafe motion in inches
          */
         void setOffset(float straight, float turn, float strafe);
+
+        /**
+         * @brief Set the measurement units for chassis values.
+         * @param preferred_units the user's measurement system
+         */
+        void setMeasurementUnits(Conversion::measurement preferred_units);
 };
 }

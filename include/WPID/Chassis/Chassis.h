@@ -4,6 +4,9 @@
 #include "../PID.h"
 #include "../Mechanism/Mechanism.h"
 #include "../Logger.h"
+#include "../Conversion.h"
+
+using namespace convert;
 
 namespace wpid {
 class Chassis {
@@ -22,6 +25,8 @@ class Chassis {
         float turn_offset = 0;
         // maximum acceleration for ramp
         float max_acceleration = .5;
+        // measurement unit
+        Conversion::measurement measure_units = Conversion::measurement::in;
     public:
         /**
          * @brief Sets the straight line PID object.
@@ -110,5 +115,11 @@ class Chassis {
          * @param max_accel an arbitrary value to increment to ramp the speed up
          */
         virtual void setMaxAcceleration(float max_accel) = 0;
+
+        /**
+         * @brief Set the measurement units for chassis values.
+         * @param preferred_units the user's measurement system
+         */
+        virtual void setMeasurementUnits(Conversion::measurement preferred_units) = 0;
 };
 }
