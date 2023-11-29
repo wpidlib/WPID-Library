@@ -15,20 +15,19 @@ float PID::calculateSpeed(float error, float max_speed, std::string mech_id){
     // calculated speed value
     float speed = error*kp + integral*ki + derivative*kd; // calculated speed
     float prev_speed = speed; // pre cap speed
-    
-    // if saturated, check if getting worse
-    // if getting worse, use previous integral and stop integrating
-    // only starts to integrate if our output is less than our maximum
-    if(speed != prev_speed && std::signbit(error) == std::signbit(prev_speed)){
-        speed -= integral*ki;
-        integral = prev_integral;
-        speed += integral*ki;
-    } // integral clamping
-    prev_integral = integral;
 
     // cap speed at max speed if saturated
     if(speed > max_speed){ speed = max_speed; }
     if(speed < -max_speed){ speed = -max_speed; }
+    
+    // if saturated, check if getting worse
+    // if getting worse, use previous integral and stop integrating
+    if(speed != prev_speed && std::signbit(error) == std::signbit(prev_speed)){
+        speed -= integral*ki; // remove integral component
+        integral = prev_integral; // set error to 0 in integral calculation
+        speed += integral*ki; // add back new clamped integral
+    } // integral clamping
+    prev_integral = integral;
 
     // retain minimum speed
     if (speed < bias && speed > 0) { speed = bias; }

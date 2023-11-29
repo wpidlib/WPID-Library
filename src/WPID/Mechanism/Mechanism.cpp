@@ -79,7 +79,7 @@ void Mechanism::spinToTarget(void* args){
     int calc = 999;
     int final_speed;
     
-    while(mech->pid.unfinished(error) || calc > mech->pid.bias){
+    while(mech->pid.unfinished(error) || calc > mech->pid.bias){ // checks if within bounds and if the system speed is below the bias
         state = mech->getPosition(rotationUnits::deg); // get the state of the motors
         error = target - state; // difference between target and state
 
