@@ -2,6 +2,6 @@
 #include <iostream>
 
 void auton(){
-  chassis->setMaxAcceleration(1);
-  chassis->straight(24, 50);
+  chassis->setMaxAcceleration(1.5);
+  chassis->straight(15, 30);
 }

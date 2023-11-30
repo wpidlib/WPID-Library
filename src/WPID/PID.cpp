@@ -5,11 +5,17 @@ using namespace vex;
 using namespace wpid;
 
 float PID::calculateSpeed(float error, float max_speed, std::string mech_id){
+    float a = .75;
     // summation of error over time
     float integral = prev_integral + (error * (delay_time/(float)1000));
 
     // slope of error over time
-    float derivative = (error - prev_error) / (delay_time/(float)1000); 
+    // if(prev_error == MAXFLOAT) {prev_error = 0;}
+    // float current_estimate = (previous_estimate*a + (1-a)*(error - prev_error)); 
+    // previous_estimate = current_estimate;
+
+    // float derivative = current_estimate / (delay_time/(float)1000);
+    float derivative = (error - prev_error) / (delay_time/(float)1000);
     prev_error = error; // set previous error to current error
 
     // calculated speed value
@@ -50,6 +56,7 @@ bool PID::unfinished(float error){
 void PID::reset(void){
     prev_error = MAXFLOAT;
     prev_integral = 0;
+    previous_estimate = 0;
 }
 
 PID PID::copy(void){

@@ -82,9 +82,8 @@ void Mechanism::spinToTarget(void* args){
     while(mech->pid.unfinished(error) || calc > mech->pid.bias){ // checks if within bounds and if the system speed is below the bias
         state = mech->getPosition(rotationUnits::deg); // get the state of the motors
         error = target - state; // difference between target and state
-
+       
         calc = mech->pid.calculateSpeed(error, max_speed, mech->mech_id); // calculate PID speed
-
         //limit to ramp speed if ramp is less than max_speed
         if(mech->max_acceleration > 0 && fabs(ramp) < max_speed){
             final_speed = ramp;
@@ -96,6 +95,7 @@ void Mechanism::spinToTarget(void* args){
         mech->motors->spin(fwd, final_speed, pct); // spin the motors at speed
         this_thread::sleep_for(mech->pid.delay_time); // delay by pid.delay_time milliseconds
     }
+    LOG(DEBUG) << "Stopping " << mech->mech_id;
     mech->stop();
     mech->pid.reset();
     return;

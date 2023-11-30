@@ -23,8 +23,9 @@ void init(void) {
     chassis = new Tank(12.5, 1.625, &leftGroup, &rightGroup, 1);
     chassis->setOffset(.25, 0.85);
 
-    PID straight = PID(0.08, 0.007, 0.005);
-    straight.bias = 2;
+    //PID straight = PID(0.08, 0.007, 0.05);
+    PID straight = PID(0.4, 0.17, 0.06);
+    straight.bias = 0;
     straight.setErrorRange(2);
     PID turn = PID(0.06, 0.008, 0.001);
     turn.setErrorRange(2);
@@ -43,7 +44,7 @@ void init(void) {
     fourbar->setMaxAcceleration(0);
     fourbar->setBounds(0, 90);
 
-    LOG().setBaseLevel(INFO);
+    LOG().setBaseLevel(DEBUG);
 
     //chassis->setMeasurementUnits(Conversion::measurement::m);
 }

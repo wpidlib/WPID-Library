@@ -41,6 +41,8 @@ class PID {
         */
         float prev_integral = 0;
 
+        float previous_estimate = 0;
+
         /**
         * Base name of the logging file
         */

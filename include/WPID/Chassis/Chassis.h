@@ -10,16 +10,15 @@ namespace wpid {
 class Chassis {
     protected:
         /** 
-        * @brief Chassis scales specific for Tank Drive
+        * Chassis track width for Tank drive
         */
         float track_width;
         
         /**
-         * @brief 
-         * 
+         * Chassis wheel circumference for Tank drive
          */
         float wheel_circumference;
-        
+
         /** 
         * Left and Right motor groups for Tank
         */
