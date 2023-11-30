@@ -5,13 +5,24 @@
 namespace wpid {
 class HDrive : public wpid::Tank {
     private:
-        // Chassis scales specific for Tank Drive
+        /**
+        * Chassis scales specific for Tank Drive
+        */
         float center_wheel_circumference;
-        // Left and Right motor groups for Tank
+        
+        /**
+        * Left and Right motor groups for Tank
+        */
         Mechanism* center;
-        // seperate PID objects for turning and straight motion
+        
+        /** 
+        * Seperate PID objects for turning and straight motion
+        */
         PID pidStrafe;
-        // offsets to fix steady state error
+        
+        /** 
+        * Offsets to fix steady state error
+        */
         float strafe_offset = 0;
         
         /**

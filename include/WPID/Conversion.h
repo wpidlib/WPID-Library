@@ -6,10 +6,29 @@
 namespace wpid {
 class Conversion {
     private:
+        /**
+        * Conversion metric from feet to inches 
+        */
         static constexpr float FT_TO_IN = 12.0;
+
+        /**
+        * Conversion metric from yards to inches 
+        */
         static constexpr float YD_TO_IN = 36.0;
+
+        /**
+        * Conversion metric from meters to inches 
+        */
         static constexpr float M_TO_IN = 39.3701;
+
+        /**
+        * Conversion metric from centimeters to inches 
+        */
         static constexpr float CM_TO_IN = 0.393701;
+
+        /**
+        * Conversion metric from millimeters to inches 
+        */
         static constexpr float MM_TO_IN = 0.0393701;
 
     public:

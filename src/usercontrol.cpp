@@ -18,13 +18,8 @@ int opPrint(){
 }
 
 void usercontrol(){ 
-    //auton();
+    auton();
     thread disp = thread(opPrint);
-
-    LOG().setBaseLevel(DEBUG);
-    LOG(WARN) << "ERROR WAONFAOEF";
-    LOG(INFO) << "testing" << 123;
-
     // axis values on controller
     double axis3, axis4 = 0;
     while (1) {
@@ -38,8 +33,13 @@ void usercontrol(){
         } else {
             fourbar->stop();
         }
+
+        if(con->ButtonDown.pressing()){
+            chassis->spin(-20);
+        } else {
+            chassis->spin(axis3 + axis4, axis3 - axis4);
+        }
         
-        chassis->spin(axis3 + axis4, axis3 - axis4);
         wait(20, msec);
     }
 }

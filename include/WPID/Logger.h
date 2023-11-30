@@ -43,8 +43,8 @@ private:
         std::string label;
         switch (type) {
             case DEBUG: label = "DEBUG"; break;
-            case WARN: label = "WARN"; break;
-            case INFO: label = "INFO"; break;
+            case WARN:  label = "WARN" ; break;
+            case INFO:  label = "INFO" ; break;
         }
         return label;
     }

@@ -8,21 +8,57 @@
 namespace wpid{
 class Mechanism {
 private:
+    /**
+    * Mechanism Name
+    */
     std::string name = "Mechanism";
-    // Mechanism motors
+
+    /**
+    * Mechanism motors
+    */
     vex::motor_group* motors;
-    float gear_ratio; // the gear ration from motor to output
-    PID pid; // the pid constants
-    float offset = 0; // an offset to account for consistent error
-    std::string mech_id; // the string identifier for the motor group for logging purposes
+    /**
+    * The Gear ratio from motor to output
+    */
+    float gear_ratio;
 
-    // Mechanism traits
+    /**
+    * The PID Constants
+    */
+    PID pid;
+    
+    /**
+    * An offset to account for consistent error
+    */
+    float offset = 0;
+
+    /**
+    * The string identifier for the motor group for logging purposes
+    */
+    std::string mech_id;
+
+    /**
+    * The Max acceleration of the mechanism
+    */
     float max_acceleration = 0;
-    float upper_bound = MAXFLOAT; // the upper bound to limit motion
-    float lower_bound = -MAXFLOAT; // the lower bound to limit motion
-    const float MAX_RAMP_DURATION = .25; // maximum duration based on target
 
-    // A struct to store position, speed and the pointer to this mechanism
+    /**
+    * The upper boun to limit mechanism motion
+    */
+    float upper_bound = MAXFLOAT;
+    /**
+    * The lower bound to limit mechanism motion
+    */
+    float lower_bound = -MAXFLOAT;
+
+    /**
+    * The maximum ramp duration based on target
+    */
+    const float MAX_RAMP_DURATION = .25;
+
+    /**
+    * A struct to store position, speed and the pointer to this mechanism
+    */
     typedef struct params {
         Mechanism* mech;
         float pos;

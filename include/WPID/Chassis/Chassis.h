@@ -9,21 +9,43 @@
 namespace wpid {
 class Chassis {
     protected:
-        // Chassis scales specific for Tank Drive
+        /** 
+        * @brief Chassis scales specific for Tank Drive
+        */
         float track_width;
+        
+        /**
+         * @brief 
+         * 
+         */
         float wheel_circumference;
-        // Left and Right motor groups for Tank
+        
+        /** 
+        * Left and Right motor groups for Tank
+        */
         Mechanism* left;
         Mechanism* right;
-        // seperate PID objects for turning and straight motion
+
+        /** 
+        * Seperate PID objects for turning and straight motion
+        */
         PID pidStraight;
         PID pidTurn;
-        // offsets to fix steady state error
+
+        /**
+        * Offsets to fix steady state error
+        */
         float straight_offset = 0;
         float turn_offset = 0;
-        // maximum acceleration for ramp
+        
+        /**
+        * Maximum acceleration for ramp
+        */
         float max_acceleration = .5;
-        // measurement unit
+        
+        /**
+        * Measurement unit
+        */
         Conversion::measurement measure_units = Conversion::measurement::in;
     public:
         /**

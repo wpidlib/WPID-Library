@@ -11,16 +11,52 @@
 namespace wpid{
 class PID {
     private:
-        float kp; // proportional constant
-        float ki; // integral constant
-        float kd; // derivative constant
-        float bound = 1; //the error bound in rotationUnits::deg
-        float prev_error = MAXFLOAT; // the previous error
-        float prev_integral = 0; // the previous integral
+        /**
+        * Proportional Constant
+        */
+        float kp;
+
+        /**
+        * Integral Constant
+        */
+        float ki;
+
+        /**
+        * Derivative Constant
+        */
+        float kd;
+
+        /**
+        * The error bound in rotationUnits::deg
+        */
+        float bound = 1;
+
+        /**
+        * The Previous Error
+        */
+        float prev_error = MAXFLOAT;
+
+        /**
+        * The Previous Integral
+        */
+        float prev_integral = 0;
+
+        /**
+        * Base name of the logging file
+        */
         std::string fName = "LoggedData";
     public:
-        int delay_time = 20; // PID loop delay in milliseconds
-        int bias = 0; // lowest speed possible for PID to achieve
+
+        /**
+        * PI loop delay in milliseconds
+        */
+        int delay_time = 20;
+
+        /**
+        * Lowest speed possible for the PID to achieve
+        */
+        int bias = 0; 
+        
         /**
          * @brief Construct a new PID object.
          * When constructing a PID object, only the kp constant is required, 
