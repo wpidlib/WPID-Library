@@ -10,13 +10,13 @@ float PID::calculateSpeed(float error, float max_speed, std::string mech_id){
     float integral = prev_integral + (error * (delay_time/(float)1000));
 
     // slope of error over time
-    // if(prev_error == MAXFLOAT) {prev_error = 0;}
-    // float current_estimate = (previous_estimate*a + (1-a)*(error - prev_error)); 
-    // previous_estimate = current_estimate;
-
-    // float derivative = current_estimate / (delay_time/(float)1000);
-    float derivative = (error - prev_error) / (delay_time/(float)1000);
+    if(prev_error == MAXFLOAT) {prev_error = error;}
+    float current_estimate = (previous_estimate*a + (1-a)*(error - prev_error)); 
+    previous_estimate = current_estimate;
     prev_error = error; // set previous error to current error
+    float derivative = current_estimate / (delay_time/(float)1000);
+
+    // float derivative = (error - prev_error) / (delay_time/(float)1000);
 
     // calculated speed value
     float speed = error*kp + integral*ki + derivative*kd; // calculated speed
@@ -50,7 +50,13 @@ void PID::setErrorRange(float bound){
 }
 
 bool PID::unfinished(float error){
-    return std::fabs(error) > bound ? true : false;
+    bool within_bounds = std::fabs(error) > bound;
+    bool low_speed = speed <= low_speed_threshold;
+    bool exceeded_timeout = timeout != -1 ? start_time + vex::timer::system() >= timeout : false;
+    if(timeout != -1 && exceeded_timeout) {
+        LOG(WARN) << "PID timed out. Remaining error is " << error; 
+    }
+    return (within_bounds && low_speed) || exceeded_timeout;
 }
 
 void PID::reset(void){

@@ -17,6 +17,7 @@ private:
     * Mechanism motors
     */
     vex::motor_group* motors;
+
     /**
     * The Gear ratio from motor to output
     */
@@ -52,11 +53,6 @@ private:
     float lower_bound = -MAXFLOAT;
 
     /**
-    * The maximum ramp duration based on target
-    */
-    const float MAX_RAMP_DURATION = .25;
-
-    /**
     * A struct to store position, speed and the pointer to this mechanism
     */
     typedef struct params {
@@ -87,7 +83,13 @@ private:
      * @param args the parameter arguments to set the target
      */
     static void spinToTarget(void* args);  
+
+    /**
+     * @brief The main thread responsible for spinning the motors 
+     * and calculating speeds using PID.
+     */
     vex::thread* mech_thread;
+
 public:
     /**
      * @brief Construct a new Mechanism object.
