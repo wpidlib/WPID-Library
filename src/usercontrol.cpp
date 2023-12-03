@@ -7,19 +7,8 @@ double scale(double x) {
     return (x > 0 ? 100 : -100) * ((x/127) * (x/127)); 
 }
 
-int opPrint(){
-    while(1){
-        Brain.Screen.clearScreen();
-        Brain.Screen.setCursor(1, 1);
-        Brain.Screen.print("Angle: %f", fourbar->getPosition(deg));
-        this_thread::sleep_for(25);
-    }
-    return 0;
-}
-
 void usercontrol(){ 
     auton();
-    thread disp = thread(opPrint);
     // axis values on controller
     double axis3, axis4 = 0;
     while (1) {

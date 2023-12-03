@@ -6,22 +6,22 @@ namespace wpid {
 class HDrive : public wpid::Tank {
     private:
         /**
-        * Chassis scales specific for Tank Drive
+        * Chassis scales specific for HDrive Drive
         */
         float center_wheel_circumference;
         
         /**
-        * Left and Right motor groups for Tank
+        * Center mechanisms for Tank
         */
         Mechanism* center;
         
         /** 
-        * Seperate PID objects for turning and straight motion
+        * PID object for strafing
         */
         PID pidStrafe;
         
         /** 
-        * Offsets to fix steady state error
+        * Offset to fix consistent error
         */
         float strafe_offset = 0;
         
@@ -29,19 +29,18 @@ class HDrive : public wpid::Tank {
          * @brief Sets the target position of each side of the chassis.
          * Uses the PID algorithm to determine speeds of the motors.
          * This function is inaccessable and is used as a helper.
-         * @param left_target the left side's target in SOME UNITS
-         * @param right_target the right side's target in SOME UNITS
-         * @param center_target the center wheels' target in SOME UNITS
+         * @param left_target the left side's target
+         * @param right_target the right side's target
+         * @param center_target the center wheels' target
          * @param l_max_spd the max speed the left side should spin
          * @param r_max_spd the max speed the right side should spin
          * @param c_max_spd the max speed the center wheel should spin
          */
         void spinToTarget(float left_target, float right_target, float center_target, int l_max_spd, int r_max_spd, int c_max_spd);
+    
     public:
         /**
-         * @brief Construct a new Chassis object. 
-         * All distance units are assumed to be in inches.
-         * 
+         * @brief Construct a new HDrive object.
          * @param track_width the width between left and right
          * @param wheel_base the distance from front to back of the wheel
          * @param wheel_radius radius of the wheel 
@@ -54,7 +53,7 @@ class HDrive : public wpid::Tank {
         HDrive() = default;
 
         /**
-         * @brief Sets the straight line PID object.
+         * @brief Sets the straight PID object.
          * @param pid a PID object holding the constants for driving straight 
          */
         void setStraightPID(PID pid) override;
@@ -92,7 +91,7 @@ class HDrive : public wpid::Tank {
          * @brief Move the chassis forward a specific distance with PID.
          * Chassis will always stay at or below the maximum speed.
          * @param distance the distance in inches
-         * @param max_speed the maximum speed the robot will travel
+         * @param max_speed the maximum speed the robot will travel in percent units
          */
         void straight(float distance, int max_speed) override;
 
@@ -100,7 +99,7 @@ class HDrive : public wpid::Tank {
          * @brief Move the chassis forward asynchronously a specific distance with PID.
          * Chassis will always stay at or below the maximum speed.
          * @param distance the distance in inches
-         * @param max_speed the maximum speed the robot will travel
+         * @param max_speed the maximum speed the robot will travel in percent units
          */
         void straightAsync(float distance, int max_speed) override;
 
@@ -143,7 +142,7 @@ class HDrive : public wpid::Tank {
          * If the straight distance is 100, and center is 30, the center wheel will spin at 30% the speed of straight_max_speed.
          * @param straight_distance the distance going forward or backwards in inches
          * @param strafe_distance the distance going sideways in inches
-         * @param straight_max_speed the maximum speed the robot will travel
+         * @param straight_max_speed the maximum speed the robot will travel in percent units
          */
         void diagonal(float straight_distance, float strafe_distance, int straight_max_speed);
 
@@ -154,7 +153,7 @@ class HDrive : public wpid::Tank {
          * If the straight distance is 100, and center is 30, the center wheel will spin at 30% the speed of straight_max_speed.
          * @param straight_distance the distance going forward or backwards in inches
          * @param strafe_distance the distance going sideways in inches
-         * @param straight_max_speed the maximum speed the robot will travel
+         * @param straight_max_speed the maximum speed the robot will travel in percent units
          */
         void diagonalAsync(float straight_distance, float strafe_distance, int straight_max_speed);
 
@@ -204,9 +203,11 @@ class HDrive : public wpid::Tank {
         void setBrakeType(vex::brakeType type);
 
         /**
-         * @brief Set the max acceleration of the mechanism. 
-         * The value is arbitrary, between 0 and 1.
-         * @param max_accel an arbitrary value to increment to ramp the speed up
+         * @brief Set the max acceleration of the chassis. 
+         * Every time the PID loop executes, it increments the speed of the 
+         * mechanism by this value until the mechanism reaches it's maximum speed. 
+         * Increase the value if the robot is ramping too slow, or decrease if it causes too much jerk.
+         * @param max_accel a value to increment to ramp the speed up in velocityUnits::pct
          */
         void setMaxAcceleration(float max_accel);
 
@@ -218,6 +219,14 @@ class HDrive : public wpid::Tank {
          * @param strafe the distance to offset strafe motion in inches
          */
         void setOffset(float straight, float turn, float strafe);
+
+        /**
+         * @brief Set the timeout to use for PID movement. If the timeout is exceeded, 
+         * the system will stop regardless of the current error or speed.
+         * A value of -1 will disable timeouts.
+         * @param timeout in milliseconds
+         */
+        void setTimeout(int timeout);
 
         /**
          * @brief Set the measurement units for chassis values.

@@ -150,6 +150,12 @@ void HDrive::setMaxAcceleration(float max_accel){
     this->max_acceleration = max_accel;
 }
 
+void HDrive::setTimeout(int timeout){
+    this->pidStraight.setTimeout(timeout);
+    this->pidTurn.setTimeout(timeout);
+    this->pidStrafe.setTimeout(timeout);
+}
+
 void HDrive::setMeasurementUnits(Conversion::measurement preferred_units){
     this->measure_units = preferred_units;
     this->wheel_circumference = Conversion::standardize(this->wheel_circumference, preferred_units);

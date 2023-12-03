@@ -71,34 +71,33 @@ void Mechanism::spinToTarget(void* args){
         LOG(WARN) << mech->mech_id << "'s lower bound was exceeded, reduced to " << mech->lower_bound;
     }
 
-    LOG(INFO) << "moving " << mech->mech_id << " to " << target << " with max speed " << max_speed;
+    LOG(DEBUG) << "moving " << mech->mech_id << " to " << target << " with max speed " << max_speed;
 
     float state = 0;
     float error = 999;
     float ramp = 0;
-    int calc = 999;
+    int calculated_speed = 999;
     int final_speed;
 
-    mech->pid.start_time = vex::timer::system();
-
-    while(mech->pid.unfinished(error)){ // checks if the system is within bounds, low speed, or timed out
+    while(mech->pid.unfinished(error, calculated_speed)){ // checks if the system is within bounds, low speed, or timed out
         state = mech->getPosition(rotationUnits::deg); // get the state of the motors
         error = target - state; // difference between target and state
        
-        calc = mech->pid.calculateSpeed(error, max_speed, mech->mech_id); // calculate PID speed
+        calculated_speed = mech->pid.calculateSpeed(error, max_speed, mech->mech_id); // calculate PID speed
         
         //limit to ramp speed if ramp is less than max_speed
         if(mech->max_acceleration > 0 && fabs(ramp) < max_speed){
             final_speed = ramp;
             ramp += error < 0 ? -mech->max_acceleration : mech->max_acceleration;
         } else {
-            final_speed = calc;
+            final_speed = calculated_speed;
         }
 
         mech->motors->spin(fwd, final_speed, pct); // spin the motors at speed
-        this_thread::sleep_for(mech->pid.delay_time); // delay by pid.delay_time milliseconds
+        this_thread::sleep_for(mech->pid.getDelayTime()); // delay by pid.delay_time milliseconds
     }
-    LOG(DEBUG) << "Stopping " << mech->mech_id;;
+
+    LOG(DEBUG) << "Stopping " << mech->mech_id << " with " << error << " error";
     mech->stop();
     mech->pid.reset();
     return;

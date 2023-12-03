@@ -22,29 +22,33 @@ void init(void) {
     Brain.Screen.clearScreen();
     chassis = new Tank(12.5, 1.625, &leftGroup, &rightGroup, 1);
     chassis->setOffset(.25, 0.85);
+    chassis->setBrakeType(brakeType::brake);
+    chassis->setMaxAcceleration(.5);
+    chassis->setMeasurementUnits(Conversion::measurement::in);
 
-    //PID straight = PID(0.08, 0.007, 0.05);
-    PID straight = PID(0.4, 0.17, 0.06);
-    straight.bias = 0;
+
+    PID straight = PID(0.3, 0.65, 0.04);
+    straight.setBias(0);
+    straight.setMaxIntegral(8);
+    straight.setLowSpeedThreshold(3);
+    straight.setDelayTime(25);
     straight.setErrorRange(2);
+
     PID turn = PID(0.06, 0.008, 0.001);
     turn.setErrorRange(2);
 
     chassis->setStraightPID(straight);
     chassis->setTurnPID(turn);
 
-    chassis->setBrakeType(brakeType::brake);
-    chassis->setMaxAcceleration(.5);
-
     // Fourbar setup
     fourbar = new Mechanism(&mechGroup, 0.25);
-    PID lift = PID(0.3, 0.05, 0.001);
-    fourbar->setPID(lift);
     fourbar->setBrakeType(brakeType::hold);
     fourbar->setMaxAcceleration(0);
     fourbar->setBounds(0, 90);
 
-    LOG().setBaseLevel(DEBUG);
+    PID lift = PID(0.3, 0.05, 0.001);
+    fourbar->setPID(lift);
 
-    //chassis->setMeasurementUnits(Conversion::measurement::m);
+    LOG().setBaseLevel(DEBUG);
+    LOG(INFO) << "Robot Initialized";
 }

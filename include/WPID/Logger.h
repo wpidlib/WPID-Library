@@ -1,3 +1,7 @@
+/**
+ * This logger was adapted from an example on Stack Overflow.
+ * https://stackoverflow.com/questions/5028302/small-logger-class
+ */
 #pragma once
 
 #include <iostream>
@@ -16,9 +20,10 @@ public:
     LOG(){}
     LOG(logType type){
         msg_level = type;
-        operator << ("["+getLevel(type)+" ");
+        operator << ("[");
         operator << (vex::timer::system());
-        operator << ("ms]");
+        operator << ("]");
+        operator << ("["+getLevel(type)+"]");
     }
     ~LOG(){
         if(opened){

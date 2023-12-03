@@ -89,14 +89,14 @@ private:
      * and calculating speeds using PID.
      */
     vex::thread* mech_thread;
-
+    
 public:
     /**
      * @brief Construct a new Mechanism object.
      * 
      * @param motors the motors used on the mechanism
-     * @param gear_ratio the external gear ratio between motor group and mechanism
-     * @param motor_id the string identifier for the motor group to enable per motor logging
+     * @param gear_ratio the external gear ratio
+     * @param mech_id a string identifier for the mechanism to use during logging
      */
     Mechanism(vex::motor_group* motors, float gear_ratio, std::string mech_id);
     Mechanism(vex::motor_group* motors, float gear_ratio);
@@ -105,7 +105,7 @@ public:
     /**
      * @brief Spins the motor group at the specified velocity.
      * Negative values will spin the motors backwards.
-     * @param velocity the velocity of the mechanism
+     * @param velocity the velocity of the mechanism in velocityUnits::pct
      */
     void spin(int velocity);
 
@@ -123,7 +123,7 @@ public:
      * @brief Move the mechanism to a relative angle.
      * 
      * @param position the relative angle to move to in degrees
-     * @param max_speed the max speed of the motors
+     * @param max_speed the max speed of the motors in velocityUnits::pct
      */
     void moveRelative(float position, float max_speed);
 
@@ -131,7 +131,7 @@ public:
      * @brief Move the mechanism to a relative angle asynchronously
      * 
      * @param position the relative angle to move to in degrees
-     * @param max_speed the max speed of the motors
+     * @param max_speed the max speed of the motors in velocityUnits::pct
      */
     void moveRelativeAsync(float position, float max_speed);
 
@@ -139,7 +139,7 @@ public:
      * @brief Move the mechanism to an absolute angle.
      * 
      * @param position the absolute angle to move to in degrees
-     * @param max_speed the max speed of the motors
+     * @param max_speed the max speed of the motors in velocityUnits::pct
      */
     void moveAbsolute(float position, float max_speed);
 
@@ -147,12 +147,12 @@ public:
      * @brief Move the mechanism to an absolute angle asynchronously
      * 
      * @param position the absolute angle to move to in degrees
-     * @param max_speed the max speed of the motors
+     * @param max_speed the max speed of the motors in velocityUnits::pct
      */
     void moveAbsoluteAsync(float position, float max_speed);
     
     /**
-     * @brief Get the position of the first motor in the group in the specified units.
+     * @brief Get the position of the first motor in the group with the specified units.
      * 
      * @param units the rotation units to return
      * @return float the position of the motor
@@ -166,18 +166,18 @@ public:
 
     /**
      * @brief Sets the brake type of the chassis.
-     * @param type The brake type can be set to coast, brake, or hold.  
+     * @param type The brake type can be set to coast, brake, or hold
      */
     void setBrakeType(vex::brakeType type);
 
     /**
-     * @brief Set a PID object to the mechanism
+     * @brief Set a PID object to the mechanism.
      * @param PID a PID object
      */
     void setPID(PID pid);
 
     /**
-     * @brief Set the offset of the mechanism to add or subtract a constant angle
+     * @brief Set the offset of the mechanism to add or subtract a constant angle.
      * 
      * @param offset the offset in degrees
      */
@@ -185,14 +185,16 @@ public:
 
     /**
      * @brief Set the max acceleration of the mechanism. 
-     * The value is arbitrary, between 0 and 1.
-     * @param max_accel an arbitrary value to increment to ramp the speed up
+     * Every time the PID loop executes, it increments the speed of the 
+     * mechanism by this value until the mechanism reaches it's maximum speed. 
+     * Increase the value if the robot is ramping too slow, or decrease if it causes too much jerk.
+     * @param max_accel a value to increment to ramp the speed up in velocityUnits::pct
      */
     void setMaxAcceleration(float max_accel);
 
     /**
      * @brief Set the manual bounds of the mechanism, such that it is unable to spin past these points.
-     * 
+     * Does not affect PID motion, so be careful that you dont let your mechanism move too far beyond its physical limits.
      * @param lower_bound the lowest encoder value the mechanism may move to
      * @param upper_bound the highest encoder value the mechanism may move to
      */

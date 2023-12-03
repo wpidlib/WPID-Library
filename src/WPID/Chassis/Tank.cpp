@@ -106,6 +106,11 @@ void Tank::setMaxAcceleration(float max_accel){
     this->right->setMaxAcceleration(max_accel);
 }
 
+void Tank::setTimeout(int timeout){
+    this->pidStraight.setTimeout(timeout);
+    this->pidTurn.setTimeout(timeout);
+}
+
 void Tank::setMeasurementUnits(Conversion::measurement preferred_units){
     this->measure_units = preferred_units;
     this->wheel_circumference = Conversion::standardize(this->wheel_circumference, preferred_units);

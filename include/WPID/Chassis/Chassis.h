@@ -7,6 +7,11 @@
 #include "../Conversion.h"
 
 namespace wpid {
+/**
+ * @brief A pure virtual class to define the behavior and attributes 
+ * of a chassis. Classes that extend this class will defualt to the 
+ * behavior defined here, which for all methods is to do nothing.
+ */
 class Chassis {
     protected:
         /** 
@@ -15,24 +20,24 @@ class Chassis {
         float track_width;
         
         /**
-         * Chassis wheel circumference for Tank drive
+         * Chassis wheel circumference
          */
         float wheel_circumference;
 
         /** 
-        * Left and Right motor groups for Tank
+        * Left and Right mechanisms
         */
         Mechanism* left;
         Mechanism* right;
 
         /** 
-        * Seperate PID objects for turning and straight motion
+        * PID objects for straight and turning motion
         */
         PID pidStraight;
         PID pidTurn;
 
         /**
-        * Offsets to fix steady state error
+        * Offsets to fix consistent error
         */
         float straight_offset = 0;
         float turn_offset = 0;
@@ -40,15 +45,15 @@ class Chassis {
         /**
         * Maximum acceleration for ramp
         */
-        float max_acceleration = .5;
+        float max_acceleration = 1;
         
         /**
-        * Measurement unit
+        * The units used for distances
         */
         Conversion::measurement measure_units = Conversion::measurement::in;
     public:
         /**
-         * @brief Sets the straight line PID object.
+         * @brief Sets the straight PID object.
          * @param pid a PID object holding the constants for driving straight
          */
         virtual void setStraightPID(PID pid) = 0;
