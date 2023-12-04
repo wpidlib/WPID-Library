@@ -130,7 +130,7 @@ class Tank : public wpid::Chassis{
          * Increase the value if the robot is ramping too slow, or decrease if it causes too much jerk.
          * @param max_accel a value to increment to ramp the speed up in velocityUnits::pct
          */
-        void setMaxAcceleration(float max_accel) override;
+        void setMaxAcceleration(float max_accel);
 
         /**
          * @brief Set the offset for the straight and turn functions.

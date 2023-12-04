@@ -10,7 +10,7 @@ using namespace vex;
 extern brain Brain;
 extern controller* con;
 
-extern Tank* chassis;
+extern HDrive* chassis;
 extern Mechanism* fourbar;
 
 void init(void);

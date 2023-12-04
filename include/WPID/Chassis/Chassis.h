@@ -43,11 +43,6 @@ class Chassis {
         float turn_offset = 0;
         
         /**
-        * Maximum acceleration for ramp
-        */
-        float max_acceleration = 1;
-        
-        /**
         * The units used for distances
         */
         Conversion::measurement measure_units = Conversion::measurement::in;
@@ -132,13 +127,6 @@ class Chassis {
          * @param type The brake type can be set to coast, brake, or hold.  
          */
         virtual void setBrakeType(vex::brakeType type) = 0;
-
-        /**
-         * @brief Set the max acceleration of the chassis. 
-         * The value is arbitrary, between 0 and 1.
-         * @param max_accel an arbitrary value to increment to ramp the speed up
-         */
-        virtual void setMaxAcceleration(float max_accel) = 0;
 
         /**
          * @brief Set the measurement units for chassis values.

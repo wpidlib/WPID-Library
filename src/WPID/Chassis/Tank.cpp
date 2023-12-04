@@ -111,7 +111,6 @@ void Tank::setOffset(float straight, float turn){
 void Tank::setMaxAcceleration(float max_accel){
     if(max_accel < 0)
         LOG(WARN) << "Negative accelerations not allowed";
-    this->max_acceleration = max_accel;
     this->left->setMaxAcceleration(max_accel);
     this->right->setMaxAcceleration(max_accel);
 }
