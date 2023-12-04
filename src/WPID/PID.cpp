@@ -22,26 +22,26 @@ float PID::calculateSpeed(float error, float max_speed, std::string mech_id){
 
     // calculated speed value
     float speed = error*kp + integral*ki + derivative*kd; // calculated speed
-    float prev_speed = speed; // pre cap speed
-
+    
+    // if system is saturated and error and speed are increasing
+    // then make error 0 in integral calculation
+    if(abs(speed) > abs(max_speed) && std::signbit(error) == std::signbit(speed)){
+        speed -= integral*ki; // remove integral term
+        integral = prev_integral; // set current error value to 0 
+        speed += integral*ki; // add back new integral value
+    }
+    prev_integral = integral;
+    
     // cap speed at max speed if saturated
     if(speed > max_speed){ speed = max_speed; }
     if(speed < -max_speed){ speed = -max_speed; }
-    
-    // if saturated, check if getting worse
-    // if getting worse, use previous integral and stop integrating
-    if(speed != prev_speed && std::signbit(error) == std::signbit(prev_speed)){
-        speed -= integral*ki; // remove integral component
-        integral = prev_integral; // set error to 0 in integral calculation
-        speed += integral*ki; // add back new clamped integral
-    } // integral clamping
-    prev_integral = integral;
 
     // retain minimum speed
     if (speed < bias && speed > 0) { speed = bias; }
     if (speed > -bias && speed < 0) { speed = -bias; }
     
     LOG(INFO) << "err: " << error << " spd: " << speed << " P: " << error*kp << " I: " << integral*ki << " D: " << derivative*kd;
+
     this->fileLogging(error, speed, (error*kp), integral, derivative, mech_id);
 
     return speed;
@@ -81,7 +81,7 @@ bool PID::unfinished(float error, int speed){
         LOG(WARN) << "PID timed out. Remaining error is " << error;
         return false;
     }
-    bool high_speed = speed > low_speed_threshold;
+    bool high_speed = low_speed_threshold != -1 ? speed > low_speed_threshold : false;
     bool outside_bounds = std::fabs(error) > bound;
     return outside_bounds || high_speed;
 }

@@ -19,8 +19,7 @@ Mechanism::Mechanism(motor_group* motors, float gear_ratio){
 void Mechanism::spin(int velocity){
     float position = this->getPosition(rotationUnits::deg);
     if((velocity > 0 && position < upper_bound)
-    || (velocity < 0 && position > lower_bound)
-    || (upper_bound == lower_bound)){
+    || (velocity < 0 && position > lower_bound)){
         motors->spin(directionType::fwd, velocity, velocityUnits::pct);
     } else {
         motors->stop();

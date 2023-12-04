@@ -9,6 +9,7 @@ double scale(double x) {
 
 void usercontrol(){ 
     auton();
+    Brain.Screen.printAt(1, 1, "IN DRIVER CONTROL");
     // axis values on controller
     double axis3, axis4 = 0;
     while (1) {

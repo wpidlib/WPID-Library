@@ -44,7 +44,7 @@ private:
     float max_acceleration = 0;
 
     /**
-    * The upper boun to limit mechanism motion
+    * The upper bound to limit mechanism motion
     */
     float upper_bound = MAXFLOAT;
     /**
@@ -193,10 +193,10 @@ public:
     void setMaxAcceleration(float max_accel);
 
     /**
-     * @brief Set the manual bounds of the mechanism, such that it is unable to spin past these points.
-     * Does not affect PID motion, so be careful that you dont let your mechanism move too far beyond its physical limits.
-     * @param lower_bound the lowest encoder value the mechanism may move to
-     * @param upper_bound the highest encoder value the mechanism may move to
+     * @brief Set the bounds of the mechanism, such that it is unable to spin past these points.
+     * This check is only done during driver control and does not affect PID motion. 
+     * @param lower_bound the lowest encoder value the mechanism may move to in degrees
+     * @param upper_bound the highest encoder value the mechanism may move to in degrees
      */
     void setBounds(float lower_bound, float upper_bound);
 };

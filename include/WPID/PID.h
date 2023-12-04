@@ -52,7 +52,7 @@ class PID {
         /**
         * The error bound in rotationUnits::deg
         */
-        float bound = 1;
+        float bound = 2;
 
         /**
         * PID loop delay in milliseconds
@@ -78,7 +78,7 @@ class PID {
         /**
          * The maximum output of the integral term. Unit is velocityUnits::pct
          */
-        int max_integral_speed = 10;
+        int max_integral_speed = 100;
 
         /**
         * Base name of the logging file
