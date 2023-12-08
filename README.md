@@ -1,6 +1,6 @@
 # WPID: A Simple PID Library for VEX
 
-WPID is a high level PID library built for the V5 system, written using the **VEXcode API**. WPID was built with ease of use in mind, and allows teams to quickly implement the library and start moving their robot autonomously. With functions like `Chassis::forward()` and `Mechanism::setPosition()`, teams can quickly create an autonomous routine that takes advantage of a robust PID algorithm, and leverages many extra utilities to improve consistency.
+WPID is a high level PID library built for the V5 system, written using the **VEXcode API**. WPID was built with ease of use in mind, and allows teams to quickly implement the library and start moving their robot autonomously. With functions like `Chassis::straight()` and `Mechanism::moveRelative()`, teams can quickly create an autonomous routine that takes advantage of a robust PID algorithm, and leverages many extra utilities to improve consistency.
 
 Documentation for the library is in progress.
 
