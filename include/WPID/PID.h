@@ -50,9 +50,9 @@ class PID {
 
         // Tuneable attributes
         /**
-        * The error bound in rotationUnits::deg
+        * The error range in rotationUnits::deg
         */
-        float bound = 2;
+        float errorRange = 2;
 
         /**
         * PID loop delay in milliseconds

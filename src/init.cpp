@@ -31,15 +31,17 @@ void init(void) {
     chassis.setMaxAcceleration(2, 2);
 
     LOG(DEBUG) << "PID Straight";
-    PID straight = PID(0.2, 0.65, 0.02);
-    straight.setBias(0);
-    straight.setMaxIntegral(8);
-    straight.setLowSpeedThreshold(5);
-    straight.setDelayTime(20);
-    straight.setErrorRange(2);
+    //PID straight = PID(0.2, 0.65, 0.02);
+    PID straight = PID(0.15, 0.025, 0.015);
+    straight.setLowSpeedThreshold(3);
+    // straight.setBias(0);
+    // straight.setMaxIntegral(8);
+    // straight.setLowSpeedThreshold(5);
+    // straight.setDelayTime(20);
+    // straight.setErrorRange(2);
 
     LOG(DEBUG) << "PID turn";
-    PID turn = PID(0.15, 0.7, 0.01);
+    PID turn = PID(0.15, 0.05, 0.01);
     turn.setBias(0);
     turn.setMaxIntegral(8);
     turn.setLowSpeedThreshold(3);
@@ -61,13 +63,13 @@ void init(void) {
     LOG(DEBUG) << "setting measurements";
     chassis.setMeasurementUnits(Conversion::measurement::in);
 
-    // Fourbar setup
-    fourbar = new Mechanism(&mechGroup, 4);
-    fourbar->setBrakeType(brakeType::hold);
-    fourbar->setBounds(0, 90);
-    fourbar->setBrakeType(hold);
-    fourbar->setMaxAcceleration(5);
-    fourbar->setOffset(0);
+    // // Fourbar setup
+    // fourbar = new Mechanism(&mechGroup, 4);
+    // fourbar->setBrakeType(brakeType::hold);
+    // fourbar->setBounds(0, 90);
+    // fourbar->setBrakeType(hold);
+    // fourbar->setMaxAcceleration(5);
+    // fourbar->setOffset(0);
 
     // PID lift = PID(1.5, 0.7, 0.02);
     // fourbar->setPID(lift);

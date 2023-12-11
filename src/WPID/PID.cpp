@@ -47,8 +47,8 @@ float PID::calculateSpeed(float error, float max_speed, std::string mech_id){
     return speed;
 }
 
-void PID::setErrorRange(float bound){
-    this->bound = bound;
+void PID::setErrorRange(float degrees){
+    this->errorRange = errorRange;
 }
 
 void PID::setDelayTime(int delay){
@@ -81,9 +81,9 @@ bool PID::unfinished(float error, int speed){
         LOG(WARN) << "PID timed out. Remaining error is " << error;
         return false;
     }
-    bool high_speed = low_speed_threshold != -1 ? speed > low_speed_threshold : false;
-    bool outside_bounds = std::fabs(error) > bound;
-    return outside_bounds || high_speed;
+    bool high_speed = low_speed_threshold != -1 ? fabs(speed) > low_speed_threshold : false;
+    bool outside_errorRanges = std::fabs(error) > errorRange;
+    return outside_errorRanges || high_speed;
 }
 
 void PID::reset(void){
@@ -97,7 +97,7 @@ void PID::reset(void){
 PID PID::copy(void){
     PID dupe = PID(this->kp, this->ki, this->kd);
     dupe.setDelayTime(this->delay_time);
-    dupe.setErrorRange(this->bound);
+    dupe.setErrorRange(this->errorRange);
     dupe.setBias(this->bias);
     dupe.setLowSpeedThreshold(this->low_speed_threshold);
     dupe.setTimeout(this->timeout);

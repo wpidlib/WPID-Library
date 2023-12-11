@@ -81,7 +81,7 @@ void Mechanism::spinToTarget(void* args){
     int calculated_speed = 999;
     int final_speed;
 
-    while(mech->pid.unfinished(error, calculated_speed)){ // checks if the system is within bounds, low speed, or timed out
+    while(mech->pid.unfinished(error, final_speed)){ // checks if the system is within bounds, low speed, or timed out
         state = mech->getPosition(rotationUnits::deg); // get the state of the motors
         error = target - state; // difference between target and state
        
