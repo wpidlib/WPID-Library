@@ -12,15 +12,6 @@ int printAngle(){
 }
 
 void auton(){
-  //thread printAngleThread = thread(printAngle);
-  // fourbar->moveAbsolute(60, 70);
-  // fourbar->moveAbsolute(110, 60);
-  // fourbar->moveAbsolute(0, 70);
   LOG(DEBUG) << "in auton";
-  // chassis.strafe(24,40);
-  // chassis.turn(90,35);
-  // chassis.diagonal(-24, -24, 40);
-  // chassis.turn(-90,35);
-  // chassis.straight(-24,40);
-  chassis.straight(-24, 50);
+  chassis.straight(24, 50);
 }

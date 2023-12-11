@@ -44,7 +44,7 @@ float PID::calculateSpeed(float error, float max_speed, std::string mech_id){
 }
 
 void PID::setErrorRange(float degrees){
-    this->error_range = error_range;
+    this->error_range = degrees;
 }
 
 void PID::setDelayTime(int delay){

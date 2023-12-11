@@ -110,13 +110,6 @@ class PID {
         void setErrorRange(float degrees);
 
         /**
-         * @brief Set the delay used in the PID loop.
-         * Default value is 20ms.
-         * @param delay in milliseconds
-         */
-        void setDelayTime(int delay);
-
-        /**
          * @brief Gets the delay time of this PID object in milliseconds.
          * 
          * @return int milliseconds
