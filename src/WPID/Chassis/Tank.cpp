@@ -3,12 +3,12 @@
 using namespace vex;
 using namespace wpid;
 
-Tank::Tank(float track_width, float wheel_radius, vex::motor_group* left, vex::motor_group* right, float drive_gear_ratio){
+Tank::Tank(float track_width, float wheel_radius, vex::motor_group left, vex::motor_group right, float drive_gear_ratio){
     if(drive_gear_ratio <= 0)
         LOG(WARN) << "Cannot use a non-positive drive ratio";
-    if(left->count() == 0)
+    if(left.count() == 0)
         LOG(WARN) << "No motors found in \"LEFT\" motor group";
-    if(right->count() == 0)
+    if(right.count() == 0)
         LOG(WARN) << "No motors found in \"RIGHT\" motor group";
     
     this->track_width = track_width;

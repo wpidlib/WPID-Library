@@ -25,7 +25,7 @@ class Tank : public wpid::Chassis{
          * @param left motor group
          * @param right motor group
          */
-        Tank(float track_width, float wheel_radius, vex::motor_group* left, vex::motor_group* right, float drive_gear_ratio);
+        Tank(float track_width, float wheel_radius, vex::motor_group left, vex::motor_group right, float drive_gear_ratio);
         Tank() = default;
 
         /**
