@@ -98,8 +98,8 @@ public:
      * @param gear_ratio the external gear ratio
      * @param mech_id a string identifier for the mechanism to use during logging
      */
-    Mechanism(vex::motor_group* motors, float gear_ratio, std::string mech_id);
-    Mechanism(vex::motor_group* motors, float gear_ratio);
+    Mechanism(vex::motor_group motors, float gear_ratio, std::string mech_id);
+    Mechanism(vex::motor_group motors, float gear_ratio);
     Mechanism() = default;
 
     /**

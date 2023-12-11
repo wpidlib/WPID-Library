@@ -8,9 +8,9 @@ using namespace wpid;
 using namespace vex;
 
 extern brain Brain;
-extern controller* con;
+extern controller con;
 
-extern HDrive* chassis;
-extern Mechanism* fourbar;
+extern HDrive chassis;
+extern Mechanism fourbar;
 
 void init(void);

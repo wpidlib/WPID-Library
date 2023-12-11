@@ -49,7 +49,7 @@ class HDrive : public wpid::Tank {
          * @param center motor group
          * @param drive_gear_ratio the internal gearset of the drive train
          */
-        HDrive(float track_width, float wheel_radius, float center_wheel_radius, vex::motor_group* left, vex::motor_group* right, vex::motor_group* center, float drive_gear_ratio);
+        HDrive(float track_width, float wheel_radius, float center_wheel_radius, vex::motor_group left, vex::motor_group right, vex::motor_group center, float drive_gear_ratio);
         HDrive() = default;
 
         /**

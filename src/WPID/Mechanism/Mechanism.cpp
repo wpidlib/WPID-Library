@@ -4,14 +4,14 @@
 using namespace vex;
 using namespace wpid;
 
-Mechanism::Mechanism(motor_group* motors, float gear_ratio, std::string mech_id){
-    this->motors = motors;
+Mechanism::Mechanism(motor_group motors, float gear_ratio, std::string mech_id){
+    this->motors = &motors;
     this->gear_ratio = gear_ratio;
     this->mech_id = mech_id;
 }
 
-Mechanism::Mechanism(motor_group* motors, float gear_ratio){
-    this->motors = motors;
+Mechanism::Mechanism(motor_group motors, float gear_ratio){
+    this->motors = &motors;
     this->gear_ratio = gear_ratio;
     this->mech_id = "MECHANISM";
 }
