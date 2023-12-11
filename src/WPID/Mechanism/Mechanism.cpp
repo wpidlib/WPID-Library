@@ -59,7 +59,10 @@ void Mechanism::spinToTarget(void* args){
     params* input = (params*)args;
     Mechanism* mech = input->mech;
     float max_speed = fabs(input->spd); // make sure max_speed is a scalar
-    float target = (input->pos + mech->offset);
+    float target = input->pos + mech->offset;
+    if(input->pos < 0) {
+        target = input->pos - mech->offset;
+    }
 
     //limit target to bounds if calcluations exceed bounds
     if(target > mech->upper_bound){

@@ -214,9 +214,9 @@ class HDrive : public wpid::Tank {
         /**
          * @brief Set the offset for the straight and turn functions.
          * This value is in inches, and will add to the input of each movement funciton.
-         * @param straight the distance to offset straight motion in inches
+         * @param straight the distance to offset straight motion in distance units
          * @param turn the angle to offset turns in degrees
-         * @param strafe the distance to offset strafe motion in inches
+         * @param strafe the distance to offset strafe motion in distance units
          */
         void setOffset(float straight, float turn, float strafe);
 

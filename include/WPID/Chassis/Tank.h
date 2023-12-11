@@ -135,7 +135,7 @@ class Tank : public wpid::Chassis{
         /**
          * @brief Set the offset for the straight and turn functions.
          * This value is in inches, and will add to the input of each movement funciton.
-         * @param straight the distance to offset straight motion in inches
+         * @param straight the distance to offset straight motion in distance units
          * @param turn the angle to offset turns in degrees
          */
         void setOffset(float straight, float turn);
