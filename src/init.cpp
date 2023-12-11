@@ -4,7 +4,7 @@ brain Brain;
 controller* con = new controller(controllerType::primary);
 
 HDrive* chassis;
-//Mechanism* fourbar;
+Mechanism* fourbar;
 
 motor leftFront = motor(PORT17, ratio18_1, false);
 motor leftBack = motor(PORT18, ratio18_1, false);
@@ -17,8 +17,8 @@ motor_group leftGroup = motor_group(leftFront, leftBack);
 motor_group rightGroup = motor_group(rightFront, rightBack);
 motor_group centerGroup = motor_group(center);
 
-//motor mech = motor(PORT11, ratio18_1, false);
-//motor_group mechGroup = motor_group(mech);
+motor mech = motor(PORT11, ratio18_1, false);
+motor_group mechGroup = motor_group(mech);
 
 void init(void) {
     Brain.Screen.clearScreen();
@@ -55,13 +55,15 @@ void init(void) {
     chassis->setStrafePID(strafe);
 
     // Fourbar setup
-    // fourbar = new Mechanism(&mechGroup, 0.25);
-    // fourbar->setBrakeType(brakeType::hold);
-    // fourbar->setMaxAcceleration(5);
-    // fourbar->setBounds(0, 110);
+    fourbar = new Mechanism(&mechGroup, 4);
+    fourbar->setBrakeType(brakeType::hold);
+    fourbar->setBounds(0, 90);
+    fourbar->setBrakeType(hold);
+    fourbar->setMaxAcceleration(5);
+    fourbar->setOffset(0);
 
-    // PID lift = PID(1.5, 0.7, 0.02);
-    // fourbar->setPID(lift);
+    PID lift = PID(1.5, 0.7, 0.02);
+    fourbar->setPID(lift);
 
     LOG().setBaseLevel(DEBUG);
     LOG(INFO) << "Robot Initialized";

@@ -15,7 +15,7 @@ void auton(){
   //thread printAngleThread = thread(printAngle);
   // fourbar->moveAbsolute(60, 70);
   // fourbar->moveAbsolute(110, 60);
-  // fourbar->moveAbsolute(0, 70);
+  fourbar->moveAbsolute(0, 70);
 
   chassis->strafe(24,40);
   chassis->turn(90,35);

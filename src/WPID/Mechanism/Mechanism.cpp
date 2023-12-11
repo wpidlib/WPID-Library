@@ -106,7 +106,7 @@ void Mechanism::spinToTarget(void* args){
 }
 
 float Mechanism::getPosition(rotationUnits units){
-    return motors->position(units) * gear_ratio;
+    return motors->position(units) / gear_ratio;
 }
 
 void Mechanism::resetPosition(){
