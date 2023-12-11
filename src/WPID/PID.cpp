@@ -35,10 +35,6 @@ float PID::calculateSpeed(float error, float max_speed, std::string mech_id){
     // cap speed at max speed if saturated
     if(speed > max_speed){ speed = max_speed; }
     if(speed < -max_speed){ speed = -max_speed; }
-
-    // retain minimum speed
-    if (speed < bias && speed > 0) { speed = bias; }
-    if (speed > -bias && speed < 0) { speed = -bias; }
     
     LOG(INFO) << "err: " << error << " spd: " << speed << " P: " << error*kp << " I: " << integral*ki << " D: " << derivative*kd;
 
@@ -48,7 +44,7 @@ float PID::calculateSpeed(float error, float max_speed, std::string mech_id){
 }
 
 void PID::setErrorRange(float degrees){
-    this->errorRange = errorRange;
+    this->error_range = error_range;
 }
 
 void PID::setDelayTime(int delay){
@@ -57,10 +53,6 @@ void PID::setDelayTime(int delay){
 
 int PID::getDelayTime(){
     return this->delay_time;
-}
-
-void PID::setBias(int bias){
-    this->bias = bias;
 }
 
 void PID::setLowSpeedThreshold(int threshold){
@@ -82,7 +74,7 @@ bool PID::unfinished(float error, int speed){
         return false;
     }
     bool high_speed = low_speed_threshold != -1 ? fabs(speed) > low_speed_threshold : false;
-    bool outside_errorRanges = std::fabs(error) > errorRange;
+    bool outside_errorRanges = std::fabs(error) > error_range;
     return outside_errorRanges || high_speed;
 }
 
@@ -97,8 +89,7 @@ void PID::reset(void){
 PID PID::copy(void){
     PID dupe = PID(this->kp, this->ki, this->kd);
     dupe.setDelayTime(this->delay_time);
-    dupe.setErrorRange(this->errorRange);
-    dupe.setBias(this->bias);
+    dupe.setErrorRange(this->error_range);
     dupe.setLowSpeedThreshold(this->low_speed_threshold);
     dupe.setTimeout(this->timeout);
     dupe.setMaxIntegral(this->max_integral_speed);

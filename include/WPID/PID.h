@@ -52,18 +52,13 @@ class PID {
         /**
         * The error range in rotationUnits::deg
         */
-        float errorRange = 2;
+        float error_range = 2;
 
         /**
         * PID loop delay in milliseconds
         */
         int delay_time = 20;
-
-        /**
-        * Lowest speed possible for the PID to achieve
-        */
-        int bias = 0; 
-
+        
         /**
          * A threshold to check for when the system is slow enough to stop
          */
@@ -99,7 +94,7 @@ class PID {
 
         /**
          * @brief Used to calculate the velocity of a motor or motor group. 
-         * The speed is calculated using PID, with integral clamping, bias maintaining, and speed clamping. 
+         * The speed is calculated using PID, with integral clamping, and speed clamping. 
          * 
          * @param error the remaining distance to the target
          * @param max_speed maximum velocity allowed in velocityUnits::pct
@@ -110,9 +105,9 @@ class PID {
 
         /**
          * @brief Set the error range in rotationUnits::deg.
-         * @param bound the absolute value of the bounds of the error range
+         * @param degrees the absolute value of the bounds of the error range
          */
-        void setErrorRange(float bound);
+        void setErrorRange(float degrees);
 
         /**
          * @brief Set the delay used in the PID loop.
@@ -127,13 +122,6 @@ class PID {
          * @return int milliseconds
          */
         int getDelayTime();
-
-        /**
-         * @brief Set the bias, or the lowest speed possible for the system.
-         * Default value is 0.
-         * @param bias in velocityUnits::pct
-         */
-        void setBias(int bias);
 
         /**
          * @brief Set the low speed threshold to determine when the system is slow.
