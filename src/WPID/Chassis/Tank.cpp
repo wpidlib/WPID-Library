@@ -42,14 +42,11 @@ void Tank::straight(float distance, int max_speed){
 
 void Tank::straightAsync(float distance, int max_speed){
     distance = Conversion::standardize(distance, this->measure_units);
-    if(distance > 0){
-        distance += straight_offset;
-    } else {
-        distance -= straight_offset;
-    }
     float target = ((distance) / wheel_circumference) * 360.0;
     left->setPID(pidStraight.copy());
     right->setPID(pidStraight.copy());
+    left->setOffset(straight_offset);
+    right->setOffset(straight_offset);
     this->spinToTarget(target, target, max_speed, max_speed);
 }
 
@@ -59,14 +56,11 @@ void Tank::turn(int target_angle, int max_speed){
 }
 
 void Tank::turnAsync(float target_angle, int max_speed){
-    if(target_angle > 0){
-        target_angle += turn_offset;
-    } else {
-        target_angle -= turn_offset;
-    }
     float target = ((track_width/2)*((float)(target_angle)*M_PI/180)/wheel_circumference)*360;
     left->setPID(pidTurn.copy());
     right->setPID(pidTurn.copy());
+    left->setOffset(turn_offset);
+    right->setOffset(turn_offset);
     this->spinToTarget(target, -target, max_speed, max_speed);
 }
 
@@ -104,8 +98,8 @@ void Tank::setBrakeType(brakeType type){
 }
 
 void Tank::setOffset(float straight, float turn){
-    straight_offset = straight;
-    turn_offset = turn;
+    straight_offset = ((straight) / wheel_circumference) * 360.0;
+    turn_offset = ((track_width/2)*((float)(turn)*M_PI/180)/wheel_circumference)*360;
 }
 
 void Tank::setMaxAcceleration(float max_accel){

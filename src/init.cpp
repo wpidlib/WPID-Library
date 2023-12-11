@@ -16,8 +16,8 @@ motor_group leftGroup = motor_group(leftFront, leftBack);
 motor_group rightGroup = motor_group(rightFront, rightBack);
 motor_group centerGroup = motor_group(center);
 
-//motor mech = motor(PORT11, ratio18_1, false);
-//motor_group mechGroup = motor_group(mech);
+motor mech = motor(PORT11, ratio18_1, false);
+motor_group mechGroup = motor_group(mech);
 
 HDrive chassis = HDrive(12.5, 1.625, 1.625, leftGroup, rightGroup, centerGroup, 1);
 
@@ -62,12 +62,15 @@ void init(void) {
     chassis.setMeasurementUnits(Conversion::measurement::in);
 
     // Fourbar setup
-    // fourbar = new Mechanism(&mechGroup, 0.25);
-    // fourbar->setBrakeType(brakeType::hold);
-    // fourbar->setMaxAcceleration(5);
-    // fourbar->setBounds(0, 110);
+    fourbar = new Mechanism(&mechGroup, 4);
+    fourbar->setBrakeType(brakeType::hold);
+    fourbar->setBounds(0, 90);
+    fourbar->setBrakeType(hold);
+    fourbar->setMaxAcceleration(5);
+    fourbar->setOffset(0);
 
     // PID lift = PID(1.5, 0.7, 0.02);
     // fourbar->setPID(lift);
+
     LOG(INFO) << "Robot Initialized";
 }
