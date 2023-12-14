@@ -9,6 +9,10 @@
 #include "./Logger.h"
 
 namespace wpid{
+/**
+ * @brief A PID class that stores constants and calculates the speed 
+ * of a motor or motor group with respect to its current error and other internal factors.
+ */
 class PID {
     private:
         // PID constants

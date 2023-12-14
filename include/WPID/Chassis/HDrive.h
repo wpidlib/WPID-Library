@@ -3,6 +3,11 @@
 #include <string>
 
 namespace wpid {
+/**
+ * @brief An HDrive chassis class that inherits from the Tank class.
+ * Contains functions for strafing sideways, and moving diagonally along with
+ * all Tank related motion. Utilizes PID for all motion.
+ */
 class HDrive : public wpid::Tank {
     private:
         /**

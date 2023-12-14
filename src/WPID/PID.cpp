@@ -47,10 +47,6 @@ void PID::setErrorRange(float degrees){
     this->error_range = degrees;
 }
 
-void PID::setDelayTime(int delay){
-    this->delay_time = delay;
-}
-
 int PID::getDelayTime(){
     return this->delay_time;
 }
@@ -88,7 +84,6 @@ void PID::reset(void){
 
 PID PID::copy(void){
     PID dupe = PID(this->kp, this->ki, this->kd);
-    dupe.setDelayTime(this->delay_time);
     dupe.setErrorRange(this->error_range);
     dupe.setLowSpeedThreshold(this->low_speed_threshold);
     dupe.setTimeout(this->timeout);

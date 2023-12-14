@@ -6,6 +6,10 @@
 #include <string>
 
 namespace wpid{
+/**
+ * @brief A Mechanism class that uses PID to control a motor group. 
+ * Contains functions for moving to a relative or absolute angle both synchronously and asynchronously.
+ */
 class Mechanism {
 private:
     /**

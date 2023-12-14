@@ -4,6 +4,10 @@
 #include "v5_vcs.h"
 
 namespace wpid {
+/**
+ * @brief A Conversion class used to convert distances to other units. 
+ * Also used to standardize units to inches in the internal calculation.
+ */
 class Conversion {
     private:
         /**

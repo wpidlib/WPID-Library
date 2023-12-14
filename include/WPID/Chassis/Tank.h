@@ -3,6 +3,11 @@
 #include <string>
 
 namespace wpid{
+/**
+ * @brief An Tank chassis class that inherits from the Chassis virtual class.
+ * Contains functions for moving forwards and backwards, and on the spot turns.
+ * Utilizes PID for all motion.
+ */
 class Tank : public wpid::Chassis{
     private:
         /**

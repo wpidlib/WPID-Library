@@ -9,6 +9,10 @@
 #include "v5_vcs.h"
 
 namespace wpid {
+/**
+ * @brief A simple logger class that can be used to log messages to the console.
+ * Contains 3 different logging levels, DEBUG, INFO, and WARN. 
+ */
 enum logType {
     DEBUG,
     INFO,
