@@ -13,7 +13,7 @@ class Tank : public wpid::Chassis{
         /**
          * @brief Sets the target position of each side of the chassis.
          * Uses the PID algorithm to determine speeds of the motors.
-         * This function is inaccessable and is used as a helper.
+         * This function is inaccessible and is used as a helper.
          * @param left_target the left side's target
          * @param right_target the right side's target
          * @param l_max_spd the max speed the left side should spin
@@ -112,7 +112,7 @@ class Tank : public wpid::Chassis{
         /**
          * @brief Gets the current position of the right side of the chassis
          * 
-         * @param units typically useing rotationUnits::deg
+         * @param units typically using rotationUnits::deg
          * @return float 
          */
         float getRightPosition(vex::rotationUnits units) override;
@@ -139,7 +139,7 @@ class Tank : public wpid::Chassis{
 
         /**
          * @brief Set the offset for the straight and turn functions.
-         * This value is in inches, and will add to the input of each movement funciton.
+         * This value is in inches, and will add to the input of each movement function.
          * @param straight the distance to offset straight motion in distance units
          * @param turn the angle to offset turns in degrees
          */

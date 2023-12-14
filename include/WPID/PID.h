@@ -91,7 +91,7 @@ class PID {
          * ki and kd can be set to 0 if not used.
          * @param kp proportional constant
          * @param ki integral constant
-         * @param kd derrivative constant
+         * @param kd derivative constant
          */
         PID(float kp, float ki, float kd) : kp(kp), ki(ki), kd(kd){};
         PID() = default;

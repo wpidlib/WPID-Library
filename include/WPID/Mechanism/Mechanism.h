@@ -67,7 +67,7 @@ private:
 
     /**
      * @brief Get an instance of a param struct pointer to pass to setTarget.
-     * Used as a helper funciton to pass multple parameters into a thread.
+     * Used as a helper function to pass multiple parameters into a thread.
      * @param position the position target
      * @param speed the max speed
      * @return params* a parameter pointer
@@ -83,7 +83,7 @@ private:
     /**
      * @brief Sets the target position of the mechanism.
      * Uses the PID algorithm to determine speeds of the motors.
-     * This function is inaccessable and is used as a helper.
+     * This function is inaccessible and is used as a helper.
      * @param args the parameter arguments to set the target
      */
     static void spinToTarget(void* args);  

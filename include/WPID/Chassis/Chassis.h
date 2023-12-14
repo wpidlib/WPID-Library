@@ -9,7 +9,7 @@
 namespace wpid {
 /**
  * @brief A pure virtual class to define the behavior and attributes 
- * of a chassis. Classes that extend this class will defualt to the 
+ * of a chassis. Classes that extend this class will default to the 
  * behavior defined here, which for all methods is to do nothing.
  */
 class Chassis {
@@ -55,7 +55,7 @@ class Chassis {
 
         /**
          * @brief Sets the turning PID object.
-         * @param pid a PID onject holding the constants for turning on the spot
+         * @param pid a PID object holding the constants for turning on the spot
          */
         virtual void setTurnPID(PID pid) = 0;
 

@@ -33,7 +33,7 @@ class HDrive : public wpid::Tank {
         /**
          * @brief Sets the target position of each side of the chassis.
          * Uses the PID algorithm to determine speeds of the motors.
-         * This function is inaccessable and is used as a helper.
+         * This function is inaccessible and is used as a helper.
          * @param left_target the left side's target
          * @param right_target the right side's target
          * @param center_target the center wheels' target
@@ -52,7 +52,7 @@ class HDrive : public wpid::Tank {
          * @param left motor group
          * @param right motor group
          * @param center motor group
-         * @param drive_gear_ratio the internal gearset of the drive train
+         * @param drive_gear_ratio the internal gear-set of the drive train
          */
         HDrive(float track_width, float wheel_radius, float center_wheel_radius, vex::motor_group left, vex::motor_group right, vex::motor_group center, float drive_gear_ratio);
         HDrive() = default;
@@ -133,7 +133,7 @@ class HDrive : public wpid::Tank {
         void strafe(float distance, int max_speed);
 
         /**
-         * @brief Strafe the chassis sideways asyncrhonously with PID.
+         * @brief Strafe the chassis sideways asynchronously with PID.
          * Chassis will always stay at or below the maximum speed.
          * @param distance the distance to travel in inches
          * @param max_speed the maximum speed in percent units
@@ -218,7 +218,7 @@ class HDrive : public wpid::Tank {
 
         /**
          * @brief Set the offset for the straight and turn functions.
-         * This value is in inches, and will add to the input of each movement funciton.
+         * This value is in inches, and will add to the input of each movement function.
          * @param straight the distance to offset straight motion in distance units
          * @param turn the angle to offset turns in degrees
          * @param strafe the distance to offset strafe motion in distance units
