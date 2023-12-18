@@ -69,9 +69,9 @@ bool PID::unfinished(float error, int speed){
         LOG(WARN) << "PID timed out. Remaining error is " << error;
         return false;
     }
-    bool high_speed = low_speed_threshold != -1 ? fabs(speed) > low_speed_threshold : false;
-    bool outside_errorRanges = std::fabs(error) > error_range;
-    return outside_errorRanges || high_speed;
+    bool high_speed = fabs(speed) > low_speed_threshold;
+    bool outside_range = std::fabs(error) > error_range;
+    return outside_range || high_speed;
 }
 
 void PID::reset(void){
