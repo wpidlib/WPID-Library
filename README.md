@@ -2,8 +2,6 @@
 
 WPID is a high level PID library built for the V5 system, written using the **VEXcode API**. WPID was built with ease of use in mind, and allows teams to quickly implement the library and start moving their robot autonomously. With functions like `Chassis::straight()` and `Mechanism::moveRelative()`, teams can quickly create an autonomous routine that takes advantage of a robust PID algorithm, and leverages many extra utilities to improve consistency.
 
-Documentation for the library is in progress.
-
 > Disclaimer: this will not win you worlds, nor is it intended to... but if it does let us know!
 ---
 
@@ -27,27 +25,27 @@ Here is an example of using the library. We include the api, create a **Tank** c
 #include "wpid.h"
 
 // motors setup
-motor_group* driveLeft = new motor_group(...)
-motor_group* driveRight = new motor_group(...)
-motor_group* liftMotors = new motor_group(...)
+motor_group driveLeft = new motor_group(...)
+motor_group driveRight = new motor_group(...)
+motor_group liftMotors = new motor_group(...)
 
 // Chassis and Mechanism setup
-Tank* chassis = new Tank(trackWidth, wheelRadius, &driveLeft, &driveRight);
-Mechanism* lift = new Mechanism(&liftMotors, 2.0);
+Tank chassis = new Tank(trackWidth, wheelRadius, driveLeft, driveRight);
+Mechanism lift = new Mechanism(liftMotors, 2.0);
 
 PID drivePID = PID(1, .25, .02);
 PID liftPID  = PID(2, .15, .03);
 
 int main(){
   // set the PID constants
-  chassis->setStraightPID(drivePID);
-  fourBar->setPID(liftPID);
+  chassis.setStraightPID(drivePID);
+  fourBar.setPID(liftPID);
 
   // drive the chassis forward 24 inches at 50% speed
-  chassis->straight(24.0, 50);
+  chassis.straight(24.0, 50);
 
   // move the lift to 90 degrees @ 20% speed
-  fourBar->moveRelative(90.0, 20);
+  fourBar.moveRelative(90.0, 20);
 }
 ```
 
@@ -56,9 +54,6 @@ int main(){
 ## Installation
 
 The required files for installation are located in the releases tab. A dedicated tutorial on how to install the library is [located here](https://wpidlib.github.io/WPID-Library-Docs/tutorial/tutorials.html).
-
-> In short: Add the header files to your include folder, and the archive file to your project folder.
-Then add the name of the archive file to the LIB flag in your mkenv.env file.
 
 ---
 
