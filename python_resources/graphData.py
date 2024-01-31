@@ -76,13 +76,14 @@ allFiles.sort(key = len)
 dFs = []
 
 for file in allFiles:
-    data = pd.read_csv("VexLogs/"+file)
-    name = data["Name"].iloc[0]
-    time = data["Time"].tail(1)
-    #print(time+1)
-    data.loc[len(data.index)] = [time+1, np.NaN, np.NaN, np.NaN, np.NaN, np.NaN, name]
-    #print(name)
-    dFs.append(data)
+    if file.endswith(".csv"):
+        data = pd.read_csv("VexLogs/"+file)
+        name = data["Name"].iloc[0]
+        time = data["Time"].tail(1)
+        #print(time+1)
+        data.loc[len(data.index)] = [time+1, np.NaN, np.NaN, np.NaN, np.NaN, np.NaN, name]
+        #print(name)
+        dFs.append(data)
 
 result = pd.concat(dFs)
 
