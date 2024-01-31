@@ -54,14 +54,11 @@ void HDrive::straight(float distance, int max_speed){
 
 void HDrive::straightAsync(float distance, int max_speed){
     distance = Conversion::standardize(distance, this->measure_units);
-    if(distance > 0){
-        distance += straight_offset;
-    } else {
-        distance -= straight_offset;
-    }
     float target = ((distance) / wheel_circumference) * 360.0;
     left->setPID(pidStraight.copy());
     right->setPID(pidStraight.copy());
+    left->setOffset(straight_offset);
+    right->setOffset(straight_offset);
     this->spinToTarget(target, target, 0, max_speed, max_speed, 0);
 }
 
@@ -71,14 +68,11 @@ void HDrive::turn(int target_angle, int max_speed){
 }
 
 void HDrive::turnAsync(float target_angle, int max_speed){
-    if(target_angle > 0){
-        target_angle += turn_offset;
-    } else {
-        target_angle -= turn_offset;
-    }
     float target = ((track_width/2)*((float)(target_angle)*M_PI/180)/wheel_circumference)*360;
     left->setPID(pidTurn.copy());
     right->setPID(pidTurn.copy());
+    left->setOffset(turn_offset);
+    right->setOffset(turn_offset);
     this->spinToTarget(target, -target, 0, max_speed, max_speed, 0);
 }
 
@@ -89,11 +83,6 @@ void HDrive::strafe(float distance, int max_speed){
 
 void HDrive::strafeAsync(float distance, int max_speed){
     distance = Conversion::standardize(distance, this->measure_units);
-     if(distance > 0){
-        distance += strafe_offset;
-    } else {
-        distance -= strafe_offset;
-    }
     float target = ((distance) / center_wheel_circumference) * 360.0;
     this->spinToTarget(0, 0, target, 0, 0, max_speed);
 }
@@ -106,11 +95,14 @@ void HDrive::diagonal(float straight_distance, float strafe_distance, int straig
 void HDrive::diagonalAsync(float straight_distance, float strafe_distance, int straight_max_speed){
     straight_distance = Conversion::standardize(straight_distance, this->measure_units);
     strafe_distance = Conversion::standardize(strafe_distance, this->measure_units);
-    float straight_target = ((straight_distance + straight_offset) / wheel_circumference) * 360.0;
-    float strafe_target = ((strafe_distance + strafe_offset) / center_wheel_circumference) * 360.0;
+    float straight_target = (straight_distance / wheel_circumference) * 360.0;
+    float strafe_target = (strafe_distance / center_wheel_circumference) * 360.0;
     float center_max_speed = straight_max_speed*(strafe_distance / straight_distance);
-    left->setPID(pidStraight);
-    right->setPID(pidStraight);
+    left->setPID(pidStraight.copy());
+    right->setPID(pidStraight.copy());
+
+    left->setOffset(straight_offset);
+    right->setOffset(straight_offset);
     this->spinToTarget(straight_target, straight_target, strafe_target, straight_max_speed, straight_max_speed, center_max_speed);
 }
 
@@ -160,6 +152,7 @@ void HDrive::setOffset(float straight, float turn, float center){
     straight_offset = straight;
     turn_offset = turn;
     strafe_offset = center;
+    this->center->setOffset(strafe_offset);
 }
 
 void HDrive::setMaxAcceleration(float straight_max_accel, float c_max_accel){
