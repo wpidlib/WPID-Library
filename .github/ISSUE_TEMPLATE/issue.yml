@@ -1,0 +1,30 @@
+name: Github Issue Template
+description: A template for creating issues in the repository
+title: "Issue: "
+labels: ["bug", "help wanted"]
+body:
+  - type: markdown
+    attributes:
+      value: Please fill out the sections below
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      placeholder: Describe the issue in as much detail as possible
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: Provide a step-by-step guide to reproduce the issue
+    validations:
+      required: true
+  - type: checkboxes
+    id: extra
+    attributes:
+      label: Additional information
+      options:
+        - label: "This issue occurs every single time, when the above steps are replicated"
+        - label: "This issue occurs only sometimes, when the above steps are replicated"
+  
